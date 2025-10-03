@@ -1,0 +1,15 @@
+{
+  "EMAIL_IS_REQUIRED": "Email Id is required!!",
+  "CONTACT_DETAILS_REQUIRED": "Contact Details are required!!",
+  "USERNAME_IS_REQUIRED": "User Name is required!!",
+  "PASSWORD_IS_REQUIRED": "Password is required!!",
+  "EMAIL_ALREADY_EXISTS": "Email is already taken!!",
+  "PASSWORD_LENGTH": "Password must be 6 digits!!",
+  "NAME_IS_REQUIRED": "Name is required!!",
+  "PROPER_CREDENTIALS_REQ": "Proper Credentials are required!!",
+  "USER_NOT_FOUND": "User not found!!",
+  "SIGIN_SUCCESSFULL": "Sign-in Successfull!!",
+  "TOKEN_REQUIRED": "No Token Provided!!",
+  "TOKEN_EXPIRED": "Token has expired!!",
+  "LOGO_IS_REQUIRED": "Logo is required!!"
+}
