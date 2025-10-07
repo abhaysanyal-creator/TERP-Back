@@ -25,6 +25,7 @@ export const loginService = async (payload: LoginPaylaod) => {
  return {
     message: "OTP sent. Please verify to complete login.",
     userId: user._id,
+    otp:otp
   };
 };
 

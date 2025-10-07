@@ -11,6 +11,7 @@ export const loginController: ExpressMiddleware = async (request, response) => {
 
     return success(response, result.message, {
       userId: result.userId,
+      otp:result.otp
     });
   } catch (error) {
     console.error(error);
@@ -25,7 +26,7 @@ export const verifyOtpController: ExpressMiddleware = async (
   try {
     const { userId, otp } = request.body;
     const result = await verifyOtpService(userId, otp);
-    
+
     return success(response, result.message, {
       token: result.token,
       userId: result.userId,
