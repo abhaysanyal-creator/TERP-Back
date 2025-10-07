@@ -1,4 +1,5 @@
 {
+  "SUCCESS": "Successful!!",
   "EMAIL_IS_REQUIRED": "Email Id is required!!",
   "CONTACT_DETAILS_REQUIRED": "Contact Details are required!!",
   "USERNAME_IS_REQUIRED": "User Name is required!!",
@@ -11,5 +12,14 @@
   "SIGIN_SUCCESSFULL": "Sign-in Successfull!!",
   "TOKEN_REQUIRED": "No Token Provided!!",
   "TOKEN_EXPIRED": "Token has expired!!",
-  "LOGO_IS_REQUIRED": "Logo is required!!"
+  "LOGO_IS_REQUIRED": "Logo is required!!",
+  "CREATED_BY_REQ": "Created by required!!",
+  "ROLE_IS_REQUIRED": "Role is required!!",
+  "CONTACT_REQUIRED": "Contact number is required!!",
+  "DEPT_REQUIRED": "Department is required!!",
+  "USER_CREATED": "User Created!!",
+  "ID_REQUIRED": "Id is required!!",
+  "ADD_PERM": "Add Accessibility Criteria",
+  "ADD_SUCCESS":"Added Successfully!!",
+  "ICON_REQUIRED":"Icon Required!!"
 }

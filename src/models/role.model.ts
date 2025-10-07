@@ -1,14 +1,14 @@
-import mongoose, { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import type { Role } from "../types/interface.types.js";
 
 const roleSchema: Schema<Role> = new Schema(
   {
     name: { type: String, required: true, unique: true },
-    permissions: { type: [String], required: true, default: ["*"] },
+    permissions: { type: [String], required: true },
   },
   { timestamps: true }
 );
 
-const roleModel = model<Role>("roles", roleSchema,"roles");
+const roleModel = model<Role>("roles", roleSchema, "roles");
 
 export default roleModel;

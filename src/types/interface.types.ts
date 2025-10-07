@@ -11,11 +11,21 @@ export interface Role extends Document {
 export interface User extends Document {
   username: string;
   email: string;
+  employee_id: string;
   name: string;
   password: string;
   role: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
+  otp_code: Number;
+  otp_expires: Date;
+  contact_number: number;
+}
+
+export interface Permissions extends Document {
+  name: string;
+  icon: string;
+  created_by: Types.ObjectId;
 }
 
 export interface JwtInterface extends JwtPayload {
