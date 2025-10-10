@@ -6,7 +6,6 @@ export const createAdmin = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-
       const creator = await mongoose
         .model("users")
         .findOne({ _id: ObjectId(payload.created_by) })
@@ -15,6 +14,10 @@ export const createAdmin = (
       if (!creator) {
         return reject(new Error("Creator not found"));
       }
+
+      const hasAccess = await adminCheck(creator);
+
+      if (!hasAccess) throw new Error("Only Admins has access!!");
 
       const user = await mongoose
         .model("users")
@@ -25,12 +28,14 @@ export const createAdmin = (
         throw new Error("User Already exists!!");
       }
 
-      const hasAccess = await adminCheck(creator);
-
-      if (!hasAccess) throw new Error("Only Admins has access!!");
-
       payload.employee_id = generateEmployeeId();
 
+      const role = await mongoose
+        .model("roles")
+        .findOne({ _id: ObjectId(payload.role) });
+
+      payload.permissions = role.permissions;
+      
       const newUser = await mongoose.model("users").create(payload);
 
       return resolve(newUser);

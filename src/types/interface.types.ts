@@ -32,3 +32,40 @@ export interface JwtInterface extends JwtPayload {
   id: string;
   role: string;
 }
+
+export interface WorkingHour {
+  day: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface Address {
+  city: string;
+  address: string;
+  country: string;
+  postal_code: string;
+}
+
+export interface Employee extends Document {
+  first_Name: string;
+  last_Name: string;
+  national_id: string;
+  employee_type: string;
+  position_types: string[];
+  employee_roles: string[];
+  team_leader: boolean;
+  is_deleted:boolean;
+  hire_date: Date;
+  role:string;
+  job_percentage: number;
+  dob: Date;
+  organization_assignments: string[];
+  location_assignments: string[];
+  address: Address;
+  mobile_phones: string;
+  home_phones: string;
+  emails: string;
+  notes?: string;
+  gender: string;
+  working_hours: WorkingHour[];
+}

@@ -8,6 +8,22 @@ export const badRequest = (response: Response, message: string): Response => {
   });
 };
 
+export const errorResponse = (
+  response: Response,
+  statusCode: number,
+  errorCode: string,
+  message: string
+): Response => {
+  return response.status(statusCode).json({
+    status: statusCode,
+    success: false,
+    error: {
+      code: errorCode,
+      message: message,
+    },
+  });
+};
+
 export const success = (
   response: Response,
   message: string,
@@ -17,7 +33,7 @@ export const success = (
     statusCode: 200,
     message: message,
     data: data,
-    status: "Successfull!!",
+    status: "success",
   });
 };
 

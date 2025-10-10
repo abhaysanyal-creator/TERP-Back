@@ -3,7 +3,6 @@ import { createAdmin, viewAdminService } from "../services/admin.service.js";
 import type { ExpressMiddleware } from "../types/express.types.js";
 import Lang from "../locales/en.json" with {type:"json"}
 import { getErrorMessage } from "../middlewares/app.middlewares.js";
-import { request } from "http";
 
 export const adminCreateController: ExpressMiddleware = async (
   request,

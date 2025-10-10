@@ -1,0 +1,4 @@
+{
+  "EmployeeType": ["Employee", "Freelancer", "Other"],
+  "Gender": ["Male", "Female", "Other"]
+}

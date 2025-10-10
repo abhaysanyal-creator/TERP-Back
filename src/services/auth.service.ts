@@ -1,6 +1,12 @@
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
-import { generateOTP, generateToken, saveOtp, verifyOtp } from "../utils/helpers.js";
+import {
+  generateOTP,
+  generateToken,
+  saveOtp,
+  verifyOtp,
+} from "../utils/helpers.js";
+import { errorResponse } from "../response/response.js";
 interface LoginPaylaod {
   email: string;
   password: string;
@@ -13,7 +19,13 @@ export const loginService = async (payload: LoginPaylaod) => {
   const user = await mongoose.model("users").findOne({ email: email }).exec();
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw new Error("Invalid Credentials!!");
+    throw {
+      status: 401,
+      error: {
+        code: "INVALID_PASSWORD",
+        message: "Invalid password",
+      },
+    };
   }
 
   const otp = generateOTP();
@@ -22,10 +34,10 @@ export const loginService = async (payload: LoginPaylaod) => {
 
   console.log(`OTP for user ${email}: ${otp}`);
 
- return {
+  return {
     message: "OTP sent. Please verify to complete login.",
     userId: user._id,
-    otp:otp
+    otp: otp,
   };
 };
 
@@ -33,12 +45,24 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
   try {
     const isValid = verifyOtp(userId, otpInput);
     if (!isValid) {
-      throw new Error("OTP expired. Request login again!!");
+      throw {
+        status: 401,
+        error: {
+          code: "OTP_EXPIRED",
+          message: "Otp Expired!!",
+        },
+      };
     }
 
     const user = await mongoose.model("users").findById(userId).exec();
     if (!user) {
-      throw new Error("User not found.");
+      throw {
+        status: 401,
+        error: {
+          code: "USER_NOT_FOUND",
+          message: "User not found!!",
+        },
+      };
     }
 
     const token = generateToken(
@@ -50,7 +74,10 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
     return {
       message: "Login successful!",
       token,
-      userId: user._id,
+      user: {
+        id: user._id,
+        name: user.name,
+      },
       role: user.role,
     };
   } catch (error) {

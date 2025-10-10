@@ -54,7 +54,7 @@ export const updateRolesService = (
       const newRole = await mongoose
         .model("roles")
         .findOneAndReplace({ _id: payload.params.id }, payload.body, {
-          new: true,
+          returnDocument: "after",
         });
       return resolve(newRole);
     } catch (error) {

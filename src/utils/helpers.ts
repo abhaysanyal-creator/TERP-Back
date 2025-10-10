@@ -62,10 +62,7 @@ export const saveOtp = (userId: mongoose.Types.ObjectId, otp: string) => {
   otps.set(userId, { otp, expiresAt });
 };
 
-export const verifyOtp = (
-  userId:string,
-  otpInput: string
-) => {
+export const verifyOtp = (userId: string, otpInput: string) => {
   if (!otps.has(userId)) {
     throw new Error("OTP expired. Request login again!!");
   }
@@ -74,7 +71,14 @@ export const verifyOtp = (
     otps.delete(userId);
     return false;
   }
-  if (otp !== otpInput) throw new Error("Invalid OTP!!");
+  if (otp !== otpInput)
+    throw {
+      status: 401,
+      error: {
+        code: "INVALID_OTP",
+        message: "Invalid OTP!!",
+      },
+    };
   if (otp === otpInput) {
     otps.delete(userId);
     return true;

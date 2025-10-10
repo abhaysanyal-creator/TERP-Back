@@ -3,10 +3,10 @@ import jwt, { type JwtPayload } from "jsonwebtoken";
 import { invalidToken, noToken } from "../response/response.js";
 import type { JwtInterface } from "../types/interface.types.js";
 import type { ExpressMiddlewareNext } from "../types/express.types.js";
+import mongoose from "mongoose";
+import { ObjectId } from "../utils/helpers.js";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
-
-// * Middleware for verifying JSON Web Tokens (JWT) in incoming HTTP requests.
 
 export const authorisationMiddleware: ExpressMiddlewareNext = (
   request,
@@ -28,6 +28,38 @@ export const authorisationMiddleware: ExpressMiddlewareNext = (
   } catch (error) {
     return invalidToken(response, "Invalid Token", { error: error });
   }
+};
+
+export const authorizePermission = (requiredPermission: string) => {
+  return async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const userRole = (request as any).user.role;
+
+      const roleDoc = await mongoose
+        .model("roles")
+        .findOne({ _id: ObjectId(userRole) })
+        .exec();
+
+      if (!roleDoc) {
+        return response.status(403).json({ message: "Role not found" });
+      }
+
+      const hasPermission = roleDoc.permissions.includes(requiredPermission);
+
+      if (!hasPermission) {
+        return response
+          .status(403)
+          .json({ message: "Access denied: insufficient permissions" });
+      }
+
+      next();
+    } catch (err) {
+      console.error(err);
+      response
+        .status(500)
+        .json({ message: "Server error while checking permissions" });
+    }
+  };
 };
 
 // const rolePermissions = {

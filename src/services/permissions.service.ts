@@ -1,11 +1,10 @@
 import mongoose from "mongoose";
-import { ObjectId } from "../utils/helpers.js";
+import { adminCheck, ObjectId } from "../utils/helpers.js";
 
 export const addPermissionService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
-    const allowedRoles = ["super-admin","admin"];
 
     try {
       const creator = await mongoose
@@ -17,21 +16,9 @@ export const addPermissionService = (
         throw new Error("User doesnt exist!!");
       }
 
-      const allowedRoleDocs = await mongoose
-        .model("roles")
-        .find({
-          name: { $in: allowedRoles },
-        })
-        .exec();
+      const hasAccess = await adminCheck(creator);
 
-      const allowedRoleIds = allowedRoleDocs.map((role) => role._id);
-
-      const hasAccess = allowedRoleIds.some((roleId) =>
-        creator.role.equals(roleId)
-      );
-      if (!hasAccess) {
-        throw new Error("Only Admins or Super-Admins have access!!");
-      }
+      if (!hasAccess) throw new Error("Only Admins has access!!");
 
       const newPermission = await mongoose.model("permissions").create(payload);
       return resolve(newPermission);
