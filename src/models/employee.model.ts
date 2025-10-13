@@ -23,8 +23,8 @@ const workingHourSchema = new Schema<WorkingHour>(
 
 const employeeSchema = new Schema<Employee>(
   {
-    first_Name: { type: String, required: true, maxlength: 20 },
-    last_Name: { type: String, required: true, maxlength: 20 },
+    first_name: { type: String, required: true, maxlength: 20 },
+    last_name: { type: String, required: true, maxlength: 20 },
     national_id: {
       type: String,
       required: true,

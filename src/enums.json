@@ -1,4 +1,12 @@
 {
   "EmployeeType": ["Employee", "Freelancer", "Other"],
+  "OrganisationType": [
+    "HMO",
+    "Government Office",
+    "Communication Center",
+    "Clinic",
+    "Other"
+  ],
+  "AreaIn": ["sq.ft", "acre"],
   "Gender": ["Male", "Female", "Other"]
 }

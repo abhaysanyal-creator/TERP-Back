@@ -5,6 +5,6 @@ import { addPermissionsValidator } from "../validators/permissions.validator.js"
 
 const router = Router();
 
-router.post("/add",authorisationMiddleware,addPermissionsValidator,addPermissionController)
+router.post("/create",authorisationMiddleware,addPermissionsValidator,addPermissionController)
 
 export default router;

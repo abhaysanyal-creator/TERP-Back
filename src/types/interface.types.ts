@@ -47,16 +47,16 @@ export interface Address {
 }
 
 export interface Employee extends Document {
-  first_Name: string;
-  last_Name: string;
+  first_name: string;
+  last_name: string;
   national_id: string;
   employee_type: string;
   position_types: string[];
   employee_roles: string[];
   team_leader: boolean;
-  is_deleted:boolean;
+  is_deleted: boolean;
   hire_date: Date;
-  role:string;
+  role: string;
   job_percentage: number;
   dob: Date;
   organization_assignments: string[];
@@ -68,4 +68,38 @@ export interface Employee extends Document {
   notes?: string;
   gender: string;
   working_hours: WorkingHour[];
+}
+
+export interface Contact {
+  id: string;
+  name: string;
+  role?: string;
+  phone?: string;
+  email?: string;
+}
+
+export interface FixedCost {
+  id: string;
+  type: string;
+  amount: number;
+  recurrence: "monthly" | "yearly";
+  description?: string;
+}
+export interface Organisations extends Document {
+  org_name: string;
+  org_type: string;
+  institution_code: string;
+  internal_code: string;
+  building_size: number;
+  area_in: string;
+  number_of_rooms: number;
+  protected_space: boolean;
+  operating_hours: WorkingHour[];
+  address: Address;
+  number_of_patients: number;
+  contacts: Contact[];
+  created_at?: Date;
+  updated_at?: Date;
+  is_deleted: boolean;
+  fixed_cost: FixedCost[];
 }

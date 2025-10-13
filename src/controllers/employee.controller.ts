@@ -1,5 +1,5 @@
 import { badRequest, success } from "../response/response.js";
-import { changeWorkingHoursEmployeeService, createEmployeeService,deleteEmployeeService,updateEmployeeService, viewEmployeeService } from "../services/employee.service.js";
+import { changeWorkingHoursEmployeeService, createEmployeeService,deleteEmployeeService,listEmployeeService,updateEmployeeService, viewEmployeeService } from "../services/employee.service.js";
 import type { ExpressMiddleware } from "../types/express.types.js";
 import Lang from "../locales/en.json" with {type: "json"}
 import { getErrorMessage } from "../middlewares/app.middlewares.js";
@@ -75,13 +75,23 @@ export const changeWorkingHoursEmployeeController:ExpressMiddleware = async(requ
 try {
     const checkEmployee = await mongoose.model("employees").findOne({_id:ObjectId(request.body.id)}).exec()
 if(!checkEmployee) return badRequest(response,Constants.MESSAGES.EMP_NOT_FOUND.code)
-    console.log(checkEmployee.working_hours)
-console.log(request.body.working_hours)
+    
 if(JSON.stringify(checkEmployee.working_hours)===JSON.stringify(request.body.working_hours)) {return badRequest(response,Constants.MESSAGES.CHANGE_HOURS.code)}
 const result = await changeWorkingHoursEmployeeService(request.body)
 
 return success(response,Constants.MESSAGES.SUCCESS.code,result)
 
+} catch (error) {
+    console.error(error)
+    return badRequest(response,getErrorMessage(error))
+}
+}
+
+export const listEmployeeController:ExpressMiddleware = async (request,response) => {
+try {
+
+    const result = await listEmployeeService(request.body)
+return success(response,Constants.MESSAGES.SUCCESS.code,result)
 } catch (error) {
     console.error(error)
     return badRequest(response,getErrorMessage(error))

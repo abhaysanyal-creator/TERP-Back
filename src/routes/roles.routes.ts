@@ -9,7 +9,7 @@ import { authorisationMiddleware } from "../middlewares/auth.middlewares.js";
 const router = Router();
 
 router.post(
-  "/add",
+  "/create",
   authorisationMiddleware,
   addRolesValidator,
   addRolesController

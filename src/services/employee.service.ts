@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { ObjectId } from "../utils/helpers.js";
+import { success } from "../response/response.js";
 
 export const createEmployeeService = (
   payload: Record<string, any>
@@ -87,7 +88,7 @@ export const changeWorkingHoursEmployeeService = (
     try {
       const workingHours = payload.working_hours;
       const id = payload.id;
-      
+
       const changedWorkingHours = await mongoose
         .model("employees")
         .findOneAndUpdate(
@@ -97,15 +98,67 @@ export const changeWorkingHoursEmployeeService = (
         )
         .exec();
 
-        if (!changedWorkingHours) {
+      if (!changedWorkingHours) {
         throw new Error("Problem Changing the working hours!!");
       }
-      resolve(
-        changedWorkingHours,
-       );
+      resolve(changedWorkingHours);
     } catch (error) {
       console.error(error);
       reject(error);
+    }
+  });
+};
+
+export const listEmployeeService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      
+      const page = Number(payload.page) || 1;
+      const limit = Number(payload.limit) || 10;
+      const skip = (page - 1) * limit;
+      
+      const match: Record<string, any> = {
+        is_deleted: false,
+      };
+      
+      const or: any[] = [];
+      
+      if (payload.department) or.push({ department: payload.department });
+      if (payload.status) or.push({ status: payload.status });
+      if (payload.search) {
+        or.push(
+          { name: { $regex: payload.search, $options: "i" } },
+          { email: { $regex: payload.search, $options: "i" } }
+        );
+      }
+      if (or.length) match.$or = or;
+      
+      const pipeline: any[] = [
+        { $match: match },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit },
+      ];
+      
+      const countPipeline = [{ $match: match }, { $count: "total" }];
+      
+      const [employees, countResult] = await Promise.all([
+        mongoose.model("employees").aggregate(pipeline),
+        mongoose.model("employees").aggregate(countPipeline),
+      ]);
+      
+      const totalCount = countResult[0]?.total || 0;
+      
+      resolve({
+        data: employees,
+       
+          total: totalCount,
+        },
+      );
+    } catch (error) {
+     reject(error) 
     }
   });
 };

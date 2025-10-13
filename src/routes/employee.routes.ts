@@ -4,6 +4,7 @@ import {
   changeWorkingHoursEmployeeValidator,
   createEmployeeValidator,
   deleteEmployeeValidator,
+  listEmployeeValidator,
   updateEmployeeValidator,
   viewEmployeeValidator,
 } from "../validators/employee.validator.js";
@@ -11,6 +12,7 @@ import {
   changeWorkingHoursEmployeeController,
   createEmployeeController,
   deleteEmployeeController,
+  listEmployeeController,
   updateEmployeeController,
   viewEmployeeController,
 } from "../controllers/employee.controller.js";
@@ -50,6 +52,13 @@ router.patch(
   authorisationMiddleware,
   changeWorkingHoursEmployeeValidator,
   changeWorkingHoursEmployeeController
+);
+
+router.post(
+  "/list",
+  authorisationMiddleware,
+  listEmployeeValidator,
+  listEmployeeController
 );
 
 export default router;

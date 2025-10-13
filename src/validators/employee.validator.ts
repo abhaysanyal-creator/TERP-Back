@@ -276,3 +276,13 @@ if (request.body.working_hours && !Array.isArray(request.body.working_hours)) {
   }
 next()
 }
+
+export const listEmployeeValidator:ExpressMiddlewareNext =(request,response,next) => {
+if(!request.body.page) {
+  return badRequest(response,Constants.MESSAGES.PAGE.code)
+}
+if(!request.body.limit) {
+  return badRequest(response,Constants.MESSAGES.LIMIT.code)
+}
+next();
+}
