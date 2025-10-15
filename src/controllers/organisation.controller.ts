@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
-import type { ExpressMiddleware } from "../types/express.types.js";
-import { badRequest, success } from "../response/response.js";
-import Constants from "../locales/constants.js";
+import type { ExpressMiddleware } from "../types/express.types.ts";
+import { badRequest, success } from "../response/response.ts";
+import Constants from "../locales/constants.ts";
 import {
   createOrganisationService,
   deleteOrganisationService,
   listOrganisationService,
   updateOrganisationService,
   viewOrganisationService,
-} from "../services/organisation.service.js";
-import { getErrorMessage } from "../middlewares/app.middlewares.js";
-import { ObjectId } from "../utils/helpers.js";
+} from "../services/organisation.service.ts";
+import { getErrorMessage } from "../middlewares/app.middlewares.ts";
+import { ObjectId } from "../utils/helpers.ts";
 
 export const createOrganisationController: ExpressMiddleware = async (
   request,

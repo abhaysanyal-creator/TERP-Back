@@ -3,10 +3,13 @@ import mongoose from "mongoose";
 import {
   generateOTP,
   generateToken,
+  ObjectId,
   saveOtp,
   verifyOtp,
-} from "../utils/helpers.js";
-import { errorResponse } from "../response/response.js";
+} from "../utils/helpers.ts";
+import Constants from "../locales/constants.ts";
+import { sendOtpEmail } from "../utils/email.ses.ts";
+
 interface LoginPaylaod {
   email: string;
   password: string;
@@ -16,14 +19,15 @@ const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export const loginService = async (payload: LoginPaylaod) => {
   const { email, password } = payload;
+
   const user = await mongoose.model("users").findOne({ email: email }).exec();
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw {
       status: 401,
       error: {
-        code: "INVALID_PASSWORD",
-        message: "Invalid password",
+        code: Constants.MESSAGES.INVALID_PASSWORD.code,
+        message: Constants.MESSAGES.INVALID_PASSWORD.message,
       },
     };
   }
@@ -33,34 +37,42 @@ export const loginService = async (payload: LoginPaylaod) => {
   saveOtp(user._id.toString(), otp);
 
   console.log(`OTP for user ${email}: ${otp}`);
+  await sendOtpEmail(user.email, otp);
 
   return {
     message: "OTP sent. Please verify to complete login.",
     userId: user._id,
-    otp: otp,
+    // otp: otp,
   };
 };
 
 export const verifyOtpService = async (userId: string, otpInput: string) => {
   try {
-    const isValid = verifyOtp(userId, otpInput);
+    const isValid = await verifyOtp(userId, otpInput);
+
     if (!isValid) {
       throw {
         status: 401,
         error: {
-          code: "OTP_EXPIRED",
-          message: "Otp Expired!!",
+          code: Constants.MESSAGES.OTP_EXPIRED.code,
+          message: Constants.MESSAGES.OTP_EXPIRED.message,
         },
       };
     }
 
-    const user = await mongoose.model("users").findById(userId).exec();
+    const user = await mongoose
+      .model("users")
+      .findOne({ _id: ObjectId(userId) })
+      .select("-password")
+      .populate("role")
+      .exec();
+
     if (!user) {
       throw {
         status: 401,
         error: {
-          code: "USER_NOT_FOUND",
-          message: "User not found!!",
+          code: Constants.MESSAGES.NOT_FOUND.code,
+          message: Constants.MESSAGES.NOT_FOUND.message,
         },
       };
     }
@@ -72,13 +84,12 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
     );
 
     return {
-      message: "Login successful!",
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
+      response: {
+        code: Constants.MESSAGES.LOGIN_SUCCESS.code,
+        message: Constants.MESSAGES.LOGIN_SUCCESS.message,
       },
-      role: user.role,
+      token,
+      user,
     };
   } catch (error) {
     throw error;

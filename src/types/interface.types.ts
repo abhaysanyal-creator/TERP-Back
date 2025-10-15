@@ -33,6 +33,12 @@ export interface JwtInterface extends JwtPayload {
   role: string;
 }
 
+export interface OTP {
+  userId: string;
+  otp: string;
+  expiresAt: Date;
+}
+
 export interface WorkingHour {
   day: string;
   startTime: string;
@@ -102,4 +108,29 @@ export interface Organisations extends Document {
   updated_at?: Date;
   is_deleted: boolean;
   fixed_cost: FixedCost[];
+}
+
+export interface Companion {
+  full_name: string;
+  contact_number: string;
+  national_id: string;
+  relation_patient: string;
+  email:string;
+}
+
+export interface Patients extends Document {
+  created_by:Types.ObjectId;
+  patient_id: string;
+  first_name: string;
+  last_name: string;
+  national_id: string;
+  gender: string;
+  email:string;
+  dob: Date;
+    is_deleted: boolean;
+  organisation_assignment: string[];
+  address: Address;
+  disabilities_list: string[];
+  companions_list: Companion[];
+  allergies_list: string[];
 }

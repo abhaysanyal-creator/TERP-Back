@@ -1,4 +1,4 @@
-import type { Permissions } from "../types/interface.types.js";
+import type { Permissions } from "../types/interface.types.ts";
 import mongoose, { Schema, model } from "mongoose";
 
 const permissionSchema: Schema<Permissions> = new Schema(

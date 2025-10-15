@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { loginValidator } from "../validators/auth.validator.js";
+import { loginValidator } from "../validators/auth.validator.ts";
 import {
   loginController,
   verifyOtpController,
-} from "../controllers/auth.controller.js";
+} from "../controllers/auth.controller.ts";
 
 const router = Router();
 

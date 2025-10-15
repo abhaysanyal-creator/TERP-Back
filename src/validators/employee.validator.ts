@@ -1,8 +1,8 @@
-import { badRequest } from "../response/response.js";
-import type { ExpressMiddlewareNext } from "../types/express.types.js";
+import { badRequest } from "../response/response.ts";
+import type { ExpressMiddlewareNext } from "../types/express.types.ts";
 import Lang from "../locales/en.json" with {type:"json"}
 import enums from "../enums.json" with {type:"json"}
-import Constants from "../locales/constants.js"
+import Constants from "../locales/constants.ts"
 
 export const createEmployeeValidator: ExpressMiddlewareNext = (
   request,

@@ -1,6 +1,6 @@
-import { badRequest } from "../response/response.js";
-import Constants from "../locales/constants.js"
-import type { ExpressMiddlewareNext } from "../types/express.types.js";
+import { badRequest } from "../response/response.ts";
+import Constants from "../locales/constants.ts"
+import type { ExpressMiddlewareNext } from "../types/express.types.ts";
 import enums from "../enums.json" with { type: "json" };
 
 export const createOrganisationValidator: ExpressMiddlewareNext = (request, response, next) => {
@@ -106,7 +106,7 @@ export const updateOrganisationValidator: ExpressMiddlewareNext = (request, resp
     request.body.institution_code !== undefined ||
     request.body.internal_code !== undefined
   ) {
-    return badRequest(response, Constants.MESSAGES.FORBIDDEN_INTERNAL_FIELDS.code);
+    return badRequest(response, Constants.MESSAGES.FORBIDDEN_INTERNAL_FIELDS.FORBIDDEN.code);
   }
 
   if (

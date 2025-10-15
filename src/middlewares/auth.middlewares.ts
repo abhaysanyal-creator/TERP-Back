@@ -1,10 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
-import { invalidToken, noToken } from "../response/response.js";
-import type { JwtInterface } from "../types/interface.types.js";
-import type { ExpressMiddlewareNext } from "../types/express.types.js";
+import { invalidToken, noToken } from "../response/response.ts";
+import type { JwtInterface } from "../types/interface.types.ts";
+import type { ExpressMiddlewareNext } from "../types/express.types.ts";
 import mongoose from "mongoose";
-import { ObjectId } from "../utils/helpers.js";
+import { ObjectId } from "../utils/helpers.ts";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 

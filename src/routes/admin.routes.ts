@@ -2,12 +2,12 @@ import { Router } from "express";
 import {
   adminCreateValidator,
   viewAdminValidator,
-} from "../validators/admin.validator.js";
+} from "../validators/admin.validator.ts";
 import {
   adminCreateController,
   viewAdminController,
-} from "../controllers/admin.controller.js";
-import { authorisationMiddleware } from "../middlewares/auth.middlewares.js";
+} from "../controllers/admin.controller.ts";
+import { authorisationMiddleware } from "../middlewares/auth.middlewares.ts";
 
 const router = Router();
 

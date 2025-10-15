@@ -1,19 +1,19 @@
 import { Router } from "express";
-import { authorisationMiddleware } from "../middlewares/auth.middlewares.js";
+import { authorisationMiddleware } from "../middlewares/auth.middlewares.ts";
 import {
   createOrganisationController,
   deleteOrganisationController,
   listOrganisationController,
   updateOrganisationController,
   viewOrganisationController,
-} from "../controllers/organisation.controller.js";
+} from "../controllers/organisation.controller.ts";
 import {
   createOrganisationValidator,
   deleteOrganisationValidator,
   listOrganisationValidator,
   updateOrganisationValidator,
   viewOrganisationValidator,
-} from "../validators/organisation.validator.js";
+} from "../validators/organisation.validator.ts";
 
 
 const router = Router();

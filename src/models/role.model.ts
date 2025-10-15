@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import type { Role } from "../types/interface.types.js";
+import type { Role } from "../types/interface.types.ts";
 
 const roleSchema: Schema<Role> = new Schema(
   {

@@ -1,5 +1,5 @@
 import express from "express";
-import type { ExpressMiddlewareNext } from "../types/express.types.js";
+import type { ExpressMiddlewareNext } from "../types/express.types.ts";
 import morgan from "morgan";
 // export const apiLogger: ExpressMiddlewareNext = (req, res, next) => {
 //   const start = Date.now();

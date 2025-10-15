@@ -1,8 +1,8 @@
-import { addPermissionService } from "../services/permissions.service.js";
-import type { ExpressMiddleware } from "../types/express.types.js";
+import { addPermissionService } from "../services/permissions.service.ts";
+import type { ExpressMiddleware } from "../types/express.types.ts";
 import Lang from "../locales/en.json" with {type:"json"}
-import { badRequest, success } from "../response/response.js";
-import { getErrorMessage } from "../middlewares/app.middlewares.js";
+import { badRequest, success } from "../response/response.ts";
+import { getErrorMessage } from "../middlewares/app.middlewares.ts";
 
 export const addPermissionController: ExpressMiddleware = async (
   request,

@@ -1,7 +1,9 @@
-import { badRequest, errorResponse, success } from "../response/response.js";
-import type { ExpressMiddleware } from "../types/express.types.js";
-import { getErrorMessage } from "../middlewares/app.middlewares.js";
-import { loginService, verifyOtpService } from "../services/auth.service.js";
+import { badRequest, errorResponse, success } from "../response/response.ts";
+import type { ExpressMiddleware } from "../types/express.types.ts";
+import { getErrorMessage } from "../middlewares/app.middlewares.ts";
+import { loginService, verifyOtpService } from "../services/auth.service.ts";
+import mongoose from "mongoose";
+import Constants from "../locales/constants.ts";
 
 export const loginController: ExpressMiddleware = async (request, response) => {
   try {
@@ -11,7 +13,7 @@ export const loginController: ExpressMiddleware = async (request, response) => {
 
     return success(response, result.message, {
       userId: result.userId,
-      otp: result.otp,
+      // otp: result.otp,
     });
   } catch (error) {
     const err = error as any;
@@ -35,10 +37,10 @@ export const verifyOtpController: ExpressMiddleware = async (
     const { userId, otp } = request.body;
     const result = await verifyOtpService(userId, otp);
 
-    return success(response, result.message, {
+    return success(response, result.response.code, {
+      message: result.response.message,
       token: result.token,
-      user: { id: result.user.id, name: result.user.name },
-      role: result.role,
+      user: result.user,
     });
   } catch (error) {
     const err = error as any;

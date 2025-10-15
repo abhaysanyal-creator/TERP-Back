@@ -1,8 +1,10 @@
-import userModel from "./user.model.js";
-import roleModel from "./role.model.js";
-import permissionModel from "./permissions.model.js";
-import employeeModel from "./employee.model.js";
-import organisationModel from "./organisation.model.js";
+import userModel from "./user.model.ts";
+import roleModel from "./role.model.ts";
+import permissionModel from "./permissions.model.ts";
+import employeeModel from "./employee.model.ts";
+import organisationModel from "./organisation.model.ts";
+import patientModel from "./patients.model.ts";
+import otpModel from "./otp.model.ts"
 
 const ProjectModels = {
   userModel,
@@ -10,6 +12,8 @@ const ProjectModels = {
   permissionModel,
   employeeModel,
   organisationModel,
+  patientModel,
+  otpModel
 };
 
 export default ProjectModels;

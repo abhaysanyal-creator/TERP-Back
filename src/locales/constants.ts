@@ -1,16 +1,48 @@
 export default {
   MESSAGES: {
+    LOGIN_SUCCESS: {
+      code: "LOGIN_SUCCESS",
+      message: "Login Successful!!",
+    },
+    SOMETHING_WENT_WRONG: {
+      DELETE: {
+        code: "NOT_DELETED",
+        message: "Something Went Wrong!!",
+      },
+    },
     EMP_NOT_FOUND: {
       code: "EMP_NOT_FOUND",
       message: "Employee Not Found!!",
     },
-      NOT_FOUND: {
+    CREATED_BY_REQ: {
+      code: "CREATED_BY_REQUIRED",
+      message: "Created By Required!!",
+    },
+    NOT_FOUND: {
       code: "NOT_FOUND",
       message: "Not Found!!",
     },
-    FORBIDDEN_INTERNAL_FIELDS:{
-      code:"FORBIDDEN_INTERNAL_FIELDS",
-      message:"Forbidden Parameters"
+    INVALID_PASSWORD: {
+      code: "INVALID_PASSWORD",
+      message: "Invalid Password!!",
+    },
+    INVALID_OTP: {
+      code: "INVALID_OTP",
+      message: "Invalid Otp!!",
+    },
+    OTP_EXPIRED: {
+      code: "OTP_EXPIRED",
+      message: "OTP Expired!!",
+    },
+    FORBIDDEN_INTERNAL_FIELDS: {
+      PATIENTS: {
+        code: "FORBIDDEN_PATIENT_ID",
+        message: "Forbidden Parameters",
+      },
+      FORBIDDEN: {
+        code: "FORBIDDEN_FIELDS",
+        message: "Forbidden Parameters",
+      },
     },
     ID_REQ: {
       code: "ID_REQ",
@@ -108,8 +140,75 @@ export default {
     },
     ALREADY_EXISTS: {
       code: "ALREADY_EXISTS",
-      message:
-        "Already Exists!!",
+      message: "Already Exists!!",
+    },
+    PATIENT_ID_REQ: {
+      code: "PATIENT_ID_REQ",
+      message: "Patient ID is required!!",
+    },
+    FIRST_NAME_REQ: {
+      code: "FIRST_NAME_REQ",
+      message: "First name is required!!",
+    },
+    LAST_NAME_REQ: {
+      code: "LAST_NAME_REQ",
+      message: "Last name is required!!",
+    },
+    NATIONAL_ID_REQ: {
+      code: "NATIONAL_ID_REQ",
+      message: "National ID is required!!",
+    },
+    GENDER_REQ: {
+      code: "GENDER_REQ",
+      message: "Gender is required!!",
+    },
+    DOB_REQ: {
+      code: "DOB_REQ",
+      message: "Date of birth is required!!",
+    },
+    ADDRESS_REQ: {
+      code: "ADDRESS_REQ",
+      message: "Address object is required!!",
+    },
+    CITY_REQ: {
+      code: "CITY_REQ",
+      message: "City is required!!",
+    },
+    COUNTRY_REQ: {
+      code: "COUNTRY_REQ",
+      message: "Country is required!!",
+    },
+    ADDRESS_FIELD_REQ: {
+      code: "ADDRESS_FIELD_REQ",
+      message: "Address field is required!!",
+    },
+    POSTAL_CODE_REQ: {
+      code: "POSTAL_CODE_REQ",
+      message: "Postal code is required!!",
+    },
+    COMPANION_REQ: {
+      code: "COMPANION_REQ",
+      message: "Companion list is required!!",
+    },
+    COMPANION_NAME_REQ: {
+      code: "COMPANION_NAME_REQ",
+      message: "Companion full name is required!!",
+    },
+    CONTACT_NUM_REQ: {
+      code: "CONTACT_NUM_REQ",
+      message: "Companion contact number is required!!",
+    },
+    COMPANION_NID_REQ: {
+      code: "COMPANION_NID_REQ",
+      message: "Companion national ID is required!!",
+    },
+    RELATION_REQ: {
+      code: "RELATION_REQ",
+      message: "Relation with patient is required!!",
+    },
+    EMAIL_REQ: {
+      code: "EMAIL_REQ",
+      message: "Companion email is required!!",
     },
   },
 };

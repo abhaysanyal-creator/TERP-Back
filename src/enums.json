@@ -8,5 +8,5 @@
     "Other"
   ],
   "AreaIn": ["sq.ft", "acre"],
-  "Gender": ["Male", "Female", "Other"]
+  "Gender": ["male", "female", "other"]
 }

@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+
 dotenv.config();
-import bcrypt from "bcryptjs";
-import roleModel from "../models/role.model.js";
-import userModel from "../models/user.model.js";
 
 const connectionString = process.env.MONGODB_URI as string;
 

@@ -1,4 +1,5 @@
 import jwt, { type SignOptions } from "jsonwebtoken";
+import Constants from "../locales/constants.ts";
 import mongoose from "mongoose";
 interface TokenPayload {
   id: string;
@@ -32,7 +33,7 @@ export const generateEmployeeId = () => {
   return prefix + randomPart;
 };
 
-export const generateCode = (prefix:string) => {
+export const generateCode = (prefix: string) => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let randomPart = "";
   for (let i = 0; i < 6; i++) {
@@ -66,31 +67,47 @@ export const generateOTP = () => {
 
 export const otps = new Map();
 
-export const saveOtp = (userId: mongoose.Types.ObjectId, otp: string) => {
+export const saveOtp = async (userId: mongoose.Types.ObjectId, otp: string) => {
   const expiresAt = Date.now() + 5 * 60 * 1000;
-  otps.set(userId, { otp, expiresAt });
+  // otps.set(userId, { otp, expiresAt });
+
+  await mongoose
+    .model("otps")
+    .findOneAndUpdate(
+      { userId },
+      { otp, expiresAt },
+      { upsert: true, new: true }
+    );
 };
 
-export const verifyOtp = (userId: string, otpInput: string) => {
-  if (!otps.has(userId)) {
-    throw new Error("OTP expired. Request login again!!");
-  }
-  const { otp, expiresAt } = otps.get(userId);
-  if (Date.now() > expiresAt) {
-    otps.delete(userId);
-    return false;
-  }
-  if (otp !== otpInput)
+export const verifyOtp = async (userId: string, otpInp: string) => {
+  const otpInput: string = otpInp.trim();
+  const record = await mongoose.model("otps").findOne({
+    userId,
+    expiresAt: { $gt: new Date() },
+  });
+
+  if (!record) {
     throw {
       status: 401,
       error: {
-        code: "INVALID_OTP",
-        message: "Invalid OTP!!",
+        code: Constants.MESSAGES.NOT_FOUND.code,
+        message: Constants.MESSAGES.NOT_FOUND.message,
       },
     };
-  if (otp === otpInput) {
-    otps.delete(userId);
-    return true;
   }
-  return false;
+
+  if (record.otp !== otpInput) {
+    throw {
+      status: 401,
+      error: {
+        code: Constants.MESSAGES.INVALID_OTP.code,
+        message: Constants.MESSAGES.INVALID_OTP.message,
+      },
+    };
+  }
+
+  await mongoose.model("otps").deleteOne({ _id: record._id });
+
+  return true;
 };

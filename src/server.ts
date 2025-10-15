@@ -2,16 +2,16 @@ import dotenv from "dotenv";
 dotenv.config(); // Load env variables first
 
 import express from "express";
-import ConnectDB from "./db/ConnectDb.js"; // 👈 add .js ONLY for Node ESM runtime
-import { applicationMiddlewares } from "./middlewares/app.middlewares.js";
-import routes from "./routes/router.js";
-import ProjectModels from "./models/index.js";
+import ConnectDB from "./db/ConnectDb.ts";
+import { applicationMiddlewares } from "./middlewares/app.middlewares.ts";
+import routes from "./routes/router.ts";
+import ProjectModels from "./models/index.ts";
 import cors from "cors"
 
 const app = express();
 
 applicationMiddlewares(app);
-// app.use(morgan("dev"))
+
 ConnectDB();
 
 app.use(cors({
