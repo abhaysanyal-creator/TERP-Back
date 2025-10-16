@@ -26,8 +26,8 @@ export const loginService = async (payload: LoginPaylaod) => {
     throw {
       status: 401,
       error: {
-        code: Constants.MESSAGES.INVALID_PASSWORD.code,
-        message: Constants.MESSAGES.INVALID_PASSWORD.message,
+        code: Constants.MESSAGES.INVALID_CREDENTIALS.code,
+        message: Constants.MESSAGES.INVALID_CREDENTIALS.message,
       },
     };
   }

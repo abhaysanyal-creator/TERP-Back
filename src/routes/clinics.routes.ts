@@ -1,7 +1,17 @@
 import { Router } from "express";
-import { authorisationMiddleware } from "../middlewares/auth.middlewares";
-import { createClinicController } from "../controllers/clinic.controller";
-import { createClinicValidator, viewClinicValidator } from "../validators/clinic.validator";
+import { authorisationMiddleware } from "../middlewares/auth.middlewares.ts";
+import {
+  createClinicController,
+  deleteClinicController,
+  updateClinicController,
+  viewClinicController,
+} from "../controllers/clinic.controller.ts";
+import {
+  createClinicValidator,
+  deleteClinicValidator,
+  updateClinicValidator,
+  viewClinicValidator,
+} from "../validators/clinic.validator.ts";
 
 const router = Router();
 
@@ -12,6 +22,25 @@ router.post(
   createClinicController
 );
 
-router.get("/view",authorisationMiddleware,viewClinicValidator)
+router.get(
+  "/view/:id",
+  authorisationMiddleware,
+  viewClinicValidator,
+  viewClinicController
+);
+
+router.patch(
+  "/update",
+  authorisationMiddleware,
+  updateClinicValidator,
+  updateClinicController
+);
+
+router.delete(
+  "/delete/:id",
+  authorisationMiddleware,
+  deleteClinicValidator,
+  deleteClinicController
+);
 
 export default router;

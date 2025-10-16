@@ -10,6 +10,7 @@ const userSchema: Schema<User> = new Schema(
     employee_id: { type: String },
     contact_number: { type: Number, required: true, unique: true },
     otp_code: { type: Number },
+    is_deleted: { type: Boolean, default: false },
     otp_expires: { type: Date },
     role: {
       type: mongoose.Schema.Types.ObjectId,

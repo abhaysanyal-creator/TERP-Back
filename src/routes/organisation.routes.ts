@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares.ts";
 import {
+  changeOperatingHoursOrganisationController,
   createOrganisationController,
   deleteOrganisationController,
   listOrganisationController,
@@ -8,13 +9,13 @@ import {
   viewOrganisationController,
 } from "../controllers/organisation.controller.ts";
 import {
+  changeOperatingHoursOrganisationValidator,
   createOrganisationValidator,
   deleteOrganisationValidator,
   listOrganisationValidator,
   updateOrganisationValidator,
   viewOrganisationValidator,
 } from "../validators/organisation.validator.ts";
-
 
 const router = Router();
 
@@ -51,6 +52,13 @@ router.post(
   authorisationMiddleware,
   listOrganisationValidator,
   listOrganisationController
+);
+
+router.patch(
+  "/change-operating-hours",
+  authorisationMiddleware,
+  changeOperatingHoursOrganisationValidator,
+  changeOperatingHoursOrganisationController
 );
 
 export default router;

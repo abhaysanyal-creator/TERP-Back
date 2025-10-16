@@ -2,8 +2,6 @@ import { badRequest, errorResponse, success } from "../response/response.ts";
 import type { ExpressMiddleware } from "../types/express.types.ts";
 import { getErrorMessage } from "../middlewares/app.middlewares.ts";
 import { loginService, verifyOtpService } from "../services/auth.service.ts";
-import mongoose from "mongoose";
-import Constants from "../locales/constants.ts";
 
 export const loginController: ExpressMiddleware = async (request, response) => {
   try {

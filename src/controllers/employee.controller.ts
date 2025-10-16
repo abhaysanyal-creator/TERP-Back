@@ -73,7 +73,7 @@ return success(response,Constants.MESSAGES.SUCCESS.code,{deleted_id:result._id,
 
 export const changeWorkingHoursEmployeeController:ExpressMiddleware = async(request,response) => {
 try {
-    const checkEmployee = await mongoose.model("employees").findOne({_id:ObjectId(request.body.id)}).exec()
+    const checkEmployee = await mongoose.model("employees").findOne({_id:ObjectId(request.body.id),is_deleted:false}).exec()
 if(!checkEmployee) return badRequest(response,Constants.MESSAGES.EMP_NOT_FOUND.code)
     
 if(JSON.stringify(checkEmployee.working_hours)===JSON.stringify(request.body.working_hours)) {return badRequest(response,Constants.MESSAGES.CHANGE_HOURS.code)}

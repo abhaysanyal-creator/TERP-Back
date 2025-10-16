@@ -208,3 +208,17 @@ if(!request.body.limit) {
 }
 next();
 }
+
+export const changeOperatingHoursOrganisationValidator:ExpressMiddlewareNext = (request,response,next) => {
+
+if(!request.body.id){
+return badRequest(response,Constants.MESSAGES.ID_REQ.code)
+}
+if (request.body.operating_hours && !Array.isArray(request.body.operating_hours)) {
+    return badRequest(
+      response,
+      Constants.MESSAGES.INVALID_FORMAT.code || "Working hours must be an array"
+    );
+  }
+next()
+}

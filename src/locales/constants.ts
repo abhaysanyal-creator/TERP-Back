@@ -4,13 +4,25 @@ export default {
       code: "LOGIN_SUCCESS",
       message: "Login Successful!!",
     },
+    INVALID_CREDENTIALS: {
+      code: "INVALID_CREDENTIALS",
+      message: "Invalid Credentials!!",
+    },
     SOMETHING_WENT_WRONG: {
       DELETE: {
         code: "NOT_DELETED",
         message: "Something Went Wrong!!",
       },
+      FIND: {
+        code: "NOT_FOUND",
+        message: "Something Went Wrong!!",
+      },
       CREATE: {
         code: "NOT_CREATED",
+        message: "Something Went Wrong!!",
+      },
+      UPDATE: {
+        code: "NOT_UPDATED",
         message: "Something Went Wrong!!",
       },
     },

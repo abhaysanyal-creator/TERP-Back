@@ -1,5 +1,5 @@
-import { badRequest } from "../response/response.js";
-import type { ExpressMiddlewareNext } from "../types/express.types.js";
+import { badRequest } from "../response/response.ts";
+import type { ExpressMiddlewareNext } from "../types/express.types.ts";
 import Constants from "../locales/constants.ts";
 
 export const createClinicValidator: ExpressMiddlewareNext = (
@@ -7,6 +7,10 @@ export const createClinicValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
+  if (!request.body.created_by) {
+    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
+  }
+
   if (!request.body.branch_name)
     return badRequest(response, Constants.MESSAGES.BRANCH_NAME_REQ.code);
 
@@ -91,4 +95,112 @@ export const createClinicValidator: ExpressMiddlewareNext = (
   next();
 };
 
-export const viewClinicValidator: ExpressMiddlewareNext = () => {};
+export const viewClinicValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  next();
+};
+
+export const updateClinicValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.created_by) {
+    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
+  }
+  if (!request.body.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  if (request.body.branch_name !== undefined && !request.body.branch_name)
+    return badRequest(response, Constants.MESSAGES.BRANCH_NAME_REQ.code);
+
+  if (request.body.owner !== undefined && !request.body.owner)
+    return badRequest(response, Constants.MESSAGES.OWNER_REQ.code);
+
+  if (request.body.manager !== undefined && !request.body.manager)
+    return badRequest(response, Constants.MESSAGES.MANAGER_REQ.code);
+
+  if (request.body.address !== undefined) {
+    if (!request.body.address.city)
+      return badRequest(response, Constants.MESSAGES.CITY_REQ.code);
+    if (!request.body.address.country)
+      return badRequest(response, Constants.MESSAGES.COUNTRY_REQ.code);
+    if (!request.body.address.address)
+      return badRequest(response, Constants.MESSAGES.ADDRESS_FIELD_REQ.code);
+    if (!request.body.address.postal_code)
+      return badRequest(response, Constants.MESSAGES.POSTAL_CODE_REQ.code);
+  }
+
+  if (request.body.no_of_rooms !== undefined) {
+    if (
+      typeof request.body.no_of_rooms !== "number" ||
+      request.body.no_of_rooms <= 0
+    )
+      return badRequest(response, Constants.MESSAGES.INVALID_ROOMS.code);
+  }
+
+  if (request.body.working_hours !== undefined) {
+    if (!Array.isArray(request.body.working_hours))
+      return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
+
+    for (const wh of request.body.working_hours) {
+      if (!wh.day || !wh.startTime || !wh.endTime)
+        return badRequest(
+          response,
+          Constants.MESSAGES.INVALID_OPERATING_HOURS.code
+        );
+    }
+  }
+
+  if (request.body.therapists !== undefined) {
+    if (!Array.isArray(request.body.therapists))
+      return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
+
+    for (const t of request.body.therapists) {
+      if (
+        !t.id ||
+        !t.name ||
+        !t.employee_id ||
+        !t.specialisation ||
+        !t.working_hours ||
+        !t.organisation
+      )
+        return badRequest(
+          response,
+          Constants.MESSAGES.THERAPIST_FIELD_REQ.code
+        );
+    }
+  }
+
+  if (request.body.specialisation !== undefined) {
+    if (!Array.isArray(request.body.specialisation))
+      return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
+
+    for (const s of request.body.specialisation) {
+      if (
+        !s.name ||
+        typeof s.price_to_customer !== "number" ||
+        typeof s.cost_price !== "number"
+      )
+        return badRequest(
+          response,
+          Constants.MESSAGES.SPECIALISATION_FIELD_REQ.code
+        );
+    }
+  }
+
+  next();
+};
+
+export const deleteClinicValidator:ExpressMiddlewareNext = (request,response,next) => {
+if(!request.params.id){
+  return badRequest(response,Constants.MESSAGES.ID_REQ.code)
+}
+next()
+}

@@ -65,6 +65,8 @@ const WorkingHourSchema = new Schema<WorkingHour>(
 );
 
 const clinicSchema: Schema<Clinics> = new Schema({
+  created_by:{type:Schema.Types.ObjectId,required:true,ref:"employees"},
+  is_deleted:{type:Boolean,default:false},
   branch_name: { type: String, required: true, unique: true },
   clinic_id: { type: String, required: true, unique: true },
   owner: { type: String, required: true },

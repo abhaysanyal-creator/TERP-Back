@@ -1,0 +1,50 @@
+#
+# Builder image
+#
+FROM node:18-slim as build
+ARG APP_HOME=/usr/src/app
+
+WORKDIR $APP_HOME
+COPY . $APP_HOME
+
+# Remove old dist and node_modules directories if they exist
+RUN rm -rf dist node_modules
+
+# Install dependencies and build
+RUN npm install
+RUN npm run build && \
+    cp -r src/templates dist/src/ && \
+    cp -r src/data dist/src/
+
+#
+# Runner image
+#
+FROM node:18-slim
+ARG APP_HOME=/usr/src/app
+
+# Install only necessary system dependencies
+RUN apt-get update -qq && \
+    apt-get install -y --no-install-recommends ca-certificates && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR $APP_HOME
+
+# Copy package files first for better caching
+COPY package*.json ./
+
+# Copy build artifacts
+COPY --from=build $APP_HOME/dist ./dist
+COPY --from=build $APP_HOME/node_modules ./node_modules
+
+COPY global-bundle.pem ./global-bundle.pem
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=9000
+
+# Expose the application port
+EXPOSE 9000
+
+# Start the application
+CMD ["npm run start" ]

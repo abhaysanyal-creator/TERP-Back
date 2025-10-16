@@ -3,6 +3,7 @@ import type { ExpressMiddleware } from "../types/express.types.ts";
 import { badRequest, success } from "../response/response.ts";
 import Constants from "../locales/constants.ts";
 import {
+  changeOperatingHoursOrganisationService,
   createOrganisationService,
   deleteOrganisationService,
   listOrganisationService,
@@ -110,3 +111,34 @@ export const listOrganisationController: ExpressMiddleware = async (
     return badRequest(response, getErrorMessage(error));
   }
 };
+
+export const changeOperatingHoursOrganisationController: ExpressMiddleware =
+  async (request, response) => {
+    try {
+      const checkOrg = await mongoose
+        .model("organisations")
+        .findOne({ _id: ObjectId(request.body.id), is_deleted: false })
+        .exec();
+      if (!checkOrg)
+        return badRequest(
+          response,
+          Constants.MESSAGES.INSTITUTION_CODE_REQUIRED.code
+        );
+
+      if (
+        JSON.stringify(checkOrg.operating_hours) ===
+        JSON.stringify(request.body.operating_hours)
+      ) {
+        return badRequest(response, Constants.MESSAGES.CHANGE_HOURS.code);
+      }
+      const result = await changeOperatingHoursOrganisationService(
+        request.body
+      );
+
+      return success(response, Constants.MESSAGES.SUCCESS.code, result);
+    } catch (error) {
+      console.error(error);
+      return badRequest(response, getErrorMessage(error));
+    }
+  };
+

@@ -11,6 +11,7 @@ export interface Role extends Document {
 export interface User extends Document {
   username: string;
   email: string;
+  is_deleted:boolean;
   employee_id: string;
   name: string;
   password: string;
@@ -159,6 +160,8 @@ export interface ClinicPricing {
 }
 
 export interface Clinics extends Document {
+  created_by: Types.ObjectId;
+  is_deleted:boolean;
   branch_name: string;
   clinic_id: string;
   owner: string;

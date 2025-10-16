@@ -66,7 +66,8 @@ export const updateOrganisationService = (
         )
         .exec();
 
-      if (!updatedOrganisation) throw new Error("Institution not found");
+      if (!updatedOrganisation)
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
 
       resolve(updatedOrganisation);
     } catch (error) {
@@ -161,6 +162,34 @@ export const listOrganisationService = (
         count: totalCount,
       });
     } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const changeOperatingHoursOrganisationService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const operatingHours = payload.operating_hours;
+      const id = payload.id;
+
+      const changedOperatingHours = await mongoose
+        .model("organisations")
+        .findOneAndUpdate(
+          { _id: ObjectId(id), is_deleted: { $ne: true } },
+          { $set: { working_hours: operatingHours } },
+          { returnDocument: "after" }
+        )
+        .exec();
+
+      if (!changedOperatingHours) {
+        throw new Error("Problem Changing the working hours!!");
+      }
+      resolve(changedOperatingHours);
+    } catch (error) {
+      console.error(error);
       reject(error);
     }
   });
