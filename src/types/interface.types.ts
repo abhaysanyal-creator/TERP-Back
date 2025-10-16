@@ -88,7 +88,7 @@ export interface FixedCost {
   id: string;
   type: string;
   amount: number;
-  recurrence: "monthly" | "yearly";
+  recurrence: "one_time" | "monthly" | "yearly";
   description?: string;
 }
 export interface Organisations extends Document {
@@ -115,22 +115,57 @@ export interface Companion {
   contact_number: string;
   national_id: string;
   relation_patient: string;
-  email:string;
+  email: string;
 }
 
 export interface Patients extends Document {
-  created_by:Types.ObjectId;
+  created_by: Types.ObjectId;
   patient_id: string;
   first_name: string;
   last_name: string;
   national_id: string;
   gender: string;
-  email:string;
+  email: string;
   dob: Date;
-    is_deleted: boolean;
+  is_deleted: boolean;
   organisation_assignment: string[];
   address: Address;
   disabilities_list: string[];
   companions_list: Companion[];
   allergies_list: string[];
+}
+
+export interface Therapists {
+  name: string;
+  id: Types.ObjectId;
+  employee_id: string;
+  specialisation: string;
+  working_hours: WorkingHour;
+  organisation: Types.ObjectId;
+}
+
+export interface Room {
+  room_type: string;
+  room_size: number;
+  clinic_id: string;
+  room_id: Types.ObjectId;
+}
+
+export interface ClinicPricing {
+  clinic_id: string;
+  name: string;
+  price_to_customer: number;
+  cost_price: number;
+}
+
+export interface Clinics extends Document {
+  branch_name: string;
+  clinic_id: string;
+  owner: string;
+  manager: Types.ObjectId;
+  therapists: [Therapists];
+  address: Address;
+  working_hours: WorkingHour;
+  no_of_rooms: number;
+  specialisation: ClinicPricing;
 }

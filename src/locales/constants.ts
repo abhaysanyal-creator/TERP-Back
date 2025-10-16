@@ -9,6 +9,10 @@ export default {
         code: "NOT_DELETED",
         message: "Something Went Wrong!!",
       },
+      CREATE: {
+        code: "NOT_CREATED",
+        message: "Something Went Wrong!!",
+      },
     },
     EMP_NOT_FOUND: {
       code: "EMP_NOT_FOUND",
@@ -209,6 +213,24 @@ export default {
     EMAIL_REQ: {
       code: "EMAIL_REQ",
       message: "Companion email is required!!",
+    },
+    BRANCH_NAME_REQ: {
+      code: "BRANCH_NAME_REQ",
+      message: "Branch name is required!!",
+    },
+    CLINIC_ID_REQ: {
+      code: "CLINIC_ID_REQ",
+      message: "Clinic ID is required!!",
+    },
+    OWNER_REQ: { code: "OWNER_REQ", message: "Owner is required!!" },
+    MANAGER_REQ: { code: "MANAGER_REQ", message: "Manager ID is required!!" },
+    THERAPIST_FIELD_REQ: {
+      code: "THERAPIST_FIELD_REQ",
+      message: "Therapist fields missing!!",
+    },
+    SPECIALISATION_FIELD_REQ: {
+      code: "SPECIALISATION_FIELD_REQ",
+      message: "Specialisation fields missing!!",
     },
   },
 };

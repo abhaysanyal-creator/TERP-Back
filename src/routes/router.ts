@@ -6,6 +6,7 @@ import permissionRoutes from "./permissions.routes.ts";
 import employeeRoutes from "./employee.routes.ts";
 import organisationRoutes from "./organisation.routes.ts";
 import patientRoutes from "./patients.routes.ts";
+import clinicRoutes from "./clinics.routes.ts";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use("/permissions", permissionRoutes);
 router.use("/employee", employeeRoutes);
 router.use("/organisations", organisationRoutes);
 router.use("/patients", patientRoutes);
+router.use("/clinics",clinicRoutes)
 
 export default router;

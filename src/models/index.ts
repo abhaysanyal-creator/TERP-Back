@@ -4,7 +4,8 @@ import permissionModel from "./permissions.model.ts";
 import employeeModel from "./employee.model.ts";
 import organisationModel from "./organisation.model.ts";
 import patientModel from "./patients.model.ts";
-import otpModel from "./otp.model.ts"
+import otpModel from "./otp.model.ts";
+import clinicModel from "./clinics.model.ts";
 
 const ProjectModels = {
   userModel,
@@ -13,7 +14,8 @@ const ProjectModels = {
   employeeModel,
   organisationModel,
   patientModel,
-  otpModel
+  otpModel,
+  clinicModel,
 };
 
 export default ProjectModels;
