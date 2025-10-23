@@ -1,19 +1,5 @@
 import express from "express";
-import type { ExpressMiddlewareNext } from "../types/express.types.ts";
 import morgan from "morgan";
-// export const apiLogger: ExpressMiddlewareNext = (req, res, next) => {
-//   const start = Date.now();
-
-//   res.on("finish", () => {
-//     const duration = Date.now() - start;
-//     console.log(
-//       `➡️ [${new Date().toISOString()}] ${req.method} ${req.originalUrl} | ` +
-//         `Status: ${res.statusCode} | Duration: ${duration}ms | IP: ${req.ip}`
-//     );
-//   });
-
-//   next();
-// };
 
 export const applicationMiddlewares = (app: express.Application) => {
   console.log("✅ Middlewares loaded");

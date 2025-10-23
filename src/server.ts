@@ -15,14 +15,6 @@ applicationMiddlewares(app);
 
 ConnectDB();
 
-// app.use(
-//   cors({
-//     origin: true,
-//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // all common HTTP methods
-//     credentials: true,
-//   })
-// );
-
 app.use(
   cors({
     origin: "*",
@@ -45,6 +37,19 @@ app.use("/api/v1", routes);
 
 const PORT = Number(process.env.PORT) || 5000;
 
-app.listen(PORT, "0.0.0.0", () =>
-  console.log(`Server running on ${process.env.PORT}`)
-);
+app.listen(PORT || 5000, "0.0.0.0", () => {
+  PORT
+    ? console.log(`Server running on - ${process.env.PORT}`)
+    : console.log("Server running on 5000");
+  // console.log(`Server running on ${process.env.PORT}`);
+});
+
+app.get("/health", (req, res) => {
+
+  res.status(200).json({
+    status: "ok",
+    message: "Server is healthy",
+    uptime: process.uptime(),
+    timestamp: new Date(),
+  });
+});

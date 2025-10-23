@@ -8,5 +8,6 @@
     "Other"
   ],
   "AreaIn": ["sq.ft", "acre"],
-  "Gender": ["male", "female", "other"]
+  "Gender": ["male", "female", "other"],
+  "Booking_Status": ["booked", "completed", "cancelled"]
 }

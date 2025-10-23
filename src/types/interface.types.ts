@@ -1,5 +1,10 @@
-import { Document, Types } from "mongoose";
+import {
+  Document,
+  Types,
+  type TypeExpressionOperatorReturningString,
+} from "mongoose";
 import type { JwtPayload } from "jsonwebtoken";
+import type { DateFilterList } from "aws-sdk/clients/securityhub";
 
 export interface Role extends Document {
   name: string; // Role name, e.g., "super-admin"
@@ -11,7 +16,7 @@ export interface Role extends Document {
 export interface User extends Document {
   username: string;
   email: string;
-  is_deleted:boolean;
+  is_deleted: boolean;
   employee_id: string;
   name: string;
   password: string;
@@ -161,7 +166,7 @@ export interface ClinicPricing {
 
 export interface Clinics extends Document {
   created_by: Types.ObjectId;
-  is_deleted:boolean;
+  is_deleted: boolean;
   branch_name: string;
   clinic_id: string;
   owner: string;
@@ -171,4 +176,16 @@ export interface Clinics extends Document {
   working_hours: WorkingHour;
   no_of_rooms: number;
   specialisation: ClinicPricing;
+}
+
+export interface Bookings extends Document {
+  clinic_id: string;
+  room_id: Types.ObjectId;
+  therapist_id: Types.ObjectId;
+  created_by: Types.ObjectId;
+  start_time: Date;
+  end_time: Date;
+  patient_id: Types.ObjectId;
+  status: string;
+  notes: string;
 }
