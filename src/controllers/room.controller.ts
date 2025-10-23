@@ -1,6 +1,6 @@
 import constants from "../locales/constants";
 import { badRequest, success } from "../response/response";
-import { createRoomService, viewRoomService } from "../services/room.service";
+import { createRoomService, deleteRoomService, updateRoomService, viewRoomService } from "../services/room.service";
 import { ExpressMiddleware } from "../types/express.types";
 import Constants from "../locales/constants";
 import { getErrorMessage } from "../middlewares/app.middlewares";
@@ -40,13 +40,44 @@ export const viewRoomController: ExpressMiddleware = async (
   }
 };
 
-
 export const updateRoomController: ExpressMiddleware = async (
   request,
   response
 ) => {
   try {
-    const result = await createRoomService(request.body);
+    const existingRoom = await mongoose
+      .model("rooms")
+      .findById(request.body.id)
+      .exec();
+
+    if (!existingRoom) {
+      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    }
+
+    const result = await updateRoomService(request.body);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+
+export const deleteRoomController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const existingRoom = await mongoose
+      .model("rooms")
+      .findById(request.params.id)
+      .exec();
+
+    if (!existingRoom) {
+      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    }
+
+    const result = await deleteRoomService(request.params);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

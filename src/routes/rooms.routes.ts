@@ -1,7 +1,15 @@
 import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
-import { createRoomValidator, viewRoomValidator } from "../validators/room.validator";
-import { createRoomController, viewRoomController } from "../controllers/room.controller";
+import {
+  createRoomValidator,
+  updateRoomValidator,
+  viewRoomValidator,
+} from "../validators/room.validator";
+import {
+  createRoomController,
+  updateRoomController,
+  viewRoomController,
+} from "../controllers/room.controller";
 
 const router = Router();
 
@@ -22,12 +30,12 @@ router.get(
 router.patch(
   "/update",
   authorisationMiddleware,
-  createRoomValidator,
-  createRoomController
+  updateRoomValidator,
+  updateRoomController
 );
 
 router.delete(
-  "/create",
+  "/delete':id",
   authorisationMiddleware,
   createRoomValidator,
   createRoomController
@@ -39,3 +47,5 @@ router.post(
   createRoomValidator,
   createRoomController
 );
+
+export default router;

@@ -38,3 +38,56 @@ export const viewRoomService = (
   });
 };
 
+export const updateRoomService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const updatedRoom = await mongoose
+        .model("rooms")
+        .findOneAndReplace(
+          { _id: ObjectId(payload.id), is_deleted: false },
+          { $set: payload },
+          {
+            new: true,
+            runValidators: true,
+          }
+        )
+        .exec();
+
+      if (!updatedRoom) {
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
+      }
+      resolve(updatedRoom);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const deleteRoomService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const deletedRoom = await mongoose
+        .model("rooms")
+        .findOneAndReplace(
+          { _id: ObjectId(payload.id), is_deleted: false },
+          { $set: { is_deleted: true } },
+          {
+            new: true,
+            runValidators: true,
+          }
+        )
+        .exec();
+
+      if (!deletedRoom) {
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
+      }
+      resolve(deletedRoom);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

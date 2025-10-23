@@ -7,6 +7,8 @@ import employeeRoutes from "./employee.routes";
 import organisationRoutes from "./organisation.routes";
 import patientRoutes from "./patients.routes";
 import clinicRoutes from "./clinics.routes";
+import roomRoutes from "./rooms.routes";
+import bookingRoutes from "./booking.routes";
 
 const router = Router();
 
@@ -17,6 +19,8 @@ router.use("/permissions", permissionRoutes);
 router.use("/employee", employeeRoutes);
 router.use("/organisations", organisationRoutes);
 router.use("/patients", patientRoutes);
-router.use("/clinics",clinicRoutes)
+router.use("/clinics", clinicRoutes);
+router.use("/rooms", roomRoutes);
+router.use("/bookings",bookingRoutes);
 
 export default router;

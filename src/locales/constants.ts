@@ -30,6 +30,10 @@ export default {
       code: "EMP_NOT_FOUND",
       message: "Employee Not Found!!",
     },
+    NO_CHANGES: {
+      code: "NO_CHANGES_IN_REQUEST",
+      message: "No Changes in the API!!",
+    },
     CREATED_BY_REQ: {
       code: "CREATED_BY_REQUIRED",
       message: "Created By Required!!",
@@ -252,6 +256,32 @@ export default {
     SPECIALISATION_FIELD_REQ: {
       code: "SPECIALISATION_FIELD_REQ",
       message: "Specialisation fields missing!!",
+    },
+    START_TIME_REQ: {
+      code: "START_TIME_REQ",
+      message: "Start Time Required!!",
+    },
+    END_TIME_REQ: {
+      code: "END_TIME_REQ",
+      message: "End Time Required!!",
+    },
+    THERAPIST: {
+      NAME_REQ: {
+        code: "THERAPIST_NAME_REQ",
+        message: "Therapist Name Required!!",
+      },
+      ID_REQ: {
+        code: "THERAPIST_ID_REQ",
+        message: "Therapist Id Required!!",
+      },
+      ORGANISATION_REQ: {
+        code: "THERAPIST_ORG_REQ",
+        message: "Therapist Organisation Required!!",
+      },
+    },
+    ROOM_UNAVAIL: {
+      code: "ROOM_UNAVAIL",
+      message: "Room Un-Available!!",
     },
   },
 };

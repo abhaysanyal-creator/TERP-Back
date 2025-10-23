@@ -34,3 +34,28 @@ export const viewRoomValidator: ExpressMiddlewareNext = (
 
   next();
 };
+
+export const updateRoomValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+
+  if (!request.body.created_by) {
+    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
+  }
+
+  if (!request.body.clinic_id) {
+    return badRequest(response, Constants.MESSAGES.CLINIC_ID_REQ.code);
+  }
+  if (!request.body.room_type) {
+    return badRequest(response, Constants.MESSAGES.ROOM_TYPE_REQ.code);
+  }
+  if (!request.body.room_size) {
+    return badRequest(response, Constants.MESSAGES.ROOM_SIZE_REQ.code);
+  }
+  next();
+};

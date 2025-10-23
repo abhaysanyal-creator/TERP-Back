@@ -179,10 +179,13 @@ export interface Clinics extends Document {
   specialisation: ClinicPricing;
 }
 
+
+
 export interface Bookings extends Document {
+  booking_id:String;
   clinic_id: Types.ObjectId;
   room_id: Types.ObjectId;
-  therapist_id: Types.ObjectId;
+  therapist: Therapists;
   created_by: Types.ObjectId;
   start_time: Date;
   end_time: Date;

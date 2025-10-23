@@ -1,16 +1,39 @@
 import { Schema, model } from "mongoose";
 import enums from "../enums.json";
-import { Bookings } from "../types/interface.types";
+import { Bookings, Therapists, WorkingHour } from "../types/interface.types";
+
+const WorkingHourSchema = new Schema<WorkingHour>(
+  {
+    day: { type: String, required: true },
+    startTime: { type: String, required: false, default: null },
+    endTime: { type: String, required: false, default: null },
+  },
+  { _id: false }
+);
+
+const TherapistSchema: Schema<Therapists> = new Schema(
+  {
+    id: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      unique: true,
+      ref: "employees",
+    },
+    name: { type: String, required: true },
+    employee_id: { type: String, required: true },
+    specialisation: { type: String, required: true },
+    working_hours: [WorkingHourSchema],
+    organisation: { type: Schema.Types.ObjectId, required: true },
+  },
+  { _id: false }
+);
 
 const bookingsSchema: Schema<Bookings> = new Schema(
   {
+    booking_id: { type: String, unique: true },
     clinic_id: { type: Schema.Types.ObjectId, ref: "clinics", required: true },
-    room_id: { type: Schema.Types.ObjectId, ref: "rooms", required: true },
-    therapist_id: {
-      type: Schema.Types.ObjectId,
-      ref: "employees",
-      required: true,
-    },
+    room_id: { type: Schema.Types.ObjectId, ref: "rooms", required: true }, 
+    therapist: TherapistSchema,
     patient_id: {
       type: Schema.Types.ObjectId,
       ref: "patients",

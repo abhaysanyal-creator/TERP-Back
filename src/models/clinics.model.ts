@@ -9,23 +9,6 @@ import type {
 } from "../types/interface.types";
 import roomModel from "./rooms.model";
 
-const TherapistSchema: Schema<Therapists> = new Schema(
-  {
-    id: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      unique: true,
-      ref: "employees",
-    },
-    name: { type: String, required: true },
-    employee_id: { type: String, required: true },
-    specialisation: { type: String, required: true },
-    working_hours: { type: String, required: true },
-    organisation: { type: Schema.Types.ObjectId, required: true },
-  },
-  { _id: false }
-);
-
 const ClinicPricingSchema: Schema<ClinicPricing> = new Schema(
   {
     clinic_id: { type: String, required: true },
@@ -51,6 +34,23 @@ const WorkingHourSchema = new Schema<WorkingHour>(
     day: { type: String, required: true },
     startTime: { type: String, required: false, default: null },
     endTime: { type: String, required: false, default: null },
+  },
+  { _id: false }
+);
+
+const TherapistSchema: Schema<Therapists> = new Schema(
+  {
+    id: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      unique: true,
+      ref: "employees",
+    },
+    name: { type: String, required: true },
+    employee_id: { type: String, required: true },
+    specialisation: { type: String, required: true },
+    working_hours: [WorkingHourSchema],
+    organisation: { type: Schema.Types.ObjectId, required: true },
   },
   { _id: false }
 );

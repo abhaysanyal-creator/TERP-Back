@@ -1,30 +1,42 @@
 import { Router } from "express";
-import {
-  addRolesValidator,
-  updateRolesValidator,
-} from "../validators/roles.validator";
-import { addRolesController } from "../controllers/roles.controller";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
+import {
+  createRoomValidator,
+  updateRoomValidator,
+  viewRoomValidator,
+} from "../validators/room.validator";
+import {
+  createRoomController,
+  deleteRoomController,
+  updateRoomController,
+  viewRoomController,
+} from "../controllers/room.controller";
 
 const router = Router();
 
 router.post(
   "/create",
   authorisationMiddleware,
-  addRolesValidator,
-  addRolesController
+  createRoomValidator,
+  createRoomController
 );
 router.post(
   "/view/:id",
   authorisationMiddleware,
-  addRolesValidator,
-  addRolesController
+  viewRoomValidator,
+  viewRoomController
 );
 router.post(
-  "/update/:id",
+  "/update",
   authorisationMiddleware,
-  updateRolesValidator,
-  updateRolesValidator
+  updateRoomValidator,
+  updateRoomController
+);
+router.delete(
+  "/delete",
+  authorisationMiddleware,
+  viewRoomValidator,
+  deleteRoomController
 );
 
 export default router;

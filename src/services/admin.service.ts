@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { adminCheck, generateEmployeeId, ObjectId } from "../utils/helpers";
+import Constants from "../locales/constants";
 
 export const createAdmin = (
   payload: Record<string, any>
@@ -35,7 +36,7 @@ export const createAdmin = (
         .findOne({ _id: ObjectId(payload.role) });
 
       payload.permissions = role.permissions;
-      
+
       const newUser = await mongoose.model("users").create(payload);
 
       return resolve(newUser);
@@ -54,7 +55,7 @@ export const viewAdminService = (
         .model("users")
         .findOne({ _id: ObjectId(payload.id) })
         .exec();
-      if (!user) return reject(new Error("No User Found!!"));
+      if (!user) return reject(new Error(Constants.MESSAGES.NOT_FOUND.code));
       return resolve(user);
     } catch (error) {
       reject(error);
