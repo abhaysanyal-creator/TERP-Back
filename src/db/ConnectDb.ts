@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const connectionString = process.env.MONGODB_URI as string;
+const connectionString = process.env.DATABASE_URI as string;
 
 const ConnectDB = async (): Promise<void> => {
   try {
