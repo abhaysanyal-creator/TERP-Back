@@ -1,17 +1,18 @@
 import { Schema, model } from "mongoose";
+import { Room } from "../types/interface.types";
 
-const roomsSchema = new Schema(
+const roomsSchema: Schema<Room> = new Schema(
   {
     clinic_id: { type: Schema.Types.ObjectId, ref: "clinics", required: true },
-    room_number: { type: String, required: true },
-    status: {
-      type: String,
-      enum: ["available", "booked", "maintenance"],
-      default: "available",
-    },
-    current_booking: { type: Schema.Types.ObjectId, ref: "bookings" },
+    created_by: { type: Schema.Types.ObjectId, ref: "users", required: true },
+    room_type: { type: String, required: true },
+    room_size: { type: Number, required: true },
   },
   {
     timestamps: true,
   }
 );
+
+const roomModel = model<Room>("rooms", roomsSchema, "rooms");
+
+export default roomModel;

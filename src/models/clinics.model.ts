@@ -7,6 +7,7 @@ import type {
   Therapists,
   WorkingHour,
 } from "../types/interface.types";
+import roomModel from "./rooms.model";
 
 const TherapistSchema: Schema<Therapists> = new Schema(
   {
@@ -21,16 +22,6 @@ const TherapistSchema: Schema<Therapists> = new Schema(
     specialisation: { type: String, required: true },
     working_hours: { type: String, required: true },
     organisation: { type: Schema.Types.ObjectId, required: true },
-  },
-  { _id: false }
-);
-
-const RoomSchema: Schema<Room> = new Schema(
-  {
-    room_type: { type: String, required: true },
-    room_size: { type: Number, required: true },
-    clinic_id: { type: String, required: true },
-    room_id: { type: Schema.Types.ObjectId, required: true },
   },
   { _id: false }
 );
@@ -65,8 +56,8 @@ const WorkingHourSchema = new Schema<WorkingHour>(
 );
 
 const clinicSchema: Schema<Clinics> = new Schema({
-  created_by:{type:Schema.Types.ObjectId,required:true,ref:"employees"},
-  is_deleted:{type:Boolean,default:false},
+  created_by: { type: Schema.Types.ObjectId, required: true, ref: "employees" },
+  is_deleted: { type: Boolean, default: false },
   branch_name: { type: String, required: true, unique: true },
   clinic_id: { type: String, required: true, unique: true },
   owner: { type: String, required: true },
@@ -74,7 +65,7 @@ const clinicSchema: Schema<Clinics> = new Schema({
   therapists: [TherapistSchema],
   address: AddressSchema,
   working_hours: [WorkingHourSchema],
-  no_of_rooms: { type: Number, required: true },
+  no_of_room: { type: Number, required: true },
   specialisation: [ClinicPricingSchema],
 });
 

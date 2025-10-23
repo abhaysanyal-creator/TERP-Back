@@ -234,6 +234,15 @@ export default {
       code: "CLINIC_ID_REQ",
       message: "Clinic ID is required!!",
     },
+    ROOM_TYPE_REQ: {
+      code: "ROOM_TYPE_REQ",
+      message: "Room type is required!!",
+    },
+
+    ROOM_SIZE_REQ: {
+      code: "ROOM_SIZE_REQ",
+      message: "Room size is required!!",
+    },
     OWNER_REQ: { code: "OWNER_REQ", message: "Owner is required!!" },
     MANAGER_REQ: { code: "MANAGER_REQ", message: "Manager ID is required!!" },
     THERAPIST_FIELD_REQ: {

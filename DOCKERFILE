@@ -12,9 +12,10 @@ RUN rm -rf dist node_modules
 
 # Install dependencies and build
 RUN npm install
-RUN npm run build && \
-    cp -r src/templates dist/src/ && \
-    cp -r src/data dist/src/
+RUN npm run build 
+# && \
+#     cp -r src/templates dist/src/ && \
+#     cp -r src/data dist/src/
 
 #
 # Runner image

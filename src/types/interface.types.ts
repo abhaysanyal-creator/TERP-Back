@@ -150,10 +150,10 @@ export interface Therapists {
 }
 
 export interface Room {
+  clinic_id: Types.ObjectId;
   room_type: string;
   room_size: number;
-  clinic_id: string;
-  room_id: Types.ObjectId;
+  created_by: Types.ObjectId;
 }
 
 export interface ClinicPricing {
@@ -173,12 +173,12 @@ export interface Clinics extends Document {
   therapists: [Therapists];
   address: Address;
   working_hours: WorkingHour;
-  no_of_rooms: number;
+  no_of_room:number;
   specialisation: ClinicPricing;
 }
 
 export interface Bookings extends Document {
-  clinic_id: string;
+  clinic_id: Types.ObjectId;
   room_id: Types.ObjectId;
   therapist_id: Types.ObjectId;
   created_by: Types.ObjectId;
