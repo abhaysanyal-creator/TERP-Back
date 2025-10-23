@@ -3,10 +3,10 @@ dotenv.config();
 
 import rateLimit from "express-rate-limit";
 import express from "express";
-import ConnectDB from "./db/ConnectDb.ts";
-import { applicationMiddlewares } from "./middlewares/app.middlewares.ts";
-import routes from "./routes/router.ts";
-import ProjectModels from "./models/index.ts";
+import ConnectDB from "./db/ConnectDb"
+import { applicationMiddlewares } from "./middlewares/app.middlewares";
+import routes from "./routes/router";
+import ProjectModels from "./models/index";
 import cors from "cors";
 
 const app = express();

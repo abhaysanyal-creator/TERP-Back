@@ -2,9 +2,9 @@ import { Router } from "express";
 import {
   addRolesValidator,
   updateRolesValidator,
-} from "../validators/roles.validator.ts";
-import { addRolesController } from "../controllers/roles.controller.ts";
-import { authorisationMiddleware } from "../middlewares/auth.middlewares.ts";
+} from "../validators/roles.validator";
+import { addRolesController } from "../controllers/roles.controller";
+import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 
 const router = Router();
 

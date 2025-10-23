@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import enums from "../enums.json" with {type:"json"}
+import enums from "../enums.json"
 
 
 const bookingsSchema = new Schema(

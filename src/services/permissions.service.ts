@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { adminCheck, ObjectId } from "../utils/helpers.ts";
+import { adminCheck, ObjectId } from "../utils/helpers";
 
 export const addPermissionService = (
   payload: Record<string, any>

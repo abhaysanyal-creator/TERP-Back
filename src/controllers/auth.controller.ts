@@ -1,7 +1,7 @@
-import { badRequest, errorResponse, success } from "../response/response.ts";
-import type { ExpressMiddleware } from "../types/express.types.ts";
-import { getErrorMessage } from "../middlewares/app.middlewares.ts";
-import { loginService, verifyOtpService } from "../services/auth.service.ts";
+import { badRequest, errorResponse, success } from "../response/response";
+import type { ExpressMiddleware } from "../types/express.types";
+import { getErrorMessage } from "../middlewares/app.middlewares";
+import { loginService, verifyOtpService } from "../services/auth.service";
 
 export const loginController: ExpressMiddleware = async (request, response) => {
   try {

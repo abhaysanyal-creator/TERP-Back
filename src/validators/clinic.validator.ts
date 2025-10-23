@@ -1,6 +1,6 @@
-import { badRequest } from "../response/response.ts";
-import type { ExpressMiddlewareNext } from "../types/express.types.ts";
-import Constants from "../locales/constants.ts";
+import { badRequest } from "../response/response";
+import type { ExpressMiddlewareNext } from "../types/express.types";
+import Constants from "../locales/constants";
 
 export const createClinicValidator: ExpressMiddlewareNext = (
   request,

@@ -1,8 +1,8 @@
-import { badRequest, success } from "../response/response.ts";
-import { createAdmin, viewAdminService } from "../services/admin.service.ts";
-import type { ExpressMiddleware } from "../types/express.types.ts";
-import Lang from "../locales/en.json" with {type:"json"}
-import { getErrorMessage } from "../middlewares/app.middlewares.ts";
+import { badRequest, success } from "../response/response";
+import { createAdmin, viewAdminService } from "../services/admin.service";
+import type { ExpressMiddleware } from "../types/express.types";
+import Lang from "../locales/en.json"
+import { getErrorMessage } from "../middlewares/app.middlewares";
 
 export const adminCreateController: ExpressMiddleware = async (
   request,

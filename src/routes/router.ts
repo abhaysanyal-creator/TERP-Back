@@ -1,12 +1,12 @@
 import { Router } from "express";
-import authRoutes from "./auth.routes.ts";
-import adminRoutes from "./admin.routes.ts";
-import roleRoutes from "./roles.routes.ts";
-import permissionRoutes from "./permissions.routes.ts";
-import employeeRoutes from "./employee.routes.ts";
-import organisationRoutes from "./organisation.routes.ts";
-import patientRoutes from "./patients.routes.ts";
-import clinicRoutes from "./clinics.routes.ts";
+import authRoutes from "./auth.routes";
+import adminRoutes from "./admin.routes";
+import roleRoutes from "./roles.routes";
+import permissionRoutes from "./permissions.routes";
+import employeeRoutes from "./employee.routes";
+import organisationRoutes from "./organisation.routes";
+import patientRoutes from "./patients.routes";
+import clinicRoutes from "./clinics.routes";
 
 const router = Router();
 

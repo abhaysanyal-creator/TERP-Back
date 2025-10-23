@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
-import type { ExpressMiddleware } from "../types/express.types.ts";
-import { badRequest, success } from "../response/response.ts";
-import Constants from "../locales/constants.ts";
+import type { ExpressMiddleware } from "../types/express.types";
+import { badRequest, success } from "../response/response";
+import Constants from "../locales/constants";
 import {
   createPatientService,
   deletePatientService,
   updatePatientService,
   viewPatientService,
-} from "../services/patients.service.ts";
-import { getErrorMessage } from "../middlewares/app.middlewares.ts";
-import { ObjectId } from "../utils/helpers.ts";
+} from "../services/patients.service";
+import { getErrorMessage } from "../middlewares/app.middlewares";
+import { ObjectId } from "../utils/helpers";
 
 export const createPatientController: ExpressMiddleware = async (
   request,

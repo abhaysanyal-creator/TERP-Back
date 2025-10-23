@@ -1,6 +1,6 @@
-import type { ExpressMiddlewareNext } from "../types/express.types.ts";
-import Lang from "../locales/en.json" with {type:"json"}
-import { badRequest } from "../response/response.ts";
+import type { ExpressMiddlewareNext } from "../types/express.types";
+import Lang from "../locales/en.json"
+import { badRequest } from "../response/response";
 
 export const adminCreateValidator:ExpressMiddlewareNext = (request,response,next) => {
     if(!request.body.username) {

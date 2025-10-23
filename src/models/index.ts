@@ -1,11 +1,11 @@
-import userModel from "./user.model.ts";
-import roleModel from "./role.model.ts";
-import permissionModel from "./permissions.model.ts";
-import employeeModel from "./employee.model.ts";
-import organisationModel from "./organisation.model.ts";
-import patientModel from "./patients.model.ts";
-import otpModel from "./otp.model.ts";
-import clinicModel from "./clinics.model.ts";
+import userModel from "./user.model";
+import roleModel from "./role.model";
+import permissionModel from "./permissions.model";
+import employeeModel from "./employee.model";
+import organisationModel from "./organisation.model";
+import patientModel from "./patients.model";
+import otpModel from "./otp.model";
+import clinicModel from "./clinics.model";
 
 const ProjectModels = {
   userModel,

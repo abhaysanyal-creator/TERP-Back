@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import type { ExpressMiddleware } from "../types/express.types.ts";
-import { badRequest, success } from "../response/response.ts";
-import Constants from "../locales/constants.ts";
+import { badRequest, success } from "../response/response";
+import Constants from "../locales/constants";
 import {
   changeOperatingHoursOrganisationService,
   createOrganisationService,
@@ -9,9 +9,9 @@ import {
   listOrganisationService,
   updateOrganisationService,
   viewOrganisationService,
-} from "../services/organisation.service.ts";
-import { getErrorMessage } from "../middlewares/app.middlewares.ts";
-import { ObjectId } from "../utils/helpers.ts";
+} from "../services/organisation.service";
+import { getErrorMessage } from "../middlewares/app.middlewares";
+import { ObjectId } from "../utils/helpers";
 
 export const createOrganisationController: ExpressMiddleware = async (
   request,

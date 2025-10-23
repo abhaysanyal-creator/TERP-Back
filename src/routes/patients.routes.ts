@@ -1,17 +1,17 @@
 import { Router } from "express";
-import { authorisationMiddleware } from "../middlewares/auth.middlewares.ts";
+import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
   createPatientValidator,
   deletePatientValidator,
   updatePatientValidator,
   viewPatientValidator,
-} from "../validators/patients.validator.ts";
+} from "../validators/patients.validator";
 import {
   createPatientController,
   deletePatientController,
   updatePatientController,
   viewPatientController,
-} from "../controllers/patients.controller.ts";
+} from "../controllers/patients.controller";
 
 const router = Router();
 

@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+// import roleModel from "../models/role.model.js"
+// import userModel from "../models/user.model.js"
+// import bcrypt from "bcrypt"
 
 dotenv.config();
 
@@ -29,9 +32,9 @@ const ConnectDB = async (): Promise<void> => {
 //         name: "super-admin",
 //         permissions: ["*"], // full access
 //       });
-//       console.log("Super-admin role created");
+//       console.log("super-admin role created");
 //     } else {
-//       console.log("Super-admin role already exists");
+//       console.log("super-admin role already exists");
 //     }
 
 //     const existingUser = await userModel.findOne({ username: "super_admin" });
@@ -40,8 +43,8 @@ const ConnectDB = async (): Promise<void> => {
 
 //       const superAdmin = await userModel.create({
 //         username: "super_admin",
-//         name:"superadmin",
-//         email: "superadmin@gmail.com",
+//         name:"superAdmin",
+//         email: "super@gmail.com",
 //         password: hashedPassword,
 //         role: superAdminRole._id,
 //       });

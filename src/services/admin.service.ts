@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { adminCheck, generateEmployeeId, ObjectId } from "../utils/helpers.ts";
+import { adminCheck, generateEmployeeId, ObjectId } from "../utils/helpers";
 
 export const createAdmin = (
   payload: Record<string, any>

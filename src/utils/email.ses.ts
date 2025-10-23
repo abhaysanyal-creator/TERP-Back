@@ -1,4 +1,4 @@
-import {sesClient} from "../config/ses.config.ts";
+import {sesClient} from "../config/ses.config";
 import { SendEmailCommand } from "@aws-sdk/client-ses";
 
 export const sendOtpEmail = async (toEmail: string, otp: string) => {

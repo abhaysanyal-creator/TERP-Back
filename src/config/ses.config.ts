@@ -1,6 +1,6 @@
 // src/config/sesClient.ts
 import { SESClient } from "@aws-sdk/client-ses";
-import { awsConfiguration } from "./aws.config.ts";
+import { awsConfiguration } from "./aws.config";
 
 export const sesClient = new SESClient({
   region: awsConfiguration.region,

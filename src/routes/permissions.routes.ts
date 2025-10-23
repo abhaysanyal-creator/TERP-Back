@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { authorisationMiddleware } from "../middlewares/auth.middlewares.ts";
-import { addPermissionController } from "../controllers/permission.controller.ts";
-import { addPermissionsValidator } from "../validators/permissions.validator.ts";
+import { authorisationMiddleware } from "../middlewares/auth.middlewares";
+import { addPermissionController } from "../controllers/permission.controller";
+import { addPermissionsValidator } from "../validators/permissions.validator";
 
 const router = Router();
 

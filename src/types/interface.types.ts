@@ -4,7 +4,6 @@ import {
   type TypeExpressionOperatorReturningString,
 } from "mongoose";
 import type { JwtPayload } from "jsonwebtoken";
-import type { DateFilterList } from "aws-sdk/clients/securityhub";
 
 export interface Role extends Document {
   name: string; // Role name, e.g., "super-admin"

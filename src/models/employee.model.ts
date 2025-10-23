@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
-import type { Address, Employee, WorkingHour } from "../types/interface.types.ts";
-import enums from "../enums.json" with {type:"json"}
+import type { Address, Employee, WorkingHour } from "../types/interface.types";
+import enums from "../enums.json"
 
 const addressSchema = new Schema<Address>(
   {

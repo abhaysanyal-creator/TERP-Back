@@ -1,7 +1,7 @@
-import { badRequest } from "../response/response.ts";
-import Constants from "../locales/constants.ts"
-import type { ExpressMiddlewareNext } from "../types/express.types.ts";
-import enums from "../enums.json" with { type: "json" };
+import { badRequest } from "../response/response";
+import Constants from "../locales/constants"
+import type { ExpressMiddlewareNext } from "../types/express.types";
+import enums from "../enums.json"
 
 export const createOrganisationValidator: ExpressMiddlewareNext = (request, response, next) => {
 

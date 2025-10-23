@@ -1,8 +1,8 @@
-import { badRequest, success } from "../response/response.ts";
-import { addRolesService, updateRolesService, viewRolesService } from "../services/roles.service.ts";
+import { badRequest, success } from "../response/response";
+import { addRolesService, updateRolesService, viewRolesService } from "../services/roles.service";
 import type { ExpressMiddleware } from "../types/express.types.ts";
-import Lang from "../locales/en.json" with {type:"json"}
-import { getErrorMessage } from "../middlewares/app.middlewares.ts";
+import Lang from "../locales/en.json" 
+import { getErrorMessage } from "../middlewares/app.middlewares";
 
 export const addRolesController: ExpressMiddleware = async (
   request,

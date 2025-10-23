@@ -6,9 +6,9 @@ import {
   ObjectId,
   saveOtp,
   verifyOtp,
-} from "../utils/helpers.ts";
-import Constants from "../locales/constants.ts";
-import { sendOtpEmail } from "../utils/email.ses.ts";
+} from "../utils/helpers";
+import Constants from "../locales/constants";
+import { sendOtpEmail } from "../utils/email.ses";
 
 interface LoginPaylaod {
   email: string;

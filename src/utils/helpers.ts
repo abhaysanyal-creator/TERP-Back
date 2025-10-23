@@ -1,5 +1,5 @@
 import jwt, { type SignOptions } from "jsonwebtoken";
-import Constants from "../locales/constants.ts";
+import Constants from "../locales/constants";
 import mongoose from "mongoose";
 interface TokenPayload {
   id: string;

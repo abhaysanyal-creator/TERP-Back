@@ -1,35 +1,19 @@
 {
   "compilerOptions": {
-    // File Layout
-    "rootDir": "./src",
-    "outDir": "./dist",
-
-    // Environment Settings
-    "target": "ES2020",
-    "resolveJsonModule": true,
-    "module": "ESNext",
-    "lib": ["ES2020"],
-    "types": ["node"],
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Recommended Options
-    "strict": true,
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "skipLibCheck": true
+    "target": "ES2020",                       // Modern JS target
+    "module": "CommonJS",                     // Use CommonJS for Node
+    "outDir": "./dist",                        // Output folder for compiled JS
+    "rootDir": "./src",                        // Source files folder
+    "strict": true,                            // Enable all strict checks
+    "esModuleInterop": true,                   // Allow default imports from CommonJS modules
+    "skipLibCheck": true,                      // Skip checking node_modules
+    "forceConsistentCasingInFileNames": true, // Enforce consistent file naming
+    "resolveJsonModule": true,                 // Allow importing JSON files
+    "moduleResolution": "node",                // Use Node module resolution
+    "sourceMap": true,                         // Generate source maps for debugging
+    "declaration": true,                       // Generate type declaration files
+    "declarationMap": true                     // Generate maps for declaration files
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],                     // Include all TS files in src
+  "exclude": ["node_modules", "dist"]         // Exclude node_modules and output folder
 }

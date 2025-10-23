@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { ObjectId } from "../utils/helpers.ts";
-import { success } from "../response/response.ts";
+import { ObjectId } from "../utils/helpers";
+import { success } from "../response/response";
 
 export const createEmployeeService = (
   payload: Record<string, any>

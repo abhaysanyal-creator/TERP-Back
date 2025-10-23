@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authorisationMiddleware } from "../middlewares/auth.middlewares.ts";
+import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
   changeOperatingHoursOrganisationController,
   createOrganisationController,
@@ -7,7 +7,7 @@ import {
   listOrganisationController,
   updateOrganisationController,
   viewOrganisationController,
-} from "../controllers/organisation.controller.ts";
+} from "../controllers/organisation.controller";
 import {
   changeOperatingHoursOrganisationValidator,
   createOrganisationValidator,
@@ -15,7 +15,7 @@ import {
   listOrganisationValidator,
   updateOrganisationValidator,
   viewOrganisationValidator,
-} from "../validators/organisation.validator.ts";
+} from "../validators/organisation.validator";
 
 const router = Router();
 

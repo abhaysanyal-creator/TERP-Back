@@ -1,11 +1,11 @@
-import { badRequest, success } from "../response/response.ts";
-import { changeWorkingHoursEmployeeService, createEmployeeService,deleteEmployeeService,listEmployeeService,updateEmployeeService, viewEmployeeService } from "../services/employee.service.ts";
-import type { ExpressMiddleware } from "../types/express.types.ts";
-import Lang from "../locales/en.json" with {type: "json"}
-import { getErrorMessage } from "../middlewares/app.middlewares.ts";
+import { badRequest, success } from "../response/response";
+import { changeWorkingHoursEmployeeService, createEmployeeService,deleteEmployeeService,listEmployeeService,updateEmployeeService, viewEmployeeService } from "../services/employee.service";
+import type { ExpressMiddleware } from "../types/express.types";
+import Lang from "../locales/en.json"
+import { getErrorMessage } from "../middlewares/app.middlewares";
 import mongoose from "mongoose";
-import { adminCheck, ObjectId } from "../utils/helpers.ts";
-import Constants from "../locales/constants.ts"
+import { adminCheck, ObjectId } from "../utils/helpers";
+import Constants from "../locales/constants"
 
 export const createEmployeeController: ExpressMiddleware = async (
     request,

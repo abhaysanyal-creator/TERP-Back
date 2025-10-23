@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { ObjectId } from "../utils/helpers.ts";
-import Constants from "../locales/constants.ts";
+import { ObjectId } from "../utils/helpers";
+import Constants from "../locales/constants";
 
 export const createPatientService = (
   payload: Record<string, any>

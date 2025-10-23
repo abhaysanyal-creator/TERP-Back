@@ -1,7 +1,7 @@
-import { badRequest } from "../response/response.ts";
-import type { ExpressMiddlewareNext } from "../types/express.types.ts";
-import Constants from "../locales/constants.ts";
-import enums from "../enums.json" with {type:"json"}
+import { badRequest } from "../response/response";
+import type { ExpressMiddlewareNext } from "../types/express.types";
+import Constants from "../locales/constants";
+import enums from "../enums.json"
 
 export const createPatientValidator: ExpressMiddlewareNext = (
   request,
