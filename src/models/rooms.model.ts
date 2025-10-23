@@ -7,6 +7,8 @@ const roomsSchema: Schema<Room> = new Schema(
     created_by: { type: Schema.Types.ObjectId, ref: "users", required: true },
     room_type: { type: String, required: true },
     room_size: { type: Number, required: true },
+    is_active: { type: Boolean, default: true },
+    is_deleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,

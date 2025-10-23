@@ -154,6 +154,8 @@ export interface Room {
   room_type: string;
   room_size: number;
   created_by: Types.ObjectId;
+  is_active: Boolean;
+  is_deleted: Boolean;
 }
 
 export interface ClinicPricing {
@@ -173,7 +175,7 @@ export interface Clinics extends Document {
   therapists: [Therapists];
   address: Address;
   working_hours: WorkingHour;
-  no_of_room:number;
+  no_of_room: number;
   specialisation: ClinicPricing;
 }
 

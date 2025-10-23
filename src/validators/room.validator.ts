@@ -21,4 +21,16 @@ export const createRoomValidator: ExpressMiddlewareNext = (
     return badRequest(response, Constants.MESSAGES.ROOM_SIZE_REQ.code);
   }
   next();
-}
+};
+
+export const viewRoomValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+
+  next();
+};
