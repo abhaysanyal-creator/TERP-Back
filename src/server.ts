@@ -2,11 +2,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import rateLimit from "express-rate-limit";
+import "./models/index";
 import express from "express";
 import ConnectDB from "./db/ConnectDb"
 import { applicationMiddlewares } from "./middlewares/app.middlewares";
 import routes from "./routes/router";
-import ProjectModels from "./models/index";
 import cors from "cors";
 
 const app = express();

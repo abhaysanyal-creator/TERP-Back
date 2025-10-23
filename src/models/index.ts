@@ -7,7 +7,7 @@ import patientModel from "./patients.model";
 import otpModel from "./otp.model";
 import clinicModel from "./clinics.model";
 
-const ProjectModels = {
+export   {
   userModel,
   roleModel,
   permissionModel,
@@ -17,5 +17,3 @@ const ProjectModels = {
   otpModel,
   clinicModel,
 };
-
-export default ProjectModels;
