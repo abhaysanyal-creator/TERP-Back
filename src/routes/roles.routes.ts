@@ -11,6 +11,7 @@ import {
   updateRoomController,
   viewRoomController,
 } from "../controllers/room.controller";
+import { listRolesValidator } from "../validators/roles.validator";
 
 const router = Router();
 
@@ -38,5 +39,13 @@ router.delete(
   viewRoomValidator,
   deleteRoomController
 );
+
+router.delete(
+  "/list",
+  authorisationMiddleware,
+  listRolesValidator,
+  deleteRoomController
+);
+
 
 export default router;

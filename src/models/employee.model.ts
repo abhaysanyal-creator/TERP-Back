@@ -1,28 +1,49 @@
+import { Specialisation } from './../types/interface.types';
 import { Schema, model } from "mongoose";
-import type { Address, Employee, WorkingHour } from "../types/interface.types";
-import enums from "../enums.json"
+import type {
+  Address,
+  Employee,
+  Organisation,
+  TimeSlot,
+  WorkingHour,
+} from "../types/interface.types";
+import enums from "../enums.json";
 
 const addressSchema = new Schema<Address>(
   {
     city: { type: String, required: true },
-    country:{type:String,required:true},
-    address:{type:String,required:true},
+    country: { type: String, required: true },
+    address: { type: String, required: true },
     postal_code: { type: String, required: true },
   },
   { _id: false }
 );
 
-const workingHourSchema = new Schema<WorkingHour>(
-  {
-    day: { type: String, required: true },
-    startTime: { type: String, required: true },
-    endTime: { type: String, required: true },
-  },
-  { _id: false }
-);
+const timeSlotSchema: Schema<TimeSlot> = new Schema({
+  start_time: { type: Date, required: true },
+  end_time: { type: Date, required: true },
+});
+
+const workingHourSchema = new Schema({
+  day: { type: Number, required: true },
+  slots: [timeSlotSchema],
+});
+
+const organisationSchema: Schema<Organisation> = new Schema({
+  id: { type: Schema.Types.ObjectId, required: true, unique: true },
+  name: { type: String, required: true },
+  location: { type: [String] },
+});
+
+const specialisationSchema:Schema<Specialisation> = new Schema({
+  id: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+})
+
 
 const employeeSchema = new Schema<Employee>(
   {
+    employee_id: { type: String, required: true, unique: true },
     first_name: { type: String, required: true, maxlength: 20 },
     last_name: { type: String, required: true, maxlength: 20 },
     national_id: {
@@ -36,20 +57,21 @@ const employeeSchema = new Schema<Employee>(
       enum: enums.EmployeeType as any,
       required: true,
     },
-    is_deleted:{type:Boolean,default:false},
+    is_deleted: { type: Boolean, default: false },
     position_types: [{ type: String, required: true }],
     employee_roles: [{ type: String, required: true }],
     team_leader: { type: Boolean, required: true },
     hire_date: { type: Date, required: true },
-    role:{type:Schema.Types.String},
+    role: { type: Schema.Types.String },
     job_percentage: { type: Number, min: 0, max: 100, required: true },
     dob: { type: Date, required: true },
-    organization_assignments: [{ type: String, required: true }],
+    organization_assignments: [organisationSchema],
     location_assignments: [{ type: String, required: true }],
     address: { type: addressSchema, required: true },
-    mobile_phones: { type: String, required: true,unique:true },
+    mobile_phones: { type: String, required: true, unique: true },
+    specialisation:[specialisationSchema],
     home_phones: { type: String },
-    emails: { type: String, required: true,unique:true },
+    emails: { type: String, required: true, unique: true },
     notes: { type: String },
     gender: {
       type: Schema.Types.String,
@@ -61,6 +83,6 @@ const employeeSchema = new Schema<Employee>(
   { timestamps: true }
 );
 
-const employeeModel = model<Employee>("employees",employeeSchema,"employees")
+const employeeModel = model<Employee>("employees", employeeSchema, "employees");
 
 export default employeeModel;

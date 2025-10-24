@@ -5,6 +5,7 @@ import type {
   Clinics,
   Room,
   Therapists,
+  TimeSlot,
   WorkingHour,
 } from "../types/interface.types";
 import roomModel from "./rooms.model";
@@ -29,11 +30,15 @@ const AddressSchema = new Schema<Address>(
   { _id: false }
 );
 
-const WorkingHourSchema = new Schema<WorkingHour>(
+const timeSlotSchema: Schema<TimeSlot> = new Schema({
+  start_time: { type: Date, required: true },
+  end_time: { type: Date, required: true },
+});
+
+const workingHourSchema = new Schema(
   {
-    day: { type: String, required: true },
-    startTime: { type: String, required: false, default: null },
-    endTime: { type: String, required: false, default: null },
+    day: { type: Number, required: true },
+    slots: [timeSlotSchema],
   },
   { _id: false }
 );
@@ -49,7 +54,7 @@ const TherapistSchema: Schema<Therapists> = new Schema(
     name: { type: String, required: true },
     employee_id: { type: String, required: true },
     specialisation: { type: String, required: true },
-    working_hours: [WorkingHourSchema],
+    working_hours: [workingHourSchema],
     organisation: { type: Schema.Types.ObjectId, required: true },
   },
   { _id: false }
@@ -64,7 +69,7 @@ const clinicSchema: Schema<Clinics> = new Schema({
   manager: { type: Schema.Types.ObjectId, required: true, ref: "employees" },
   therapists: [TherapistSchema],
   address: AddressSchema,
-  working_hours: [WorkingHourSchema],
+  working_hours: [workingHourSchema],
   no_of_room: { type: Number, required: true },
   specialisation: [ClinicPricingSchema],
 });

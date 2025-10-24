@@ -1,5 +1,17 @@
+import { TimeSlot } from "./../types/interface.types";
 import { Schema, model } from "mongoose";
 import { Room } from "../types/interface.types";
+
+const timeSlotSchema: Schema<TimeSlot> = new Schema({
+  start_time: { type: Date, required: true },
+  end_time: { type: Date, required: true },
+});
+
+const bookingSlotSchema = new Schema({
+  day: { type: Number, required: true },
+  slots: timeSlotSchema,
+  booking_id: { type: Schema.Types.ObjectId },
+});
 
 const roomsSchema: Schema<Room> = new Schema(
   {
@@ -7,6 +19,7 @@ const roomsSchema: Schema<Room> = new Schema(
     created_by: { type: Schema.Types.ObjectId, ref: "users", required: true },
     room_type: { type: String, required: true },
     room_size: { type: Number, required: true },
+    bookings: [bookingSlotSchema],
     is_active: { type: Boolean, default: true },
     is_deleted: { type: Boolean, default: false },
   },

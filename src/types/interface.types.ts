@@ -4,6 +4,7 @@ import {
   type TypeExpressionOperatorReturningString,
 } from "mongoose";
 import type { JwtPayload } from "jsonwebtoken";
+import { stringList } from "aws-sdk/clients/datapipeline";
 
 export interface Role extends Document {
   name: string; // Role name, e.g., "super-admin"
@@ -44,10 +45,19 @@ export interface OTP {
   expiresAt: Date;
 }
 
+export interface TimeSlot {
+  start_time: Date;
+  end_time: Date;
+}
+
 export interface WorkingHour {
-  day: string;
-  startTime: string;
-  endTime: string;
+  day: number;
+  slots: TimeSlot[];
+}
+
+export interface BookingDetails {
+  day: number;
+  slots: TimeSlot;
 }
 
 export interface Address {
@@ -57,7 +67,19 @@ export interface Address {
   postal_code: string;
 }
 
+export interface Organisation {
+  id: Types.ObjectId;
+  name: string;
+  location: string[];
+}
+
+export interface Specialisation {
+  id: string;
+  name: string;
+}
+
 export interface Employee extends Document {
+  employee_id: string;
   first_name: string;
   last_name: string;
   national_id: string;
@@ -74,6 +96,7 @@ export interface Employee extends Document {
   location_assignments: string[];
   address: Address;
   mobile_phones: string;
+  specialisation: Specialisation[];
   home_phones: string;
   emails: string;
   notes?: string;
@@ -149,11 +172,16 @@ export interface Therapists {
   organisation: Types.ObjectId;
 }
 
+export interface BookingSlot extends WorkingHour {
+  booking_id: Types.ObjectId;
+}
+
 export interface Room {
   clinic_id: Types.ObjectId;
   room_type: string;
   room_size: number;
   created_by: Types.ObjectId;
+  bookings: [BookingSlot];
   is_active: Boolean;
   is_deleted: Boolean;
 }
@@ -179,16 +207,15 @@ export interface Clinics extends Document {
   specialisation: ClinicPricing;
 }
 
-
-
 export interface Bookings extends Document {
-  booking_id:String;
+  booking_id: String;
   clinic_id: Types.ObjectId;
   room_id: Types.ObjectId;
   therapist: Therapists;
   created_by: Types.ObjectId;
-  start_time: Date;
-  end_time: Date;
+  // start_time: Date;
+  // end_time: Date;
+  booking_details:BookingDetails;
   patient_id: Types.ObjectId;
   status: string;
   notes: string;

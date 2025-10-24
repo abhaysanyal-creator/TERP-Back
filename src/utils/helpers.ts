@@ -111,3 +111,25 @@ export const verifyOtp = async (userId: string, otpInp: string) => {
 
   return true;
 };
+
+export const isRoomAvailable = (
+  room: any,
+  day: number,
+  start_time: Date,
+  end_time: Date
+) => {
+  if (!room.bookings || room.bookings.length === 0) return true;
+
+  const bookingsForDay = room.bookings.filter((b: any) => b.day === day);
+
+  for (const booking of bookingsForDay) {
+    for (const slot of booking.slots) {
+      // Check if requested slot overlaps with an existing slot
+      if (start_time < slot.end_time && end_time > slot.start_time) {
+        return false; // Overlapping, room is not available
+      }
+    }
+  }
+
+  return true; // No overlaps, room is available
+};

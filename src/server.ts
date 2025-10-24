@@ -13,7 +13,7 @@ const app = express();
 
 applicationMiddlewares(app);
 
-ConnectDB();
+ConnectDB()
 
 app.use(
   cors({
@@ -44,9 +44,9 @@ app.listen(PORT || 5000, "0.0.0.0", () => {
   // console.log(`Server running on ${process.env.PORT}`);
 });
 
-app.get("/health", (req, res) => {
+app.get("/health", (request, response) => {
 
-  res.status(200).json({
+  response.status(200).json({
     status: "ok",
     message: "Server is healthy",
     uptime: process.uptime(),

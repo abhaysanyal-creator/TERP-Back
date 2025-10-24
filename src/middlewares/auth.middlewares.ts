@@ -1,10 +1,16 @@
+import { noToken } from "./../response/response";
 import type { Request, Response, NextFunction } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
-import { invalidToken, noToken } from "../response/response";
+import {
+  internalServerError,
+  invalidToken,
+  unAuthorisedAccess,
+} from "../response/response";
 import type { JwtInterface } from "../types/interface.types";
 import type { ExpressMiddlewareNext } from "../types/express.types";
 import mongoose from "mongoose";
 import { ObjectId } from "../utils/helpers";
+import Constants from "../locales/constants";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -17,7 +23,7 @@ export const authorisationMiddleware: ExpressMiddlewareNext = (
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    return noToken(response, "No Token Provided", {});
+    return noToken(response, Constants.MESSAGES.NO_TOKEN.code, {});
   }
 
   try {
@@ -47,17 +53,16 @@ export const authorizePermission = (requiredPermission: string) => {
       const hasPermission = roleDoc.permissions.includes(requiredPermission);
 
       if (!hasPermission) {
-        return response
-          .status(403)
-          .json({ message: "Access denied: insufficient permissions" });
+        return unAuthorisedAccess(response, Constants.MESSAGES.NO_ACCESS.code);
       }
 
       next();
-    } catch (err) {
-      console.error(err);
-      response
-        .status(500)
-        .json({ message: "Server error while checking permissions" });
+    } catch (error) {
+      console.error(error);
+      return internalServerError(
+        response,
+        Constants.MESSAGES.INTERNAL_SERVER_ERROR.code
+      );
     }
   };
 };

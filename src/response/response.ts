@@ -50,6 +50,17 @@ export const noToken = (
   });
 };
 
+export const unAuthorisedAccess = (
+  response: Response,
+  message: string
+): Response => {
+  return response.status(401).json({
+    statusCode: 401,
+    message: message,
+    status: "Failed",
+  });
+};
+
 export const invalidToken = (
   response: Response,
   message: string,
@@ -60,5 +71,16 @@ export const invalidToken = (
     message: message,
     data: data,
     status: "Invalid Token!!",
+  });
+};
+
+export const internalServerError = (
+  response: Response,
+  message: string
+): Response => {
+  return response.status(500).json({
+    statusCode: 500,
+    message: message,
+    status: "Internal Server Error!!",
   });
 };

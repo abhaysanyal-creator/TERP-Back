@@ -15,6 +15,17 @@ export const createBookingService = (
       if (!newBooking) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
       }
+
+      //Update the status of the rooms as booked
+      await mongoose.model("rooms").findByIdAndUpdate(payload.room_id, {
+        $push: {
+          bookings: {
+            day: payload.booking_details.day,
+            slots: payload.booking_details.slots,
+            booking_id: newBooking._id,
+          },
+        },
+      });
       resolve(newBooking);
     } catch (error) {
       reject(error);

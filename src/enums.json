@@ -1,13 +1,33 @@
 {
-  "EmployeeType": ["Employee", "Freelancer", "Other"],
-  "OrganisationType": [
-    "HMO",
-    "Government Office",
-    "Communication Center",
-    "Clinic",
-    "Other"
-  ],
-  "AreaIn": ["sq.ft", "acre"],
-  "Gender": ["male", "female", "other"],
-  "Booking_Status": ["booked", "completed", "cancelled"]
+  "EmployeeType": {
+    "FULL_TIME_EMPLOYEE": "Full-time employee",
+    "PART_TIME_EMPLOYEE": "Part-time employee",
+    "CONTRACTOR": "Contractor"
+  },
+  "OrganisationType": {
+    "HMO": "HMO",
+    "GOVERNMENT_OFFICE": "Government Office",
+    "COMMUNICATION_CENTER": "Communication Center",
+    "CLINIC": "Clinic",
+    "OTHER": "Other"
+  },
+  "AreaIn": {
+    "SQ_FT": "sq.ft",
+    "ACRE": "acre"
+  },
+  "Gender": {
+    "MALE": "male",
+    "FEMALE": "female",
+    "OTHER": "other"
+  },
+  "Booking_Status": {
+    "BOOKED": "booked",
+    "COMPLETED": "completed",
+    "CANCELLED": "cancelled"
+  },
+  "Room_Status":{
+    "BOOKED":"booked",
+    "AVAILABLE":"available",
+    "UN_AVAILABLE":"unavailable"
+  }
 }

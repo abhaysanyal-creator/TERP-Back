@@ -1,17 +1,16 @@
 import { badRequest } from "../response/response";
 import type { ExpressMiddlewareNext } from "../types/express.types";
-import Lang from "../locales/en.json" 
-import enums from "../enums.json"
-import Constants from "../locales/constants"
+import Lang from "../locales/en.json";
+import enums from "../enums.json";
+import Constants from "../locales/constants";
 
 export const createEmployeeValidator: ExpressMiddlewareNext = (
   request,
   response,
   next
 ) => {
-  if(!request.body.created_by) {
-
-    return badRequest(response,Lang.CREATED_BY_REQ||"Created By Required")
+  if (!request.body.created_by) {
+    return badRequest(response, Lang.CREATED_BY_REQ || "Created By Required");
   }
   if (!request.body.first_Name || request.body.first_Name.trim() === "") {
     return badRequest(
@@ -33,15 +32,21 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
       Lang.NATIONAL_ID_REQUIRED || "National ID is required"
     );
   }
-  
-  if (!request.body.employee_type || !enums.EmployeeType.includes(request.body.employee_type)) {
+
+  if (
+    !request.body.employee_type ||
+    !Object.values(enums.EmployeeType).includes(request.body.employee_type)
+  ) {
     return badRequest(
       response,
       Lang.INVALID_EMPLOYEE_TYPE || "Invalid employee type"
     );
   }
 
-  if (!request.body.gender || !enums.Gender.includes(request.body.gender)) {
+  if (
+    !request.body.gender ||
+    !Object.values(enums.Gender).includes(request.body.gender)
+  ) {
     return badRequest(response, Lang.INVALID_GENDER || "Invalid gender");
   }
 
@@ -82,7 +87,7 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
     );
   }
 
-  if (!(request.body.mobile_phones)) {
+  if (!request.body.mobile_phones) {
     return badRequest(
       response,
       Lang.MOBILE_PHONE_REQUIRED ||
@@ -104,21 +109,30 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
     );
   }
 
-  if (!Array.isArray(request.body.position_types) || request.body.position_types.length === 0) {
+  if (
+    !Array.isArray(request.body.position_types) ||
+    request.body.position_types.length === 0
+  ) {
     return badRequest(
       response,
       Lang.POSITION_TYPES_REQUIRED || "At least one position type is required"
     );
   }
 
-  if (!Array.isArray(request.body.employee_roles) || request.body.employee_roles.length === 0) {
+  if (
+    !Array.isArray(request.body.employee_roles) ||
+    request.body.employee_roles.length === 0
+  ) {
     return badRequest(
       response,
       Lang.EMPLOYEE_ROLES_REQUIRED || "At least one employee role is required"
     );
   }
 
-  if (request.body.working_hours && !Array.isArray(request.body.working_hours)) {
+  if (
+    request.body.working_hours &&
+    !Array.isArray(request.body.working_hours)
+  ) {
     return badRequest(
       response,
       Lang.INVALID_WORKING_HOURS || "Working hours must be an array"
@@ -127,20 +141,27 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
   next();
 };
 
-export const viewEmployeeValidator:ExpressMiddlewareNext =(request,response,next) => {
-  if(!request.params.id){
-return badRequest(response,Lang.ID_REQUIRED)
+export const viewEmployeeValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Lang.ID_REQUIRED);
   }
-next()
-}
+  next();
+};
 
-export const updateEmployeeValidator:ExpressMiddlewareNext = (request,response,next) => {
-if(!request.params.id){
-  return badRequest(response,Lang.ID_REQUIRED)
-}
-if(!request.body.created_by) {
-
-    return badRequest(response,Lang.CREATED_BY_REQ||"Created By Required")
+export const updateEmployeeValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Lang.ID_REQUIRED);
+  }
+  if (!request.body.created_by) {
+    return badRequest(response, Lang.CREATED_BY_REQ || "Created By Required");
   }
   if (!request.body.first_Name || request.body.first_Name.trim() === "") {
     return badRequest(
@@ -162,15 +183,21 @@ if(!request.body.created_by) {
       Lang.NATIONAL_ID_REQUIRED || "National ID is required"
     );
   }
-  
-  if (!request.body.employee_type || !enums.EmployeeType.includes(request.body.employee_type)) {
+
+  if (
+    !request.body.employee_type ||
+    !Object.values(enums.EmployeeType).includes(request.body.employee_type)
+  ) {
     return badRequest(
       response,
       Lang.INVALID_EMPLOYEE_TYPE || "Invalid employee type"
     );
   }
 
-  if (!request.body.gender || !enums.Gender.includes(request.body.gender)) {
+  if (
+    !request.body.gender ||
+    !Object.values(enums.Gender).includes(request.body.gender)
+  ) {
     return badRequest(response, Lang.INVALID_GENDER || "Invalid gender");
   }
 
@@ -211,7 +238,7 @@ if(!request.body.created_by) {
     );
   }
 
-  if (!(request.body.mobile_phones)) {
+  if (!request.body.mobile_phones) {
     return badRequest(
       response,
       Lang.MOBILE_PHONE_REQUIRED ||
@@ -233,56 +260,79 @@ if(!request.body.created_by) {
     );
   }
 
-  if (!Array.isArray(request.body.position_types) || request.body.position_types.length === 0) {
+  if (
+    !Array.isArray(request.body.position_types) ||
+    request.body.position_types.length === 0
+  ) {
     return badRequest(
       response,
       Lang.POSITION_TYPES_REQUIRED || "At least one position type is required"
     );
   }
 
-  if (!Array.isArray(request.body.employee_roles) || request.body.employee_roles.length === 0) {
+  if (
+    !Array.isArray(request.body.employee_roles) ||
+    request.body.employee_roles.length === 0
+  ) {
     return badRequest(
       response,
       Lang.EMPLOYEE_ROLES_REQUIRED || "At least one employee role is required"
     );
   }
 
-  if (request.body.working_hours && !Array.isArray(request.body.working_hours)) {
+  if (
+    request.body.working_hours &&
+    !Array.isArray(request.body.working_hours)
+  ) {
     return badRequest(
       response,
       Lang.INVALID_WORKING_HOURS || "Working hours must be an array"
     );
   }
   next();
-}
+};
 
-export const deleteEmployeeValidator:ExpressMiddlewareNext = (request,response,next) => {
-if(!request.params.id){
-return badRequest(response,Constants.MESSAGES.ID_REQ.code)
-}
-next()
-}
+export const deleteEmployeeValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  next();
+};
 
-export const changeWorkingHoursEmployeeValidator:ExpressMiddlewareNext = (request,response,next) => {
-
-if(!request.body.id){
-return badRequest(response,Constants.MESSAGES.ID_REQ.code)
-}
-if (request.body.working_hours && !Array.isArray(request.body.working_hours)) {
+export const changeWorkingHoursEmployeeValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  if (
+    request.body.working_hours &&
+    !Array.isArray(request.body.working_hours)
+  ) {
     return badRequest(
       response,
       Constants.MESSAGES.INVALID_FORMAT.code || "Working hours must be an array"
     );
   }
-next()
-}
+  next();
+};
 
-export const listEmployeeValidator:ExpressMiddlewareNext =(request,response,next) => {
-if(!request.body.page) {
-  return badRequest(response,Constants.MESSAGES.PAGE.code)
-}
-if(!request.body.limit) {
-  return badRequest(response,Constants.MESSAGES.LIMIT.code)
-}
-next();
-}
+export const listEmployeeValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.page) {
+    return badRequest(response, Constants.MESSAGES.PAGE.code);
+  }
+  if (!request.body.limit) {
+    return badRequest(response, Constants.MESSAGES.LIMIT.code);
+  }
+  next();
+};

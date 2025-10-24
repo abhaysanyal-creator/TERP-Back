@@ -1,5 +1,21 @@
 export default {
   MESSAGES: {
+    NO_ACCESS: {
+      code: "NO_ACCESS",
+      message: "Un-Authorised Access!!",
+    },
+     INCLUDE_PERMISSION: {
+      code: "INCLUDE_PERMISSION",
+      message: "Include Permission!!",
+    },
+     NO_TOKEN: {
+      code: "NO_TOKEN",
+      message: "No Token Provided!!",
+    },
+    INTERNAL_SERVER_ERROR: {
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Internal Server Error!!",
+    },
     LOGIN_SUCCESS: {
       code: "LOGIN_SUCCESS",
       message: "Login Successful!!",
@@ -252,6 +268,10 @@ export default {
     THERAPIST_FIELD_REQ: {
       code: "THERAPIST_FIELD_REQ",
       message: "Therapist fields missing!!",
+    },
+    THERAPIST_UNAVAIL: {
+      code: "THERAPIST_UNAVAIL",
+      message: "Therapist Un-Available!!",
     },
     SPECIALISATION_FIELD_REQ: {
       code: "SPECIALISATION_FIELD_REQ",

@@ -1,32 +1,30 @@
 import { Schema, model } from "mongoose";
-import {type Contact, type Address, type Organisations, type WorkingHour, type FixedCost } from "../types/interface.types";
-import enums from "../enums.json" 
-
-const workingHourSchema = new Schema<WorkingHour>(
-    {
-    day: { type: String, required: true },
-    startTime: { type: String, required: false, default: null },
-    endTime: { type: String, required: false, default: null },
-  },
-  { _id: false }
-);
+import {
+  type Contact,
+  type Address,
+  type Organisations,
+  type WorkingHour,
+  type FixedCost,
+  TimeSlot,
+} from "../types/interface.types";
+import enums from "../enums.json";
 
 const addressSchema = new Schema<Address>(
   {
     city: { type: String, required: true },
-    country:{type:String,required:true},
-    address:{type:String,required:true},
+    country: { type: String, required: true },
+    address: { type: String, required: true },
     postal_code: { type: String, required: true },
   },
   { _id: false }
 );
 
 const contactSchema = new Schema<Contact>({
-  name: {type:String,required:true},
-  role: {type:String,required:true,ref:"roles"},
-  phone: {type:String,required:true,unique:true},
-  email: {type:String,required:true,unique:true}
-})
+  name: { type: String, required: true },
+  role: { type: String, required: true, ref: "roles" },
+  phone: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+});
 
 const fixedCostSchema = new Schema<FixedCost>(
   {
@@ -42,24 +40,51 @@ const fixedCostSchema = new Schema<FixedCost>(
   { _id: false }
 );
 
-const organisationSchema: Schema<Organisations> = new Schema({
- org_name: {type:String,required:true,unique:true},
-  org_type: {type:Schema.Types.String,enum:enums.OrganisationType as any,required:true},
-  institution_code: {type:String,required:true,unique:true},
-  internal_code: {type:String,required:true,unique:true},
-  building_size: {type:Number,required:true},
+const timeSlotSchema: Schema<TimeSlot> = new Schema(
+  {
+    start_time: { type: Date, required: true },
+    end_time: { type: Date, required: true },
+  },
+  { _id: false }
+);
 
-  area_in: {type:Schema.Types.String,enum:enums.AreaIn as any,required:true},
-  number_of_rooms: {type:Number,required:true},
-  protected_space: {type:Boolean,required:true},
-  operating_hours: [workingHourSchema],
-  address: addressSchema,
-  number_of_patients: {type:Number,required:true},
-  contacts: [contactSchema],
+const workingHourSchema: Schema<WorkingHour> = new Schema(
+  {
+    day: { type: Number, required: true },
+    slots: [timeSlotSchema],
+  },
+  { _id: false }
+);
 
-  is_deleted: {type:Boolean,default:false},
-  fixed_cost: [fixedCostSchema]
-},{timestamps:true});
+const organisationSchema: Schema<Organisations> = new Schema(
+  {
+    org_name: { type: String, required: true, unique: true },
+    org_type: {
+      type: Schema.Types.String,
+      enum: enums.OrganisationType as any,
+      required: true,
+    },
+    institution_code: { type: String, required: true, unique: true },
+    internal_code: { type: String, required: true, unique: true },
+    building_size: { type: Number, required: true },
+
+    area_in: {
+      type: Schema.Types.String,
+      enum: enums.AreaIn as any,
+      required: true,
+    },
+    number_of_rooms: { type: Number, required: true },
+    protected_space: { type: Boolean, required: true },
+    operating_hours: [workingHourSchema],
+    address: addressSchema,
+    number_of_patients: { type: Number, required: true },
+    contacts: [contactSchema],
+
+    is_deleted: { type: Boolean, default: false },
+    fixed_cost: [fixedCostSchema],
+  },
+  { timestamps: true }
+);
 
 const organisationModel = model<Schema>(
   "organisations",
