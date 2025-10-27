@@ -11,7 +11,7 @@ export const loginController: ExpressMiddleware = async (request, response) => {
 
     return success(response, result.message, {
       userId: result.userId,
-      // otp: result.otp,
+      otp: result.otp,
     });
   } catch (error) {
     const err = error as any;
