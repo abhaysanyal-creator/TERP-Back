@@ -23,15 +23,15 @@ app.use(
   })
 );
 
-const rateLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 50,
-  message: "Too many requests, please try again later.",
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+// const rateLimiter = rateLimit({
+//   windowMs: 1 * 60 * 1000,
+//   max: 1050,
+//   message: "Too many requests, please try again later.",
+//   standardHeaders: true,
+//   legacyHeaders: false,
+// });
 
-app.use("/api/v1", rateLimiter);
+// app.use("/api/v1", rateLimiter);
 
 app.use("/api/v1", routes);
 

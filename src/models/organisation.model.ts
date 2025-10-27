@@ -22,8 +22,8 @@ const addressSchema = new Schema<Address>(
 const contactSchema = new Schema<Contact>({
   name: { type: String, required: true },
   role: { type: String, required: true, ref: "roles" },
-  phone: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
+  phone: { type: String, required: true },
+  email: { type: String, required: true },
 });
 
 const fixedCostSchema = new Schema<FixedCost>(
@@ -64,8 +64,7 @@ const organisationSchema: Schema<Organisations> = new Schema(
       enum: enums.OrganisationType as any,
       required: true,
     },
-    institution_code: { type: String, required: true, unique: true },
-    internal_code: { type: String, required: true, unique: true },
+    organisation_id: { type: String, required: true, unique: true },
     building_size: { type: Number, required: true },
 
     area_in: {
@@ -79,7 +78,7 @@ const organisationSchema: Schema<Organisations> = new Schema(
     address: addressSchema,
     number_of_patients: { type: Number, required: true },
     contacts: [contactSchema],
-
+is_active:{type:Boolean,default:true},
     is_deleted: { type: Boolean, default: false },
     fixed_cost: [fixedCostSchema],
   },

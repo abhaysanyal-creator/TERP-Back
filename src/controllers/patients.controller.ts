@@ -5,6 +5,7 @@ import Constants from "../locales/constants";
 import {
   createPatientService,
   deletePatientService,
+  listPatientService,
   updatePatientService,
   viewPatientService,
 } from "../services/patients.service";
@@ -18,7 +19,10 @@ export const createPatientController: ExpressMiddleware = async (
   try {
     const isPatientExists = await mongoose
       .model("patients")
-      .findOne({ patient_id: request.body.patient_id })
+      .findOne({
+        patient_id: request.body.patient_id,
+        national_id: request.body.national_id,
+      })
       .exec();
 
     if (isPatientExists)
@@ -102,6 +106,19 @@ export const deletePatientController: ExpressMiddleware = async (
     const result = await deletePatientService(request.params);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const listPatientController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const result = await listPatientService(request.body);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
     return badRequest(response, getErrorMessage(error));
   }
 };

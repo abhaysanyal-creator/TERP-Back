@@ -68,10 +68,10 @@ const employeeSchema = new Schema<Employee>(
     organization_assignments: [organisationSchema],
     location_assignments: [{ type: String, required: true }],
     address: { type: addressSchema, required: true },
-    mobile_phones: { type: String, required: true, unique: true },
+    mobile_phone: { type: String, required: true, unique: true },
     specialisation:[specialisationSchema],
     home_phones: { type: String },
-    emails: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     notes: { type: String },
     gender: {
       type: Schema.Types.String,

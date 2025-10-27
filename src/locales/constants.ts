@@ -16,6 +16,10 @@ export default {
       code: "INTERNAL_SERVER_ERROR",
       message: "Internal Server Error!!",
     },
+    DUPLICATE_NATIONAL_ID:{
+      code: "DUPLICATE_NATIONAL_ID",
+      message: "Duplicate National ID!!",
+    },
     LOGIN_SUCCESS: {
       code: "LOGIN_SUCCESS",
       message: "Login Successful!!",
@@ -128,8 +132,8 @@ export default {
       code: "INVALID_AREA_IN",
       message: "Invalid area selection!!",
     },
-    INVALID_ROOMS: {
-      code: "INVALID_ROOMS",
+    INVALID_ROOMS_FORMAT: {
+      code: "INVALID_ROOMS_FORMAT",
       message: "Invalid number of rooms!!",
     },
     INVALID_PROTECTED_SPACE: {

@@ -33,8 +33,8 @@ router.get(
   viewEmployeeController
 );
 
-router.put(
-  "/update/:id",
+router.patch(
+  "/update",
   authorisationMiddleware,
   updateEmployeeValidator,
   updateEmployeeController

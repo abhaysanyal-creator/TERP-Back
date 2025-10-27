@@ -1,7 +1,7 @@
 import { badRequest } from "../response/response";
 import type { ExpressMiddlewareNext } from "../types/express.types";
 import Constants from "../locales/constants";
-import enums from "../enums.json"
+import enums from "../enums.json";
 
 export const createPatientValidator: ExpressMiddlewareNext = (
   request,
@@ -28,7 +28,10 @@ export const createPatientValidator: ExpressMiddlewareNext = (
     return badRequest(response, Constants.MESSAGES.NATIONAL_ID_REQ.code);
   }
 
-  if (!request.body.gender) {
+  if (
+    request.body.gender &&
+    !Object.values(enums.Gender).includes(request.body.gender)
+  ) {
     return badRequest(response, Constants.MESSAGES.GENDER_REQ.code);
   }
 
@@ -134,41 +137,40 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
   }
 
   if (
-    request.body.gender !== undefined && enums.Gender.includes(request.body.gender)
+    request.body.gender !== undefined &&
+    !Object.values(enums.Gender).includes(request.body.gender)
   ) {
     return badRequest(response, Constants.MESSAGES.GENDER_REQ.code);
   }
 
   if (request.body.dob !== undefined) {
-  const date = new Date(request.body.dob);
-  if (isNaN(date.getTime())) {
-    return badRequest(response, Constants.MESSAGES.DOB_REQ.code);
+    const date = new Date(request.body.dob);
+    if (isNaN(date.getTime())) {
+      return badRequest(response, Constants.MESSAGES.DOB_REQ.code);
+    }
   }
-}
 
-if (request.body.address !== undefined) {
-  const addr = request.body.address;
-  if (!addr.city || addr.city.trim() === "") {
-    return badRequest(response, Constants.MESSAGES.CITY_REQ.code);
+  if (request.body.address !== undefined) {
+    const addr = request.body.address;
+    if (!addr.city || addr.city.trim() === "") {
+      return badRequest(response, Constants.MESSAGES.CITY_REQ.code);
+    }
+    if (!addr.country || addr.country.trim() === "") {
+      return badRequest(response, Constants.MESSAGES.COUNTRY_REQ.code);
+    }
+    if (!addr.address || addr.address.trim() === "") {
+      return badRequest(response, Constants.MESSAGES.ADDRESS_FIELD_REQ.code);
+    }
+    if (!addr.postal_code || addr.postal_code.trim() === "") {
+      return badRequest(response, Constants.MESSAGES.POSTAL_CODE_REQ.code);
+    }
   }
-  if (!addr.country || addr.country.trim() === "") {
-    return badRequest(response, Constants.MESSAGES.COUNTRY_REQ.code);
-  }
-  if (!addr.address || addr.address.trim() === "") {
-    return badRequest(response, Constants.MESSAGES.ADDRESS_FIELD_REQ.code);
-  }
-  if (!addr.postal_code || addr.postal_code.trim() === "") {
-    return badRequest(response, Constants.MESSAGES.POSTAL_CODE_REQ.code);
-  }
-}
 
- if (request.body.companions_list!==undefined ) {
-  
-  
+  if (request.body.companions_list !== undefined) {
     const companions = Array.isArray(request.body.companions_list)
       ? request.body.companions_list
       : [request.body.companions_list];
-  
+
     for (const comp of companions) {
       if (!comp.full_name) {
         return badRequest(response, Constants.MESSAGES.COMPANION_NAME_REQ.code);
@@ -186,17 +188,20 @@ if (request.body.address !== undefined) {
         return badRequest(response, Constants.MESSAGES.EMAIL_REQ.code);
       }
     }
-  return badRequest(response,Constants.MESSAGES.COMPANION_NAME_REQ.code)
+    return badRequest(response, Constants.MESSAGES.COMPANION_NAME_REQ.code);
   }
 
-  next()
+  next();
 };
 
-export const deletePatientValidator:ExpressMiddlewareNext = (request,response,next) => {
-if(
-  !request.params.id
-){
-  return badRequest(response,Constants.MESSAGES.ID_REQ.code)}
+export const deletePatientValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
 
-next()
-}
+  next();
+};

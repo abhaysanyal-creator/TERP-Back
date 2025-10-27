@@ -37,26 +37,50 @@ export const createClinicValidator: ExpressMiddlewareNext = (
 
   if (
     request.body.no_of_rooms === undefined ||
-    typeof request.body.no_of_rooms !== "number" ||
-    request.body.no_of_rooms <= 0
-  )
-    return badRequest(response, Constants.MESSAGES.INVALID_ROOMS.code);
+    typeof request.body.no_of_rooms !== "number"
+  ) {
+    return badRequest(response, Constants.MESSAGES.INVALID_ROOMS_FORMAT.code);
+  }
 
-  if (!request.body.working_hours)
-    return badRequest(
-      response,
-      Constants.MESSAGES.OPERATING_HOURS_REQUIRED.code
-    );
+  console.log(request.body.working_hours);
+  if (request.body.working_hours) {
+    const workingHours = Array.isArray(request.body.working_hours)
+      ? request.body.working_hours
+      : JSON.parse(request.body.working_hours);
 
-  if (!Array.isArray(request.body.working_hours))
-    return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
-
-  for (const wh of request.body.working_hours) {
-    if (!wh.day || !wh.startTime || !wh.endTime)
+    if (workingHours.length === 0) {
       return badRequest(
         response,
-        Constants.MESSAGES.INVALID_OPERATING_HOURS.code
+        Constants.MESSAGES.OPERATING_HOURS_REQUIRED.code
       );
+    }
+
+    for (const item of workingHours) {
+      if (
+        typeof item.day !== "number" ||
+        !Array.isArray(item.slots) ||
+        item.slots.length === 0
+      ) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.INVALID_OPERATING_HOURS.code
+        );
+      }
+
+      for (const slot of item.slots) {
+        if (
+          !slot.start_time ||
+          !slot.end_time ||
+          isNaN(Date.parse(slot.start_time)) ||
+          isNaN(Date.parse(slot.end_time))
+        ) {
+          return badRequest(
+            response,
+            Constants.MESSAGES.INVALID_OPERATING_HOURS.code
+          );
+        }
+      }
+    }
   }
 
   if (!request.body.therapists || !Array.isArray(request.body.therapists)) {
@@ -117,90 +141,17 @@ export const updateClinicValidator: ExpressMiddlewareNext = (
   if (!request.body.id) {
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
   }
-  if (request.body.branch_name !== undefined && !request.body.branch_name)
-    return badRequest(response, Constants.MESSAGES.BRANCH_NAME_REQ.code);
-
-  if (request.body.owner !== undefined && !request.body.owner)
-    return badRequest(response, Constants.MESSAGES.OWNER_REQ.code);
-
-  if (request.body.manager !== undefined && !request.body.manager)
-    return badRequest(response, Constants.MESSAGES.MANAGER_REQ.code);
-
-  if (request.body.address !== undefined) {
-    if (!request.body.address.city)
-      return badRequest(response, Constants.MESSAGES.CITY_REQ.code);
-    if (!request.body.address.country)
-      return badRequest(response, Constants.MESSAGES.COUNTRY_REQ.code);
-    if (!request.body.address.address)
-      return badRequest(response, Constants.MESSAGES.ADDRESS_FIELD_REQ.code);
-    if (!request.body.address.postal_code)
-      return badRequest(response, Constants.MESSAGES.POSTAL_CODE_REQ.code);
-  }
-
-  if (request.body.no_of_rooms !== undefined) {
-    if (
-      typeof request.body.no_of_rooms !== "number" ||
-      request.body.no_of_rooms <= 0
-    )
-      return badRequest(response, Constants.MESSAGES.INVALID_ROOMS.code);
-  }
-
-  if (request.body.working_hours !== undefined) {
-    if (!Array.isArray(request.body.working_hours))
-      return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
-
-    for (const wh of request.body.working_hours) {
-      if (!wh.day || !wh.startTime || !wh.endTime)
-        return badRequest(
-          response,
-          Constants.MESSAGES.INVALID_OPERATING_HOURS.code
-        );
-    }
-  }
-
-  if (request.body.therapists !== undefined) {
-    if (!Array.isArray(request.body.therapists))
-      return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
-
-    for (const t of request.body.therapists) {
-      if (
-        !t.id ||
-        !t.name ||
-        !t.employee_id ||
-        !t.specialisation ||
-        !t.working_hours ||
-        !t.organisation
-      )
-        return badRequest(
-          response,
-          Constants.MESSAGES.THERAPIST_FIELD_REQ.code
-        );
-    }
-  }
-
-  if (request.body.specialisation !== undefined) {
-    if (!Array.isArray(request.body.specialisation))
-      return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
-
-    for (const s of request.body.specialisation) {
-      if (
-        !s.name ||
-        typeof s.price_to_customer !== "number" ||
-        typeof s.cost_price !== "number"
-      )
-        return badRequest(
-          response,
-          Constants.MESSAGES.SPECIALISATION_FIELD_REQ.code
-        );
-    }
-  }
 
   next();
 };
 
-export const deleteClinicValidator:ExpressMiddlewareNext = (request,response,next) => {
-if(!request.params.id){
-  return badRequest(response,Constants.MESSAGES.ID_REQ.code)
-}
-next()
-}
+export const deleteClinicValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  next();
+};

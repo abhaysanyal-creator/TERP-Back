@@ -63,12 +63,13 @@ export const updateEmployeeController: ExpressMiddleware = async (
   try {
     const employeeExists = await mongoose
       .model("employees")
-      .findById(request.params.id)
+      .findById(ObjectId(request.body.id))
       .exec();
+
     if (!employeeExists)
       return badRequest(response, Constants.MESSAGES.EMP_NOT_FOUND.code);
 
-    const result = await updateEmployeeService(request);
+    const result = await updateEmployeeService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

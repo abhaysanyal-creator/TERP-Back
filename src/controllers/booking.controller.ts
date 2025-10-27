@@ -69,7 +69,7 @@ export const createBookingController: ExpressMiddleware = async (
     });
 
     if (!room) {
-      return badRequest(response, Constants.MESSAGES.INVALID_ROOMS.code);
+      return badRequest(response, Constants.MESSAGES.INVALID_ROOMS_FORMAT.code);
     }
 
     if (

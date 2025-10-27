@@ -33,10 +33,10 @@ export const generateEmployeeId = () => {
   return prefix + randomPart;
 };
 
-export const generateCode = (prefix: string) => {
+export const generateCode = (prefix: string,length:number) => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let randomPart = "";
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < length; i++) {
     randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return prefix + randomPart;

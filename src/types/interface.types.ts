@@ -95,10 +95,10 @@ export interface Employee extends Document {
   organization_assignments: string[];
   location_assignments: string[];
   address: Address;
-  mobile_phones: string;
+  mobile_phone: string;
   specialisation: Specialisation[];
   home_phones: string;
-  emails: string;
+  email: string;
   notes?: string;
   gender: string;
   working_hours: WorkingHour[];
@@ -122,8 +122,7 @@ export interface FixedCost {
 export interface Organisations extends Document {
   org_name: string;
   org_type: string;
-  institution_code: string;
-  internal_code: string;
+  organisation_id: string;
   building_size: number;
   area_in: string;
   number_of_rooms: number;
@@ -132,6 +131,7 @@ export interface Organisations extends Document {
   address: Address;
   number_of_patients: number;
   contacts: Contact[];
+  is_active:boolean;
   created_at?: Date;
   updated_at?: Date;
   is_deleted: boolean;
@@ -143,7 +143,6 @@ export interface Companion {
   contact_number: string;
   national_id: string;
   relation_patient: string;
-  email: string;
 }
 
 export interface Patients extends Document {
@@ -153,10 +152,11 @@ export interface Patients extends Document {
   last_name: string;
   national_id: string;
   gender: string;
+  is_active: boolean;
   email: string;
   dob: Date;
   is_deleted: boolean;
-  organisation_assignment: string[];
+  organisation_assignment:Organisation;
   address: Address;
   disabilities_list: string[];
   companions_list: Companion[];
@@ -199,11 +199,12 @@ export interface Clinics extends Document {
   branch_name: string;
   clinic_id: string;
   owner: string;
+  is_active:boolean;
   manager: Types.ObjectId;
   therapists: [Therapists];
   address: Address;
   working_hours: WorkingHour;
-  no_of_room: number;
+  no_of_rooms: number;
   specialisation: ClinicPricing;
 }
 
@@ -215,7 +216,7 @@ export interface Bookings extends Document {
   created_by: Types.ObjectId;
   // start_time: Date;
   // end_time: Date;
-  booking_details:BookingDetails;
+  booking_details: BookingDetails;
   patient_id: Types.ObjectId;
   status: string;
   notes: string;

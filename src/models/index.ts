@@ -6,8 +6,10 @@ import organisationModel from "./organisation.model";
 import patientModel from "./patients.model";
 import otpModel from "./otp.model";
 import clinicModel from "./clinics.model";
+import roomModel from "./rooms.model";
+import bookingModel from "./booking.model";
 
-export   {
+export {
   userModel,
   roleModel,
   permissionModel,
@@ -16,4 +18,6 @@ export   {
   patientModel,
   otpModel,
   clinicModel,
+  roomModel,
+  bookingModel,
 };

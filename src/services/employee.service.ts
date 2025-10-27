@@ -36,14 +36,16 @@ export const updateEmployeeService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const requestBody = payload.body;
-      const id = payload.params.id;
+      const requestBody = payload;
+      const id = payload.id;
 
       const updatedEmployee = await mongoose
         .model("employees")
-        .findOneAndReplace({ _id: ObjectId(id) }, requestBody, {
-          returnDocument: "after",
-        })
+        .findOneAndUpdate(
+          { _id: ObjectId(id) },
+          { $set: requestBody },
+          { new: true, runValidators: true }
+        )
         .exec();
 
       if (!updatedEmployee) {
@@ -114,17 +116,16 @@ export const listEmployeeService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      
       const page = Number(payload.page) || 1;
       const limit = Number(payload.limit) || 10;
       const skip = (page - 1) * limit;
-      
+
       const match: Record<string, any> = {
         is_deleted: false,
       };
-      
+
       const or: any[] = [];
-      
+
       if (payload.department) or.push({ department: payload.department });
       if (payload.status) or.push({ status: payload.status });
       if (payload.search) {
@@ -134,31 +135,30 @@ export const listEmployeeService = (
         );
       }
       if (or.length) match.$or = or;
-      
+
       const pipeline: any[] = [
         { $match: match },
         { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit },
       ];
-      
+
       const countPipeline = [{ $match: match }, { $count: "total" }];
-      
+
       const [employees, countResult] = await Promise.all([
         mongoose.model("employees").aggregate(pipeline),
         mongoose.model("employees").aggregate(countPipeline),
       ]);
-      
+
       const totalCount = countResult[0]?.total || 0;
-      
+
       resolve({
         data: employees,
-       
-          total: totalCount,
-        },
-      );
+
+        total: totalCount,
+      });
     } catch (error) {
-     reject(error) 
+      reject(error);
     }
   });
 };

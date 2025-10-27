@@ -3,12 +3,10 @@ import type {
   Address,
   ClinicPricing,
   Clinics,
-  Room,
   Therapists,
   TimeSlot,
-  WorkingHour,
 } from "../types/interface.types";
-import roomModel from "./rooms.model";
+import roomModel, { roomsSchema } from "./rooms.model";
 
 const ClinicPricingSchema: Schema<ClinicPricing> = new Schema(
   {
@@ -64,13 +62,14 @@ const clinicSchema: Schema<Clinics> = new Schema({
   created_by: { type: Schema.Types.ObjectId, required: true, ref: "employees" },
   is_deleted: { type: Boolean, default: false },
   branch_name: { type: String, required: true, unique: true },
+  is_active:{type:Boolean,default:true},
   clinic_id: { type: String, required: true, unique: true },
   owner: { type: String, required: true },
   manager: { type: Schema.Types.ObjectId, required: true, ref: "employees" },
   therapists: [TherapistSchema],
   address: AddressSchema,
   working_hours: [workingHourSchema],
-  no_of_room: { type: Number, required: true },
+  no_of_rooms: { type: Number, required: true },
   specialisation: [ClinicPricingSchema],
 });
 

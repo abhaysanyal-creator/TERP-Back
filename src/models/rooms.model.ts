@@ -8,12 +8,12 @@ const timeSlotSchema: Schema<TimeSlot> = new Schema({
 });
 
 const bookingSlotSchema = new Schema({
-  day: { type: Number, required: true },
+  day: { type: Number },
   slots: timeSlotSchema,
   booking_id: { type: Schema.Types.ObjectId },
 });
 
-const roomsSchema: Schema<Room> = new Schema(
+export const roomsSchema: Schema<Room> = new Schema(
   {
     clinic_id: { type: Schema.Types.ObjectId, ref: "clinics", required: true },
     created_by: { type: Schema.Types.ObjectId, ref: "users", required: true },

@@ -1,15 +1,15 @@
 {
   "EmployeeType": {
-    "FULL_TIME_EMPLOYEE": "Full-time employee",
-    "PART_TIME_EMPLOYEE": "Part-time employee",
+    "FULL_TIME_EMPLOYEE": "full_time_employee",
+    "PART_TIME_EMPLOYEE": "part_time_employee",
     "CONTRACTOR": "Contractor"
   },
   "OrganisationType": {
-    "HMO": "HMO",
-    "GOVERNMENT_OFFICE": "Government Office",
-    "COMMUNICATION_CENTER": "Communication Center",
-    "CLINIC": "Clinic",
-    "OTHER": "Other"
+    "HMO": "hmo",
+    "GOVERNMENT_OFFICE": "government_office",
+    "COMMUNICATION_CENTER": "communication_center",
+    "CLINIC": "clinic",
+    "OTHER": "other"
   },
   "AreaIn": {
     "SQ_FT": "sq.ft",

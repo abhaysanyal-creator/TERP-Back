@@ -7,7 +7,7 @@ export const createBookingService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const booking_code = generateCode("B");
+      const booking_code = generateCode("B",10);
       payload.booking_id = booking_code;
 
       const newBooking = await mongoose.model("bookings").create(payload);

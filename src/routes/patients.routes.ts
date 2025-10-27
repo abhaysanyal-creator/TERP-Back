@@ -9,9 +9,11 @@ import {
 import {
   createPatientController,
   deletePatientController,
+  listPatientController,
   updatePatientController,
   viewPatientController,
 } from "../controllers/patients.controller";
+import { listOrganisationValidator } from "../validators/organisation.validator";
 
 const router = Router();
 
@@ -41,6 +43,13 @@ router.delete(
   authorisationMiddleware,
   deletePatientValidator,
   deletePatientController
+);
+
+router.post(
+  "/list",
+  authorisationMiddleware,
+  listOrganisationValidator,
+  listPatientController
 );
 
 export default router;
