@@ -6,7 +6,7 @@ import type {
   Therapists,
   TimeSlot,
 } from "../types/interface.types";
-import roomModel, { roomsSchema } from "./rooms.model";
+import { roomsSchema } from "./rooms.model";
 
 const ClinicPricingSchema: Schema<ClinicPricing> = new Schema(
   {
@@ -46,7 +46,6 @@ const TherapistSchema: Schema<Therapists> = new Schema(
     id: {
       type: Schema.Types.ObjectId,
       required: true,
-      unique: true,
       ref: "employees",
     },
     name: { type: String, required: true },
@@ -68,6 +67,7 @@ const clinicSchema: Schema<Clinics> = new Schema({
   manager: { type: Schema.Types.ObjectId, required: true, ref: "employees" },
   therapists: [TherapistSchema],
   address: AddressSchema,
+  rooms:[roomsSchema],
   working_hours: [workingHourSchema],
   no_of_rooms: { type: Number, required: true },
   specialisation: [ClinicPricingSchema],

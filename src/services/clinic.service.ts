@@ -91,3 +91,68 @@ export const deleteClinicService = (
     }
   });
 };
+
+export const listClinicService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const page = Number(payload.page) || 1;
+      const limit = Number(payload.limit) || 10;
+      const skip = (page - 1) * 10;
+
+      const match: Record<string, any> = {
+        is_deleted: false,
+      };
+
+      const or: any[] = [];
+      const and: any[] = [];
+
+      // if (payload.org_type) and.push({ org_type: payload.org_type });
+      // if (payload.number_of_rooms)
+      //   and.push({
+      //     number_of_rooms: payload.number_of_rooms,
+      //   });
+      // if (payload.protected_space)
+      //   and.push({ protected_space: payload.protected_space });
+
+      if (payload.working_hours)
+        and.push({
+          operating_hours: payload.operating_hours,
+        });
+
+      if (payload.search) {
+        or.push(
+          { clinic_id: { $regex: payload.search, $options: "i" } },
+          { name: { $regex: payload.search, $options: "i" } }
+        );
+      }
+
+      if (or.length) and.push({ $or: or });
+      if (and.length) match.$and = and;
+
+      const pipeline: any[] = [
+        { $match: match },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit },
+      ];
+
+      const countPipeline = [{ $match: match }, { $count: "total" }];
+
+      const [clinics, countResult] = await Promise.all([
+        mongoose.model("clinics").aggregate(pipeline),
+        mongoose.model("clinics").aggregate(countPipeline),
+      ]);
+
+      const totalCount = countResult[0]?.total || 0;
+
+      resolve({
+        data: clinics,
+        count: totalCount,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

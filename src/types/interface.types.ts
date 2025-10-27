@@ -143,6 +143,7 @@ export interface Companion {
   contact_number: string;
   national_id: string;
   relation_patient: string;
+  landline_number:string;
 }
 
 export interface Patients extends Document {
@@ -153,6 +154,7 @@ export interface Patients extends Document {
   national_id: string;
   gender: string;
   is_active: boolean;
+  contact_number:string;
   email: string;
   dob: Date;
   is_deleted: boolean;
@@ -202,6 +204,7 @@ export interface Clinics extends Document {
   is_active:boolean;
   manager: Types.ObjectId;
   therapists: [Therapists];
+  rooms:[Room];
   address: Address;
   working_hours: WorkingHour;
   no_of_rooms: number;

@@ -5,6 +5,7 @@ import Constants from "../locales/constants";
 import {
   createClinicService,
   deleteClinicService,
+  listClinicService,
   updateClinicService,
   viewClinicService,
 } from "../services/clinic.service";
@@ -108,6 +109,20 @@ export const deleteClinicController: ExpressMiddleware = async (
     const result = await deleteClinicService(request.params);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+
+export const listClinicController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const result = await listClinicService(request.body);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
     return badRequest(response, getErrorMessage(error));
   }
 };

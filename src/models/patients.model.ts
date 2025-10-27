@@ -17,18 +17,29 @@ const addressSchema = new Schema<Address>(
   { _id: false }
 );
 
-const companionSchema = new Schema<Companion>({
-  full_name: { type: String, required: true },
-  contact_number: { type: String, required: true },
-  national_id: { type: String, required: true },
-  relation_patient: { type: String, required: true },
-});
+const companionSchema = new Schema<Companion>(
+  {
+    full_name: { type: String, required: true },
+    contact_number: { type: String, required: true },
+    national_id: { type: String, required: true },
+    relation_patient: { type: String, required: true },
+    landline_number: { type: String },
+  },
+  {
+    _id: false,
+  }
+);
 
-const organisationSchema: Schema<Organisation> = new Schema({
-  id: { type: Schema.Types.ObjectId, required: true, unique: true },
-  name: { type: String, required: true },
-  location: { type: [String] },
-});
+const organisationSchema: Schema<Organisation> = new Schema(
+  {
+    id: { type: Schema.Types.ObjectId, required: true, unique: true },
+    name: { type: String, required: true },
+    location: { type: [String] },
+  },
+  {
+    _id: false,
+  }
+);
 
 const patientSchema: Schema<Patients> = new Schema(
   {
@@ -41,6 +52,7 @@ const patientSchema: Schema<Patients> = new Schema(
     first_name: { type: String, required: true },
     last_name: { type: String, required: true },
     national_id: { type: String, unique: true, required: true },
+    contact_number: { type: String, required: true },
     gender: {
       type: Schema.Types.String,
       enum: enums.Gender as any,
@@ -51,7 +63,7 @@ const patientSchema: Schema<Patients> = new Schema(
     is_active: { type: Boolean, default: true },
     address: addressSchema,
     disabilities_list: [{ type: String }],
-    companions_list: companionSchema,
+    companions_list: [companionSchema],
     allergies_list: [{ type: String }],
     is_deleted: { type: Boolean, default: false },
   },

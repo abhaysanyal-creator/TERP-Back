@@ -12,10 +12,6 @@ export const createPatientValidator: ExpressMiddlewareNext = (
     return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
   }
 
-  if (!request.body.patient_id) {
-    return badRequest(response, Constants.MESSAGES.PATIENT_ID_REQ.code);
-  }
-
   if (!request.body.first_name) {
     return badRequest(response, Constants.MESSAGES.FIRST_NAME_REQ.code);
   }
@@ -77,9 +73,6 @@ export const createPatientValidator: ExpressMiddlewareNext = (
     }
     if (!comp.relation_patient) {
       return badRequest(response, Constants.MESSAGES.RELATION_REQ.code);
-    }
-    if (!comp.email) {
-      return badRequest(response, Constants.MESSAGES.EMAIL_REQ.code);
     }
   }
 

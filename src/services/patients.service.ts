@@ -130,23 +130,23 @@ export const listPatientService = (
       const or: any[] = [];
       const and: any[] = [];
 
-      if (payload.org_type) and.push({ org_type: payload.org_type });
-      if (payload.number_of_rooms)
-        and.push({
-          number_of_rooms: payload.number_of_rooms,
-        });
-      if (payload.protected_space)
-        and.push({ protected_space: payload.protected_space });
+      // if (payload.org_type) and.push({ org_type: payload.org_type });
+      // if (payload.number_of_rooms)
+      //   and.push({
+      //     number_of_rooms: payload.number_of_rooms,
+      //   });
+      // if (payload.protected_space)
+      //   and.push({ protected_space: payload.protected_space });
 
-      if (payload.operating_hours)
-        and.push({
-          operating_hours: payload.operating_hours,
-        });
+      // if (payload.operating_hours)
+      //   and.push({
+      //     operating_hours: payload.operating_hours,
+      //   });
 
       if (payload.search) {
         or.push(
-          { org_name: { $regex: payload.search, $options: "i" } },
-          { institution_code: { $regex: payload.search, $options: "i" } }
+          { first_name: { $regex: payload.search, $options: "i" } },
+          { last_name: { $regex: payload.search, $options: "i" } },
         );
       }
 

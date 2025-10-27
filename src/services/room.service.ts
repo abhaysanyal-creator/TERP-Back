@@ -8,9 +8,25 @@ export const createRoomService = (
   return new Promise(async (resolve, reject) => {
     try {
       const newRoom = await mongoose.model("rooms").create(payload);
+
       if (!newRoom) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
       }
+
+      const updateRoomDetails = await mongoose
+        .model("clinics")
+        .findOneAndUpdate(
+          { _id: payload.clinic_id, is_deleted: false },
+          {
+            $set: {
+              rooms: newRoom,
+            },
+          },
+          { new: true, runValidators: true }
+        );
+
+      console.log("Updated Room in clinics", updateRoomDetails);
+
       resolve(newRoom);
     } catch (error) {
       reject(error);

@@ -3,12 +3,14 @@ import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
   createClinicController,
   deleteClinicController,
+  listClinicController,
   updateClinicController,
   viewClinicController,
 } from "../controllers/clinic.controller";
 import {
   createClinicValidator,
   deleteClinicValidator,
+  listClinicValidator,
   updateClinicValidator,
   viewClinicValidator,
 } from "../validators/clinic.validator";
@@ -41,6 +43,13 @@ router.delete(
   authorisationMiddleware,
   deleteClinicValidator,
   deleteClinicController
+);
+
+router.post(
+  "/list",
+  authorisationMiddleware,
+  listClinicValidator,
+  listClinicController
 );
 
 export default router;
