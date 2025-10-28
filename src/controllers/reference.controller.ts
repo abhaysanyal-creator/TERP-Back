@@ -32,3 +32,10 @@ export const listStatesController: ExpressMiddleware = async (
     return badRequest(response, getErrorMessage(error));
   }
 };
+
+export const createSpecialisationController: ExpressMiddleware = (
+  request,
+  response
+) => {
+  
+};

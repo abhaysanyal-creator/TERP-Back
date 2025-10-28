@@ -7,7 +7,6 @@ export const listStatesValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  console.log("first")
   if (!request.body.country) {
     return badRequest(response, Constants.MESSAGES.COUNTRY_REQ.code);
   }
@@ -24,6 +23,17 @@ export const getCitiesValidator: ExpressMiddlewareNext = (
   }
   if (!request.body.state) {
     return badRequest(response, Constants.MESSAGES.STATE_REQ.code);
+  }
+  next();
+};
+
+export const createSpecialisationValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.name) {
+    return badRequest(response, Constants.MESSAGES.SPECIALISATION_NAME.code);
   }
   next();
 };

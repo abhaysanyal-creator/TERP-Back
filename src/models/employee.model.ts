@@ -5,7 +5,6 @@ import type {
   Employee,
   Organisation,
   TimeSlot,
-  WorkingHour,
 } from "../types/interface.types";
 import enums from "../enums.json";
 
@@ -61,6 +60,7 @@ const specialisationSchema: Schema<Specialisation> = new Schema(
   }
 );
 
+
 const employeeSchema = new Schema<Employee>(
   {
     employee_id: { type: String, required: true, unique: true },
@@ -105,3 +105,9 @@ const employeeSchema = new Schema<Employee>(
 const employeeModel = model<Employee>("employees", employeeSchema, "employees");
 
 export default employeeModel;
+
+
+// 1. Integrated rooms, bookings, clinic apis.
+// 2. Managed with the frontend to complete the HR module.
+// 3. Seeded the Country, State, City.. Created APIs for them as well.
+// 4. Enabled Enums JSON API to the frontend

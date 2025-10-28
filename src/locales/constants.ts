@@ -88,6 +88,10 @@ export default {
       code: "ID_REQ",
       message: "ID is required!!",
     },
+    SPECIALISATION_NAME:{
+      code: "SPECIALISATION_NAME_REQ",
+      message: "Spec. name is required!!",
+    },
     SUCCESS: {
       code: "SUCCESS",
       message: "Successfull!!",
