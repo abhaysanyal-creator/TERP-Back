@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { logger } from "../services/logger.service";
 // import roleModel from "../models/role.model.js"
 // import userModel from "../models/user.model.js"
 // import bcrypt from "bcrypt"
@@ -10,10 +11,16 @@ const connectionString = process.env.DATABASE_URI as string;
 
 const ConnectDB = async (): Promise<void> => {
   try {
-    if (!connectionString) return console.log("MongoDB String Not Available!!");
-    await mongoose.connect(connectionString);
+    await mongoose.connect(connectionString, {
+      tls: true, // or ssl: true, both work
+      tlsCAFile: "/usr/src/app/global-bundle.pem", // absolute path inside container
+    });
 
-    console.log(`MongoDB connected: ${mongoose.connection.name} on port ${mongoose.connection.port} `);
+    logger.info("Connected to DocumentDB successfully ✅");
+
+    console.log(
+      `MongoDB connected: ${mongoose.connection.name} on port ${mongoose.connection.port}`
+    );
   } catch (error) {
     console.error("Connection Failed", error);
     process.exit(1);

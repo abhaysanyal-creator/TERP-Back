@@ -2,8 +2,8 @@ require("dotenv").config();
 
 const config = {
   mongodb: {
-    url: process.env.DATABASE_URI || "mongodb://localhost:27017/terp",
-    databaseName: process.env.DB_NAME || "terp",
+    url: process.env.DATABASE_URI,
+    databaseName: process.env.DB_NAME,
     options: {},
   },
 
