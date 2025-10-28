@@ -24,7 +24,8 @@ export const createEmployeeController: ExpressMiddleware = async (
       .findOne({ _id: request.body.created_by })
       .exec();
 
-    if (!creator) return badRequest(response, Lang.CREATED_BY_REQ);
+    if (!creator)
+      return badRequest(response, Constants.MESSAGES.NO_ACCESS.code);
     if (!adminCheck(creator)) return badRequest(response, Lang.ADMIN_ACCESS);
 
     const existingEmployee = await mongoose

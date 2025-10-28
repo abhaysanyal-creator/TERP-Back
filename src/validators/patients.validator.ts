@@ -159,30 +159,6 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
     }
   }
 
-  if (request.body.companions_list !== undefined) {
-    const companions = Array.isArray(request.body.companions_list)
-      ? request.body.companions_list
-      : [request.body.companions_list];
-
-    for (const comp of companions) {
-      if (!comp.full_name) {
-        return badRequest(response, Constants.MESSAGES.COMPANION_NAME_REQ.code);
-      }
-      if (!comp.contact_number) {
-        return badRequest(response, Constants.MESSAGES.CONTACT_NUM_REQ.code);
-      }
-      if (!comp.national_id) {
-        return badRequest(response, Constants.MESSAGES.COMPANION_NID_REQ.code);
-      }
-      if (!comp.relation_patient) {
-        return badRequest(response, Constants.MESSAGES.RELATION_REQ.code);
-      }
-      if (!comp.email) {
-        return badRequest(response, Constants.MESSAGES.EMAIL_REQ.code);
-      }
-    }
-    return badRequest(response, Constants.MESSAGES.COMPANION_NAME_REQ.code);
-  }
 
   next();
 };

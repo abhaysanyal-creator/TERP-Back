@@ -218,6 +218,10 @@ export default {
       code: "COUNTRY_REQ",
       message: "Country is required!!",
     },
+     STATE_REQ: {
+      code: "STATE_REQ",
+      message: "Country is required!!",
+    },
     ADDRESS_FIELD_REQ: {
       code: "ADDRESS_FIELD_REQ",
       message: "Address field is required!!",

@@ -28,10 +28,15 @@ const AddressSchema = new Schema<Address>(
   { _id: false }
 );
 
-const timeSlotSchema: Schema<TimeSlot> = new Schema({
-  start_time: { type: Date, required: true },
-  end_time: { type: Date, required: true },
-});
+const timeSlotSchema: Schema<TimeSlot> = new Schema(
+  {
+    start_time: { type: Date, required: true },
+    end_time: { type: Date, required: true },
+  },
+  {
+    _id: false,
+  }
+);
 
 const workingHourSchema = new Schema(
   {
@@ -61,13 +66,13 @@ const clinicSchema: Schema<Clinics> = new Schema({
   created_by: { type: Schema.Types.ObjectId, required: true, ref: "employees" },
   is_deleted: { type: Boolean, default: false },
   branch_name: { type: String, required: true, unique: true },
-  is_active:{type:Boolean,default:true},
+  is_active: { type: Boolean, default: true },
   clinic_id: { type: String, required: true, unique: true },
   owner: { type: String, required: true },
   manager: { type: Schema.Types.ObjectId, required: true, ref: "employees" },
   therapists: [TherapistSchema],
   address: AddressSchema,
-  rooms:[roomsSchema],
+  rooms: [roomsSchema],
   working_hours: [workingHourSchema],
   no_of_rooms: { type: Number, required: true },
   specialisation: [ClinicPricingSchema],

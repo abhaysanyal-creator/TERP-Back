@@ -32,9 +32,9 @@ const companionSchema = new Schema<Companion>(
 
 const organisationSchema: Schema<Organisation> = new Schema(
   {
-    id: { type: Schema.Types.ObjectId, required: true, unique: true },
+    id: { type: Schema.Types.ObjectId, required: true },
     name: { type: String, required: true },
-    location: { type: [String] },
+    location: { type: [String], required: true },
   },
   {
     _id: false,

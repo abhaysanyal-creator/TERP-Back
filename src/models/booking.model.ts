@@ -8,15 +8,25 @@ import {
   WorkingHour,
 } from "../types/interface.types";
 
-const timeSlotSchema: Schema<TimeSlot> = new Schema({
-  start_time: { type: Date, required: true },
-  end_time: { type: Date, required: true },
-});
+const timeSlotSchema: Schema<TimeSlot> = new Schema(
+  {
+    start_time: { type: Date, required: true },
+    end_time: { type: Date, required: true },
+  },
+  {
+    _id: false,
+  }
+);
 
-const workingHourSchema = new Schema({
-  day: { type: Number, required: true },
-  slots: [timeSlotSchema],
-});
+const workingHourSchema = new Schema(
+  {
+    day: { type: Number, required: true },
+    slots: [timeSlotSchema],
+  },
+  {
+    _id: false,
+  }
+);
 
 const TherapistSchema: Schema<Therapists> = new Schema(
   {
@@ -35,13 +45,18 @@ const TherapistSchema: Schema<Therapists> = new Schema(
   { _id: false }
 );
 
-const bookingDetailSchema: Schema<BookingDetails> = new Schema({
-  day: { type: Number, required: true },
-  slots: {
-    start_time: { type: Date, required: true },
-    end_time: { type: Date, required: true },
+const bookingDetailSchema: Schema<BookingDetails> = new Schema(
+  {
+    day: { type: Number, required: true },
+    slots: {
+      start_time: { type: Date, required: true },
+      end_time: { type: Date, required: true },
+    },
   },
-});
+  {
+    _id: false,
+  }
+);
 
 const bookingsSchema: Schema<Bookings> = new Schema(
   {

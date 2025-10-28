@@ -19,12 +19,17 @@ const addressSchema = new Schema<Address>(
   { _id: false }
 );
 
-const contactSchema = new Schema<Contact>({
-  name: { type: String, required: true },
-  role: { type: String, required: true, ref: "roles" },
-  phone: { type: String, required: true },
-  email: { type: String, required: true },
-});
+const contactSchema = new Schema<Contact>(
+  {
+    name: { type: String, required: true },
+    role: { type: String, required: true, ref: "roles" },
+    phone: { type: String, required: true },
+    email: { type: String, required: true },
+  },
+  {
+    _id: false,
+  }
+);
 
 const fixedCostSchema = new Schema<FixedCost>(
   {
@@ -78,7 +83,7 @@ const organisationSchema: Schema<Organisations> = new Schema(
     address: addressSchema,
     number_of_patients: { type: Number, required: true },
     contacts: [contactSchema],
-is_active:{type:Boolean,default:true},
+    is_active: { type: Boolean, default: true },
     is_deleted: { type: Boolean, default: false },
     fixed_cost: [fixedCostSchema],
   },

@@ -9,6 +9,7 @@ import patientRoutes from "./patients.routes";
 import clinicRoutes from "./clinics.routes";
 import roomRoutes from "./rooms.routes";
 import bookingRoutes from "./booking.routes";
+import referenceRoutes from "./reference.routes";
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.use("/organisations", organisationRoutes);
 router.use("/patients", patientRoutes);
 router.use("/clinics", clinicRoutes);
 router.use("/rooms", roomRoutes);
-router.use("/bookings",bookingRoutes);
+router.use("/bookings", bookingRoutes);
+router.use("/reference", referenceRoutes);
 
 export default router;

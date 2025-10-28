@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ObjectId } from "../utils/helpers";
+import { generateCode, ObjectId } from "../utils/helpers";
 import { success } from "../response/response";
 
 export const createEmployeeService = (
@@ -7,6 +7,7 @@ export const createEmployeeService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
+      payload.employee_id = generateCode("EMP",6)
       const newEmployee = await mongoose.model("employees").create(payload);
       resolve(newEmployee);
     } catch (error) {

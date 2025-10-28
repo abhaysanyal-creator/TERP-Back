@@ -33,10 +33,7 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
     );
   }
 
-  if (
-    !request.body.employee_type ||
-    !Object.values(enums.EmployeeType).includes(request.body.employee_type)
-  ) {
+  if (!request.body.employee_type) {
     return badRequest(
       response,
       Lang.INVALID_EMPLOYEE_TYPE || "Invalid employee type"
@@ -131,10 +128,7 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
     );
   }
 
-  if (
-    !Array.isArray(request.body.position_types) ||
-    request.body.position_types.length === 0
-  ) {
+  if (!request.body.position_types) {
     return badRequest(
       response,
       Lang.POSITION_TYPES_REQUIRED || "At least one position type is required"

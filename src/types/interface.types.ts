@@ -84,7 +84,7 @@ export interface Employee extends Document {
   last_name: string;
   national_id: string;
   employee_type: string;
-  position_types: string[];
+  position_types: string;
   employee_roles: string[];
   team_leader: boolean;
   is_deleted: boolean;
@@ -96,8 +96,9 @@ export interface Employee extends Document {
   location_assignments: string[];
   address: Address;
   mobile_phone: string;
-  specialisation: Specialisation[];
-  home_phones: string;
+  specialisation: string[];
+  // specialisation: Specialisation[];
+  home_phone: string;
   email: string;
   notes?: string;
   gender: string;
@@ -224,3 +225,6 @@ export interface Bookings extends Document {
   status: string;
   notes: string;
 }
+
+
+

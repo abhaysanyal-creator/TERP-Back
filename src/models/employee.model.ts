@@ -1,4 +1,4 @@
-import { Specialisation } from './../types/interface.types';
+import { Specialisation } from "./../types/interface.types";
 import { Schema, model } from "mongoose";
 import type {
   Address,
@@ -19,27 +19,46 @@ const addressSchema = new Schema<Address>(
   { _id: false }
 );
 
-const timeSlotSchema: Schema<TimeSlot> = new Schema({
-  start_time: { type: Date, required: true },
-  end_time: { type: Date, required: true },
-});
+const timeSlotSchema: Schema<TimeSlot> = new Schema(
+  {
+    start_time: { type: Date, required: true },
+    end_time: { type: Date, required: true },
+  },
+  {
+    _id: false,
+  }
+);
 
-const workingHourSchema = new Schema({
-  day: { type: Number, required: true },
-  slots: [timeSlotSchema],
-});
+const workingHourSchema = new Schema(
+  {
+    day: { type: Number, required: true },
+    slots: [timeSlotSchema],
+  },
+  {
+    _id: false,
+  }
+);
 
-const organisationSchema: Schema<Organisation> = new Schema({
-  id: { type: Schema.Types.ObjectId, required: true, unique: true },
-  name: { type: String, required: true },
-  location: { type: [String] },
-});
+const organisationSchema: Schema<Organisation> = new Schema(
+  {
+    id: { type: Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true },
+    location: { type: [String] },
+  },
+  {
+    _id: false,
+  }
+);
 
-const specialisationSchema:Schema<Specialisation> = new Schema({
-  id: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
-})
-
+const specialisationSchema: Schema<Specialisation> = new Schema(
+  {
+    id: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+  },
+  {
+    _id: false,
+  }
+);
 
 const employeeSchema = new Schema<Employee>(
   {
@@ -49,7 +68,6 @@ const employeeSchema = new Schema<Employee>(
     national_id: {
       type: String,
       required: true,
-      match: /^[0-9]+$/,
       unique: true,
     },
     employee_type: {
@@ -58,7 +76,7 @@ const employeeSchema = new Schema<Employee>(
       required: true,
     },
     is_deleted: { type: Boolean, default: false },
-    position_types: [{ type: String, required: true }],
+    position_types: { type: String, required: true },
     employee_roles: [{ type: String, required: true }],
     team_leader: { type: Boolean, required: true },
     hire_date: { type: Date, required: true },
@@ -68,9 +86,9 @@ const employeeSchema = new Schema<Employee>(
     organization_assignments: [organisationSchema],
     location_assignments: [{ type: String, required: true }],
     address: { type: addressSchema, required: true },
-    mobile_phone: { type: String, required: true, unique: true },
-    specialisation:[specialisationSchema],
-    home_phones: { type: String },
+    mobile_phone: { type: String, required: true },
+    specialisation: [{ type: String, required: true }],
+    home_phone: { type: String },
     email: { type: String, required: true, unique: true },
     notes: { type: String },
     gender: {
