@@ -10,7 +10,7 @@ const config = {
   migrationsDir: "migrations",
   changelogCollectionName: "migrations_changelog",
   migrationFileExtension: ".cjs", // 👈 critical in v12 — must be .cjs
-  moduleSystem: "commonjs",        // 👈 also new in v12
+  moduleSystem: "commonjs",
 };
 
 module.exports = config;
