@@ -13,7 +13,7 @@ export const listStatesValidator: ExpressMiddlewareNext = (
   next();
 };
 
-export const getCitiesValidator: ExpressMiddlewareNext = (
+export const listCitiesValidator: ExpressMiddlewareNext = (
   request,
   response,
   next

@@ -28,17 +28,17 @@ export const createPatientController: ExpressMiddleware = async (
     if (isPatientExists)
       return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
 
-    const creator = await mongoose
-      .model("employees")
-      .findOne({
-        _id: ObjectId(request.body.created_by),
-        is_deleted: false,
-      })
-      .exec();
+    // const creator = await mongoose
+    //   .model("employees")
+    //   .findOne({
+    //     _id: ObjectId(request.body.created_by),
+    //     is_deleted: false,
+    //   })
+    //   .exec();
 
-    if (!creator) {
-      return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-    }
+    // if (!creator) {
+    //   return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
+    // }
 
     const result = await createPatientService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);

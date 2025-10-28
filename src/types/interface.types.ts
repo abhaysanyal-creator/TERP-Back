@@ -132,7 +132,7 @@ export interface Organisations extends Document {
   address: Address;
   number_of_patients: number;
   contacts: Contact[];
-  is_active:boolean;
+  is_active: boolean;
   created_at?: Date;
   updated_at?: Date;
   is_deleted: boolean;
@@ -144,7 +144,7 @@ export interface Companion {
   contact_number: string;
   national_id: string;
   relation_patient: string;
-  landline_number:string;
+  landline_number: string;
 }
 
 export interface Patients extends Document {
@@ -155,11 +155,11 @@ export interface Patients extends Document {
   national_id: string;
   gender: string;
   is_active: boolean;
-  contact_number:string;
+  contact_number: string;
   email: string;
   dob: Date;
   is_deleted: boolean;
-  organisation_assignment:Organisation;
+  organisation_assignment: Organisation;
   address: Address;
   disabilities_list: string[];
   companions_list: Companion[];
@@ -202,10 +202,10 @@ export interface Clinics extends Document {
   branch_name: string;
   clinic_id: string;
   owner: string;
-  is_active:boolean;
+  is_active: boolean;
   manager: Types.ObjectId;
   therapists: [Therapists];
-  rooms:[Room];
+  rooms: [Room];
   address: Address;
   working_hours: WorkingHour;
   no_of_rooms: number;
@@ -226,5 +226,8 @@ export interface Bookings extends Document {
   notes: string;
 }
 
-
-
+export interface SpecialisationType {
+  name: string;
+  is_deleted: boolean;
+  is_active: boolean;
+}

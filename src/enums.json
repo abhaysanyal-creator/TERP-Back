@@ -4,6 +4,11 @@
     "PART_TIME_EMPLOYEE": "part_time_employee",
     "CONTRACTOR": "Contractor"
   },
+  "PositionType": {
+    "FULL_TIME_EMPLOYEE": "full_time_employee",
+    "PART_TIME_EMPLOYEE": "part_time_employee",
+    "CONTRACTOR": "Contractor"
+  },
   "OrganisationType": {
     "HMO": "hmo",
     "GOVERNMENT_OFFICE": "government_office",
@@ -25,9 +30,14 @@
     "COMPLETED": "completed",
     "CANCELLED": "cancelled"
   },
-  "Room_Status":{
-    "BOOKED":"booked",
-    "AVAILABLE":"available",
-    "UN_AVAILABLE":"unavailable"
+  "Room_Status": {
+    "BOOKED": "booked",
+    "AVAILABLE": "available",
+    "UN_AVAILABLE": "unavailable"
+  },
+  "CostRecurrence": {
+    "MONTHLY_FIXED": "monthly_fixed",
+    "WEEKLY_FIXED": "weekly_fixed",
+    "ONE_TIME": "one_time"
   }
 }
