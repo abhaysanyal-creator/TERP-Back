@@ -33,6 +33,7 @@ const workingHourSchema = new Schema(
   {
     day: { type: Number, required: true },
     slots: [timeSlotSchema],
+    enabled: { type: Boolean, default: true },
   },
   {
     _id: false,

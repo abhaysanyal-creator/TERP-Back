@@ -13,7 +13,6 @@ RUN rm -rf dist node_modules
 # Install dependencies and build
 RUN npm install
 RUN npm run build
-RUN npm run seed
 # && \
 #     cp -r src/templates dist/src/ && \
 #     cp -r src/data dist/src/
