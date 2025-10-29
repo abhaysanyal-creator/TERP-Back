@@ -1,10 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import bcrypt from "bcrypt";
-import User from "./models/user.model"; // adjust path if needed
-import Role from "./models/role.model";
-
 const uri = process.env.DATABASE_URI as string;
 
 // async function seedSuperAdmin() {

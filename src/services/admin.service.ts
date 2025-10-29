@@ -16,10 +16,6 @@ export const createAdmin = (
         return reject(new Error("Creator not found"));
       }
 
-      const hasAccess = await adminCheck(creator);
-
-      if (!hasAccess) throw new Error("Only Admins has access!!");
-
       const user = await mongoose
         .model("users")
         .findOne({ email: payload.email })

@@ -6,6 +6,7 @@ import {
   createSpecialisationService,
   listCitiesService,
   listCountriesService,
+  listEnumsService,
   listSpecialisationService,
   listStatesService,
 } from "../services/reference.service";
@@ -81,6 +82,19 @@ export const listSpecialisationController: ExpressMiddleware = async (
 ) => {
   try {
     const result = await listSpecialisationService();
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const listEnumsController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const result = await listEnumsService();
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

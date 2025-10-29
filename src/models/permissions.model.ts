@@ -1,14 +1,19 @@
-import type { Permissions } from "../types/interface.types";
+import type { IUserPermission } from "../types/interface.types";
 import mongoose, { Schema, model } from "mongoose";
 
-const permissionSchema: Schema<Permissions> = new Schema(
+const permissionSchema: Schema<IUserPermission> = new Schema(
   {
-    name: { type: String, required: true, unique: true },
-    icon: { type: String, required: true },
-    created_by: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-      required: true,
+    role: { type: String, required: true },
+    permissions: {
+      type: [
+        {
+          _id: false,
+          name: { type: String },
+          permission: { type: String },
+          module: { type: String },
+          description: { type: String },
+        },
+      ],
     },
   },
   {
@@ -16,7 +21,7 @@ const permissionSchema: Schema<Permissions> = new Schema(
   }
 );
 
-const permissionModel = model<Permissions>(
+const permissionModel = model<IUserPermission>(
   "permissions",
   permissionSchema,
   "permissions"

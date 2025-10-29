@@ -7,10 +7,14 @@ import type { JwtPayload } from "jsonwebtoken";
 import { stringList } from "aws-sdk/clients/datapipeline";
 
 export interface Role extends Document {
-  name: string; // Role name, e.g., "super-admin"
-  permissions: string[]; // Permissions
-  createdAt?: Date;
-  updatedAt?: Date;
+  role: string;
+  permissions: {
+    name: string;
+    permission: string;
+    module: string;
+    description: string;
+    default: boolean;
+  }[];
 }
 
 export interface User extends Document {
@@ -28,10 +32,19 @@ export interface User extends Document {
   contact_number: number;
 }
 
-export interface Permissions extends Document {
-  name: string;
-  icon: string;
-  created_by: Types.ObjectId;
+// export interface Permissions extends Document {
+//   name: string;
+//   created_by: Types.ObjectId;
+// }
+
+export interface IUserPermission extends Document {
+  role: string;
+  permissions: {
+    name: string;
+    permission: string;
+    module: string;
+    description: string;
+  }[];
 }
 
 export interface JwtInterface extends JwtPayload {
@@ -76,6 +89,14 @@ export interface Organisation {
 export interface Specialisation {
   id: string;
   name: string;
+}
+
+export interface EmpDocuments extends Document {
+  employee_id: Types.ObjectId;
+  type: string;
+  file_url: string;
+  uploaded_at: Date;
+  uploaded_by: Types.ObjectId;
 }
 
 export interface Employee extends Document {

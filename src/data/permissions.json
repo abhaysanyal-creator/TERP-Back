@@ -1,0 +1,411 @@
+[
+  {
+    "module": "organization",
+    "name": "Organization",
+    "description": "Manage organizations",
+    "permissions": [
+      {
+        "name": "Create Organization",
+        "permission": "organization.create",
+        "description": "Create an organization"
+      },
+      {
+        "name": "View Organization",
+        "permission": "organization.view",
+        "description": "View organizations"
+      },
+      {
+        "name": "Edit Organization",
+        "permission": "organization.edit",
+        "description": "Edit an organization"
+      },
+      {
+        "name": "Activate Organization",
+        "permission": "organization.activate",
+        "description": "Activate an organization"
+      },
+      {
+        "name": "Inactivate Organization",
+        "permission": "organization.inactivate",
+        "description": "Inactivate an organization"
+      },
+      {
+        "name": "Delete Organization",
+        "permission": "organization.delete",
+        "description": "Delete an organization"
+      }
+    ]
+  },
+  {
+    "module": "department",
+    "name": "Department",
+    "description": "Manage departments",
+    "permissions": [
+      {
+        "name": "Create Department",
+        "permission": "department.create",
+        "description": "Create a department"
+      },
+      {
+        "name": "View Department",
+        "permission": "department.view",
+        "description": "View departments"
+      },
+      {
+        "name": "Edit Department",
+        "permission": "department.edit",
+        "description": "Edit a department"
+      },
+
+      {
+        "name": "Activate Department",
+        "permission": "department.activate",
+        "description": "Activate a department"
+      },
+      {
+        "name": "Inactivate Department",
+        "permission": "department.inactivate",
+        "description": "Inactivate a department"
+      },
+      {
+        "name": "Delete Department",
+        "permission": "department.delete",
+        "description": "Delete a department"
+      }
+    ]
+  },
+  {
+    "module": "region",
+    "name": "Region",
+    "description": "Manage regions",
+    "permissions": [
+      {
+        "name": "Create Region",
+        "permission": "region.create",
+        "description": "Create a region"
+      },
+      {
+        "name": "View Region",
+        "permission": "region.view",
+        "description": "View regions"
+      },
+      {
+        "name": "Edit Region",
+        "permission": "region.edit",
+        "description": "Edit a region"
+      },
+      {
+        "name": "Activate Region",
+        "permission": "region.activate",
+        "description": "Activate a region"
+      },
+      {
+        "name": "Inactivate Region",
+        "permission": "region.inactivate",
+        "description": "Inactivate a region"
+      },
+      {
+        "name": "Delete Region",
+        "permission": "region.delete",
+        "description": "Delete a region"
+      }
+    ]
+  },
+  {
+    "module": "system_admin",
+    "name": "System Admin",
+    "description": "Manage system administrators",
+    "permissions": [
+      {
+        "name": "Create System Admin",
+        "permission": "system_admin.create",
+        "description": "Create a system admin"
+      },
+      {
+        "name": "View System Admin",
+        "permission": "system_admin.view",
+        "description": "View system admins"
+      },
+      {
+        "name": "Edit System Admin",
+        "permission": "system_admin.edit",
+        "description": "Edit a system admin"
+      },
+      {
+        "name": "Activate System Admin",
+        "permission": "system_admin.activate",
+        "description": "Activate a system admin"
+      },
+      {
+        "name": "Inactivate System Admin",
+        "permission": "system_admin.inactivate",
+        "description": "Inactivate a system admin"
+      },
+      {
+        "name": "Delete System Admin",
+        "permission": "system_admin.delete",
+        "description": "Delete a system admin"
+      }
+    ]
+  },
+  {
+    "module": "special_ed_director",
+    "name": "Special Ed Director",
+    "description": "Manage special education directors",
+    "permissions": [
+      {
+        "name": "Create Special Ed Director",
+        "permission": "special_ed_director.create",
+        "description": "Create a special ed director"
+      },
+      {
+        "name": "View Special Ed Director",
+        "permission": "special_ed_director.view",
+        "description": "View special ed directors"
+      },
+      {
+        "name": "Edit Special Ed Director",
+        "permission": "special_ed_director.edit",
+        "description": "Edit a special ed director"
+      },
+      {
+        "name": "Activate Special Ed Director",
+        "permission": "special_ed_director.activate",
+        "description": "Activate a special ed director"
+      },
+      {
+        "name": "Inactivate Special Ed Director",
+        "permission": "special_ed_director.inactivate",
+        "description": "Inactivate a special ed director"
+      },
+      {
+        "name": "Delete Special Ed Director",
+        "permission": "special_ed_director.delete",
+        "description": "Delete a special ed director"
+      }
+    ]
+  },
+  {
+    "module": "department_supervisor",
+    "name": "Department Supervisor",
+    "description": "Manage department supervisors",
+    "permissions": [
+      {
+        "name": "Create Department Supervisor",
+        "permission": "department_supervisor.create",
+        "description": "Create a department supervisor"
+      },
+      {
+        "name": "View Department Supervisor",
+        "permission": "department_supervisor.view",
+        "description": "View department supervisors"
+      },
+      {
+        "name": "Edit Department Supervisor",
+        "permission": "department_supervisor.edit",
+        "description": "Edit a department supervisor"
+      },
+      {
+        "name": "Activate Department Supervisor",
+        "permission": "department_supervisor.activate",
+        "description": "Activate a department supervisor"
+      },
+      {
+        "name": "Inactivate Department Supervisor",
+        "permission": "department_supervisor.inactivate",
+        "description": "Inactivate a department supervisor"
+      },
+      {
+        "name": "Delete Department Supervisor",
+        "permission": "department_supervisor.delete",
+        "description": "Delete a department supervisor"
+      }
+    ]
+  },
+  {
+    "module": "facilitator",
+    "name": "Facilitator",
+    "description": "Manage facilitators",
+    "permissions": [
+      {
+        "name": "Create Facilitator",
+        "permission": "facilitator.create",
+        "description": "Create a facilitator"
+      },
+      {
+        "name": "View Facilitator",
+        "permission": "facilitator.view",
+        "description": "View facilitators"
+      },
+      {
+        "name": "Edit Facilitator",
+        "permission": "facilitator.edit",
+        "description": "Edit a facilitator"
+      },
+      {
+        "name": "Activate Facilitator",
+        "permission": "facilitator.activate",
+        "description": "Activate a facilitator"
+      },
+      {
+        "name": "Inactivate Facilitator",
+        "permission": "facilitator.inactivate",
+        "description": "Inactivate a facilitator"
+      },
+      {
+        "name": "Delete Facilitator",
+        "permission": "facilitator.delete",
+        "description": "Delete a facilitator"
+      }
+    ]
+  },
+  {
+    "module": "therapist",
+    "name": "Therapist",
+    "description": "Manage therapists",
+    "permissions": [
+      {
+        "name": "Create Therapist",
+        "permission": "therapist.create",
+        "description": "Create a therapist"
+      },
+      {
+        "name": "View Therapist",
+        "permission": "therapist.view",
+        "description": "View therapists"
+      },
+      {
+        "name": "Edit Therapist",
+        "permission": "therapist.edit",
+        "description": "Edit a therapist"
+      },
+      {
+        "name": "Activate Therapist",
+        "permission": "therapist.activate",
+        "description": "Activate a therapist"
+      },
+      {
+        "name": "Inactivate Therapist",
+        "permission": "therapist.inactivate",
+        "description": "Inactivate a therapist"
+      },
+      {
+        "name": "Delete Therapist",
+        "permission": "therapist.delete",
+        "description": "Delete a therapist"
+      }
+    ]
+  },
+  {
+    "module": "patient",
+    "name": "Patient",
+    "description": "Manage patients",
+    "permissions": [
+      {
+        "name": "Create Patient",
+        "permission": "patient.create",
+        "description": "Create a patient"
+      },
+      {
+        "name": "View Patient",
+        "permission": "patient.view",
+        "description": "View patients"
+      },
+      {
+        "name": "Edit Patient",
+        "permission": "patient.edit",
+        "description": "Edit a patient"
+      },
+      {
+        "name": "Activate Patient",
+        "permission": "patient.activate",
+        "description": "Activate a patient"
+      },
+      {
+        "name": "Inactivate Patient",
+        "permission": "patient.inactivate",
+        "description": "Inactivate a patient"
+      },
+      {
+        "name": "Delete Patient",
+        "permission": "patient.delete",
+        "description": "Delete a patient"
+      }
+    ]
+  },
+  {
+    "module": "session",
+    "name": "Session",
+    "description": "Manage therapy sessions",
+    "permissions": [
+      {
+        "name": "Create Session",
+        "permission": "session.create",
+        "description": "Create a session"
+      },
+      {
+        "name": "View Session",
+        "permission": "session.view",
+        "description": "View sessions"
+      },
+      {
+        "name": "Edit Session",
+        "permission": "session.edit",
+        "description": "Edit a session"
+      },
+      {
+        "name": "Cancel Session",
+        "permission": "session.cancel",
+        "description": "Cancel a session"
+      }
+    ]
+  },
+  {
+    "module": "diary",
+    "name": "Diary",
+    "description": "Manage diary entries",
+    "permissions": [
+      {
+        "name": "View Diary",
+        "permission": "diary.view",
+        "description": "View diary entries"
+      }
+    ]
+  },
+  {
+    "module": "report",
+    "name": "Report",
+    "description": "Manage reports",
+    "permissions": [
+      {
+        "name": "View Report",
+        "permission": "report.view",
+        "description": "View reports"
+      }
+    ]
+  },
+  {
+    "module": "controlPanel",
+    "name": "Control Panel",
+    "description": "System control panel",
+    "permissions": [
+      {
+        "name": "View Control Panel",
+        "permission": "controlPanel.view",
+        "description": "View the control panel"
+      }
+    ]
+  },
+  {
+    "module": "permissions",
+    "name": "Permissions",
+    "description": "Manage system permissions",
+    "permissions": [
+      {
+        "name": "Manage Permissions",
+        "permission": "permissions.manage",
+        "description": "Manage system permissions"
+      }
+    ]
+  }
+]

@@ -71,14 +71,14 @@ const employeeSchema = new Schema<Employee>(
       required: true,
       unique: true,
     },
-    employee_type: { // 
+    employee_type: { //
       type: String,
       enum: enums.EmployeeType as any,
       required: true,
     },
     is_deleted: { type: Boolean, default: false },
     position_types: { type: String, required: true }, // Full_time,Part_time etc
-    employee_roles: [{ type: String, required: true }], // 
+    employee_roles: [{ type: String, required: true }], //
     team_leader: { type: Boolean, required: true },
     hire_date: { type: Date, required: true },
     role: { type: Schema.Types.String },

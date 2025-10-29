@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Constants from "../locales/constants";
 import { ObjectId } from "../utils/helpers";
+import enums from "../enums.json";
 
 export const listCountriesService = (): Promise<Record<string, any>> => {
   return new Promise(async (resolve, reject) => {
@@ -125,4 +126,15 @@ export const listSpecialisationService = (): Record<string, any> => {
       reject(error);
     }
   });
+};
+
+export const listEnumsService = async (): Promise<Record<string, any>> => {
+  try {
+    if (!enums) {
+      throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.FIND.code);
+    }
+    return enums;
+  } catch (error) {
+    throw error;
+  }
 };

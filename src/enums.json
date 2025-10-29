@@ -39,5 +39,14 @@
     "MONTHLY_FIXED": "monthly_fixed",
     "WEEKLY_FIXED": "weekly_fixed",
     "ONE_TIME": "one_time"
+  },
+  "RoleEnum": {
+    "SUPER_ADMIN": "super-admin",
+    "SYSTEM_ADMIN": "system_admin",
+    "SPECIAL_ED_DIRECTOR": "special_ed_director",
+    "DEPARTMENT_SUPERVISOR": "department_supervisor",
+    "FACILITATOR": "facilitator",
+    "PATIENT": "patient",
+    "THERAPIST": "therapist"
   }
 }

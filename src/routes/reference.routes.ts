@@ -10,6 +10,7 @@ import {
   listCountriesController,
   listSpecialisationController,
   listStatesController,
+  listEnumsController
 } from "../controllers/reference.controller";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 
@@ -32,6 +33,12 @@ router.post(
   "/specialisation/list",
   authorisationMiddleware,
   listSpecialisationController
+);
+
+router.post(
+  "/enums",
+  authorisationMiddleware,
+  listEnumsController
 );
 
 export default router;
