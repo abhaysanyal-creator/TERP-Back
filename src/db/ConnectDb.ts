@@ -14,7 +14,7 @@ const ConnectDB = async (): Promise<void> => {
         tlsCAFile: "/usr/src/app/global-bundle.pem",
       });
 
-      logger.info("Connected to DocumentDB successfully On SERVER ✅");
+      logger.info("Connected to DocumentDB successfully On SERVER");
     } else {
       await mongoose.connect(connectionString); // no TLS locally
       logger.info(
