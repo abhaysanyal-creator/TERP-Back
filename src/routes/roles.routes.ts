@@ -11,41 +11,18 @@ import {
   updateRoomController,
   viewRoomController,
 } from "../controllers/room.controller";
-import { listRolesValidator } from "../validators/roles.validator";
+import { addRolesValidator, listRolesValidator } from "../validators/roles.validator";
+import { addRolesController } from "../controllers/roles.controller";
 
 const router = Router();
 
 router.post(
   "/create",
   authorisationMiddleware,
-  createRoomValidator,
-  createRoomController
-);
-router.post(
-  "/view/:id",
-  authorisationMiddleware,
-  viewRoomValidator,
-  viewRoomController
-);
-router.post(
-  "/update",
-  authorisationMiddleware,
-  updateRoomValidator,
-  updateRoomController
-);
-router.delete(
-  "/delete",
-  authorisationMiddleware,
-  viewRoomValidator,
-  deleteRoomController
+  addRolesValidator,
+  addRolesController
 );
 
-router.delete(
-  "/list",
-  authorisationMiddleware,
-  listRolesValidator,
-  deleteRoomController
-);
 
 
 export default router;

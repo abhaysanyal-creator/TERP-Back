@@ -12,6 +12,10 @@ export default {
       code: "NO_TOKEN",
       message: "No Token Provided!!",
     },
+    NO_SUPER_ADMIN:{
+code: "CANNOT_CREATE_SUPER_ADMIN_FORBIDDEN",
+      message: "CANNOT_CREATE_SUPER_ADMIN_FORBIDDEN!!",
+    },
     INTERNAL_SERVER_ERROR: {
       code: "INTERNAL_SERVER_ERROR",
       message: "Internal Server Error!!",

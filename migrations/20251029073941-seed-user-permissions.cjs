@@ -8,7 +8,10 @@ module.exports = {
     const permissionsCollection = db.collection("roles");
 
     // Load JSON data
-    const filePath = path.resolve("src/data/user-permissions.json");
+      const filePath = path.resolve(
+        __dirname,
+        "../src/data/user-permissions.json"
+      );
     const rawData = fs.readFileSync(filePath, "utf-8");
     const permissionsData = JSON.parse(rawData);
 
@@ -35,7 +38,9 @@ module.exports = {
       );
     }
 
-    console.log(`🎉 Migration complete: ${processedCount} permission sets loaded`);
+    console.log(
+      `🎉 Migration complete: ${processedCount} permission sets loaded`
+    );
   },
 
   async down(db, client) {

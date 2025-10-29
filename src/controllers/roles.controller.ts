@@ -16,9 +16,12 @@ export const addRolesController: ExpressMiddleware = async (
 ) => {
   try {
     const payload = request.body;
+if(payload.role==="super-admin"||payload.role==="super_admin") {
+return badRequest(response,Constants.MESSAGES.NO_SUPER_ADMIN.code)
 
+}
     const result = await addRolesService(payload);
-    return success(response, Lang.USER_CREATED, result);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     return badRequest(response, getErrorMessage(error));
   }

@@ -6,10 +6,15 @@ export const addRolesService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
+
+      console.log(payload.roke)
+
       const existingRole = await mongoose
         .model("roles")
-        .findOne({ name: payload.name })
+        .findOne({ role: payload.role })
         .exec();
+
+
       if (existingRole) {
         return reject(new Error("Role Already Exists!!"));
       }
@@ -82,8 +87,6 @@ export const listRolesService = (
 
       if (or.length > 0) and.push({ $or: or });
       if (and.length > 0) match.$and = and;
-
-      
     } catch (error) {}
   });
 };

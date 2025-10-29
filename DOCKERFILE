@@ -39,6 +39,7 @@ COPY --from=build $APP_HOME/dist ./dist
 COPY --from=build $APP_HOME/node_modules ./node_modules
 
 
+COPY src/data ./src/data
 COPY migrate-mongo-config.js ./migrate-mongo-config.js
 COPY migrations ./migrations
 

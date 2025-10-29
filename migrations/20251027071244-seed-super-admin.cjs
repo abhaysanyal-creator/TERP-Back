@@ -10,12 +10,16 @@ module.exports = {
     const userCollection = db.collection("users");
 
     // 🧩 1️⃣ Load permissions from JSON file
-    const permissionsPath = path.resolve("src/data/user-permissions.json");
+    const filePath = path.resolve(
+      __dirname,
+      "../src/data/user-permissions.json"
+    );
+    
     if (!fs.existsSync(permissionsPath)) {
       throw new Error("❌ user-permissions.json not found!");
     }
 
-    const allRolesData = JSON.parse(fs.readFileSync(permissionsPath, "utf-8"));
+    const allRolesData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
     // Find super-admin entry from the array
     const superAdminData = allRolesData.find((r) => r.role === "super-admin");
