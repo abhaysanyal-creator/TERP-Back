@@ -8,7 +8,7 @@ export const addRolesValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (!request.body.role) {
+  if (!request.body.name) {
     return badRequest(response, Constants.MESSAGES.FIRST_NAME_REQ.code);
   }
   // if (!request.body.permissions) {

@@ -3,7 +3,7 @@ import type { Role } from "../types/interface.types";
 
 const roleSchema: Schema<Role> = new Schema(
   {
-    role: { type: String, required: true, unique: true },
+    name: { type: String, required: true, unique: true },
     permissions: {
       _id: false,
       type: [

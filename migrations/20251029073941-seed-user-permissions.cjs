@@ -9,29 +9,24 @@ module.exports = {
     const rawData = fs.readFileSync(filePath, "utf-8");
     const permissionsData = JSON.parse(rawData);
 
-    const permissionsCollection = db.collection("roles");
+    const rolesCollection = db.collection("roles");
 
-    for (const permissionSet of permissionsData) {
-      // 👇 match and update using name instead of role
-      await permissionsCollection.updateOne(
-        { name: permissionSet.role }, // ✅ match by name
-        {
-          $set: {
-            name: permissionSet.role, // ✅ store in name field
-            permissions: permissionSet.permissions,
-            updated_at: new Date(),
-          },
-          $setOnInsert: {
-            created_at: new Date(),
-          },
-        },
-        { upsert: true } // ✅ update or insert if not exists
-      );
+    for (const role of permissionsData) {
+      // 🧹 Remove existing role if already present (e.g. super-admin)
+      await rolesCollection.deleteOne({ name: role.name });
 
-      console.log(`✅ Processed: ${permissionSet.role}`);
+      // 🆕 Reinsert updated role + permissions
+      await rolesCollection.insertOne({
+        name: role.name,
+        permissions: role.permissions,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
+
+      console.log(`✅ Refreshed role: ${role.name}`);
     }
 
-    console.log("✅ Permissions seeding completed successfully.");
+    console.log("🎉 Permissions seeding completed successfully.");
   },
 
   async down(db, client) {
@@ -41,11 +36,8 @@ module.exports = {
     const rawData = fs.readFileSync(filePath, "utf-8");
     const permissionsData = JSON.parse(rawData);
 
-    const roleNames = permissionsData.map((p) => p.role);
-
-    await db.collection("roles").deleteMany({
-      name: { $in: roleNames },
-    });
+    const names = permissionsData.map((p) => p.name);
+    await db.collection("roles").deleteMany({ name: { $in: names } });
 
     console.log("✅ Reverted permissions seeding.");
   },

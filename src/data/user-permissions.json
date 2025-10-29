@@ -1,6 +1,6 @@
 [
   {
-    "role": "super-admin",
+    "name": "super-admin",
     "permissions": [
       {
         "name": "Create Organization",
@@ -413,7 +413,7 @@
     ]
   },
   {
-    "role": "system_admin",
+    "name": "system_admin",
     "permissions": [
       {
         "name": "Create Organization",
@@ -784,7 +784,7 @@
     ]
   },
   {
-    "role": "special_ed_director",
+    "name": "special_ed_director",
     "permissions": [
       {
         "name": "Create User",
@@ -885,7 +885,7 @@
     ]
   },
   {
-    "role": "department_supervisor",
+    "name": "department_supervisor",
     "permissions": [
       {
         "name": "View User",
@@ -932,7 +932,7 @@
     ]
   },
   {
-    "role": "facilitator",
+    "name": "facilitator",
     "permissions": [
       {
         "name": "View Diary",
@@ -955,7 +955,7 @@
     ]
   },
   {
-    "role": "therapist",
+    "name": "therapist",
     "permissions": [
       {
         "name": "Create User",
@@ -1038,7 +1038,7 @@
     ]
   },
   {
-    "role": "patient",
+    "name": "patient",
     "permissions": [
       {
         "name": "View Session",

@@ -7,11 +7,9 @@ export const addRolesService = (
   return new Promise(async (resolve, reject) => {
     try {
 
-      console.log(payload.roke)
-
       const existingRole = await mongoose
         .model("roles")
-        .findOne({ role: payload.role })
+        .findOne({ name: payload.name })
         .exec();
 
 

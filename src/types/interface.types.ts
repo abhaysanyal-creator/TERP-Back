@@ -7,7 +7,7 @@ import type { JwtPayload } from "jsonwebtoken";
 import { stringList } from "aws-sdk/clients/datapipeline";
 
 export interface Role extends Document {
-  role: string;
+  name: string;
   permissions: {
     name: string;
     permission: string;
