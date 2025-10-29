@@ -14,7 +14,7 @@ module.exports = {
     for (const permissionSet of permissionsData) {
       // 👇 match and update using name instead of role
       await permissionsCollection.updateOne(
-        { name: permissionSet.role }, // ✅ match by name field
+        { name: permissionSet.role }, // ✅ match by name
         {
           $set: {
             name: permissionSet.role, // ✅ store in name field
