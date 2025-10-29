@@ -5,23 +5,23 @@ module.exports = {
   async up(db, client) {
     console.log("🚀 Starting Permissions seeding...");
 
-    const filePath = path.join(__dirname, "../src/data/permissions.json");
+    const filePath = path.join(__dirname, "../src/data/user-permissions.json");
     const rawData = fs.readFileSync(filePath, "utf-8");
     const permissionsData = JSON.parse(rawData);
 
     const rolesCollection = db.collection("roles");
 
     for (const role of permissionsData) {
-      // 🧩 Replace the document atomically (no duplicate key error)
+    
       await rolesCollection.replaceOne(
-        { name: role.name }, // match existing record
+        { name: role.name },
         {
           name: role.name,
           permissions: role.permissions,
           updated_at: new Date(),
           created_at: new Date(),
         },
-        { upsert: true } // insert if not present
+        { upsert: true }
       );
 
       console.log(`✅ Processed: ${role.name} (${role.permissions.length} permissions)`);
@@ -33,7 +33,7 @@ module.exports = {
   async down(db, client) {
     console.log("🧹 Reverting permissions seeding...");
 
-    const filePath = path.join(__dirname, "../src/data/permissions.json");
+    const filePath = path.join(__dirname, "../src/data/user-permissions.json");
     const rawData = fs.readFileSync(filePath, "utf-8");
     const permissionsData = JSON.parse(rawData);
 

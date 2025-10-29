@@ -9,46 +9,45 @@ module.exports = {
     const roleCollection = db.collection("roles");
     const userCollection = db.collection("users");
 
-    // 🧩 1️⃣ Load permissions from JSON file
     const filePath = path.resolve(
       __dirname,
-      "../src/data/user-permissions.json"
+      "../src/data/admin-permissions-seed.json"
     );
-    
-    if (!fs.existsSync(permissionsPath)) {
+
+    if (!fs.existsSync(filePath)) {
       throw new Error("❌ user-permissions.json not found!");
     }
 
     const allRolesData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
     // Find super-admin entry from the array
-    const superAdminData = allRolesData.find((r) => r.role === "super-admin");
+    const superAdminData = allRolesData.find((r) => r.name === "super-admin");
 
     if (
       !superAdminData ||
-      !superAdminData.role ||
+      !superAdminData.name ||
       !superAdminData.permissions
     ) {
       throw new Error("❌ Invalid structure in user-permissions.json");
     }
 
     // 🧩 2️⃣ Ensure 'super-admin' role exists
-    let role = await roleCollection.findOne({ role: superAdminData.role });
+    let role = await roleCollection.findOne({ name: superAdminData.name });
 
     if (!role) {
-      console.log(`⚙️ Role '${superAdminData.role}' not found. Creating it...`);
+      console.log(`⚙️ Role '${superAdminData.name}' not found. Creating it...`);
       const result = await roleCollection.insertOne({
-        role: superAdminData.role,
+        name: superAdminData.name,
         permissions: superAdminData.permissions,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
 
       role = await roleCollection.findOne({ _id: result.insertedId });
-      console.log(`✅ Role '${superAdminData.role}' created.`);
+      console.log(`✅ Role '${superAdminData.name}' created.`);
     } else {
       console.log(
-        `🔄 Role '${superAdminData.role}' already exists. Updating permissions...`
+        `🔄 Role '${superAdminData.name}' already exists. Updating permissions...`
       );
       await roleCollection.updateOne(
         { _id: role._id },
@@ -75,7 +74,7 @@ module.exports = {
     // 🧩 4️⃣ Create new Super Admin user
     const hashedPassword = await bcrypt.hash("terp_admin123", 10);
 
-    await userCollection.insertOne({
+    const newUser = {
       username: "abhay_sanyal",
       contact_number: 8053915959,
       name: "Abhay Sanyal",
@@ -84,18 +83,19 @@ module.exports = {
       role: role._id,
       createdAt: new Date(),
       updatedAt: new Date(),
-    });
+    };
 
-    console.log("✅ Super Admin user seeded successfully!");
+    await userCollection.insertOne(newUser);
+
+    console.log(`✅ Super Admin user seeded successfully - ${newUser.email}`);
   },
 
   async down(db, client) {
     const userCollection = db.collection("users");
-    const roleCollection = db.collection("roles");
+    // const roleCollection = db.collection("roles");
 
     await userCollection.deleteOne({ email: "abhay.sanyal@rampwin.com" });
-    await roleCollection.deleteOne({ role: "super-admin" });
 
-    console.log("⏪ Super Admin and role removed.");
+    console.log("⏪ Super Admin removed.");
   },
 };
