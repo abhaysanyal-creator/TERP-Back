@@ -12,18 +12,19 @@ module.exports = {
     const rolesCollection = db.collection("roles");
 
     for (const role of permissionsData) {
-      // 🧹 Remove existing role if already present (e.g. super-admin)
-      await rolesCollection.deleteOne({ name: role.name });
+      // 🧩 Replace the document atomically (no duplicate key error)
+      await rolesCollection.replaceOne(
+        { name: role.name }, // match existing record
+        {
+          name: role.name,
+          permissions: role.permissions,
+          updated_at: new Date(),
+          created_at: new Date(),
+        },
+        { upsert: true } // insert if not present
+      );
 
-      // 🆕 Reinsert updated role + permissions
-      await rolesCollection.insertOne({
-        name: role.name,
-        permissions: role.permissions,
-        created_at: new Date(),
-        updated_at: new Date(),
-      });
-
-      console.log(`✅ Refreshed role: ${role.name}`);
+      console.log(`✅ Processed: ${role.name} (${role.permissions.length} permissions)`);
     }
 
     console.log("🎉 Permissions seeding completed successfully.");
@@ -36,8 +37,8 @@ module.exports = {
     const rawData = fs.readFileSync(filePath, "utf-8");
     const permissionsData = JSON.parse(rawData);
 
-    const names = permissionsData.map((p) => p.name);
-    await db.collection("roles").deleteMany({ name: { $in: names } });
+    const roleNames = permissionsData.map((p) => p.name);
+    await db.collection("roles").deleteMany({ name: { $in: roleNames } });
 
     console.log("✅ Reverted permissions seeding.");
   },
