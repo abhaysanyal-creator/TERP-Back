@@ -5,23 +5,19 @@ module.exports = {
   async up(db, client) {
     console.log("🚀 Starting Permissions seeding...");
 
-    const permissionsCollection = db.collection("roles");
-
-    // Load JSON data
-      const filePath = path.resolve(
-        __dirname,
-        "../src/data/user-permissions.json"
-      );
+    const filePath = path.join(__dirname, "../src/data/permissions.json");
     const rawData = fs.readFileSync(filePath, "utf-8");
     const permissionsData = JSON.parse(rawData);
 
-    let processedCount = 0;
+    const permissionsCollection = db.collection("roles");
 
     for (const permissionSet of permissionsData) {
+      // 👇 match and update using name instead of role
       await permissionsCollection.updateOne(
-        { role: permissionSet.role }, // find existing record by role
+        { name: permissionSet.role }, // ✅ match by name field
         {
           $set: {
+            name: permissionSet.role, // ✅ store in name field
             permissions: permissionSet.permissions,
             updated_at: new Date(),
           },
@@ -29,31 +25,28 @@ module.exports = {
             created_at: new Date(),
           },
         },
-        { upsert: true }
+        { upsert: true } // ✅ update or insert if not exists
       );
 
-      processedCount++;
-      console.log(
-        `✅ Processed: ${permissionSet.role} (${permissionSet.permissions.length} permissions)`
-      );
+      console.log(`✅ Processed: ${permissionSet.role}`);
     }
 
-    console.log(
-      `🎉 Migration complete: ${processedCount} permission sets loaded`
-    );
+    console.log("✅ Permissions seeding completed successfully.");
   },
 
   async down(db, client) {
-    console.log("⏪ Rolling back Permissions seeding...");
+    console.log("🧹 Reverting permissions seeding...");
 
-    const permissionsCollection = db.collection("permissions");
-    const filePath = path.resolve("src/data/user-permissions.json");
+    const filePath = path.join(__dirname, "../src/data/permissions.json");
     const rawData = fs.readFileSync(filePath, "utf-8");
     const permissionsData = JSON.parse(rawData);
 
-    const roles = permissionsData.map((item) => item.role);
-    await permissionsCollection.deleteMany({ role: { $in: roles } });
+    const roleNames = permissionsData.map((p) => p.role);
 
-    console.log(`🧹 Removed permissions for roles: ${roles.join(", ")}`);
+    await db.collection("roles").deleteMany({
+      name: { $in: roleNames },
+    });
+
+    console.log("✅ Reverted permissions seeding.");
   },
 };
