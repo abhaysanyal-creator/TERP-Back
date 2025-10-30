@@ -77,6 +77,7 @@ const employeeSchema = new Schema<Employee>(
       required: true,
     },
     is_deleted: { type: Boolean, default: false },
+    is_active: { type: Boolean, default: true },
     position_types: { type: String, required: true }, // Full_time,Part_time etc
     employee_roles: [{ type: String, required: true }], //
     team_leader: { type: Boolean, required: true },

@@ -103,6 +103,7 @@ export interface EmpDocuments extends Document {
 export interface Employee extends Document {
   employee_id: string;
   first_name: string;
+  is_active:boolean;
   last_name: string;
   national_id: string;
   employee_type: string;
