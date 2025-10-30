@@ -6,12 +6,10 @@ export const addRolesService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-
       const existingRole = await mongoose
         .model("roles")
         .findOne({ name: payload.name })
         .exec();
-
 
       if (existingRole) {
         return reject(new Error("Role Already Exists!!"));
@@ -70,7 +68,7 @@ export const updateRolesService = (
 export const listRolesService = (
   payload: Record<string, any>
 ): Record<string, any> => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       const page = Number(payload.page) || 1;
       const limit = Number(payload.limit) || 10;
@@ -85,6 +83,30 @@ export const listRolesService = (
 
       if (or.length > 0) and.push({ $or: or });
       if (and.length > 0) match.$and = and;
+
+
+      const pipeline: any[] = [
+        { $match: match },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit },
+      ];
+
+      const countPipeline = [{ $match: match }, { $count: "total" }];
+
+      const [roles, countResult] = await Promise.all([
+        mongoose.model("roles").aggregate(pipeline),
+        mongoose.model("roles").aggregate(countPipeline),
+      ]);
+
+console.log(roles)
+
+      const totalCount = countResult[0]?.total || 0;
+
+      resolve({
+        data: roles,
+        count: totalCount,
+      });
     } catch (error) {}
   });
 };

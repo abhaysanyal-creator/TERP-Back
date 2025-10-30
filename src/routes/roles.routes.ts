@@ -1,18 +1,13 @@
 import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
-  createRoomValidator,
-  updateRoomValidator,
-  viewRoomValidator,
-} from "../validators/room.validator";
+  addRolesValidator,
+  listRolesValidator,
+} from "../validators/roles.validator";
 import {
-  createRoomController,
-  deleteRoomController,
-  updateRoomController,
-  viewRoomController,
-} from "../controllers/room.controller";
-import { addRolesValidator, listRolesValidator } from "../validators/roles.validator";
-import { addRolesController } from "../controllers/roles.controller";
+  addRolesController,
+  listRolesController,
+} from "../controllers/roles.controller";
 
 const router = Router();
 
@@ -23,6 +18,11 @@ router.post(
   addRolesController
 );
 
-
+router.post(
+  "/list",
+  authorisationMiddleware,
+  listRolesValidator,
+  listRolesController
+);
 
 export default router;

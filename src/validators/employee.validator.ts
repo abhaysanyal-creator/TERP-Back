@@ -15,28 +15,28 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
   if (!request.body.first_name || request.body.first_name.trim() === "") {
     return badRequest(
       response,
-      Lang.FIRST_NAME_REQUIRED || "First Name is required"
+      Constants.MESSAGES.FIRST_NAME_REQ.code || "First Name is required"
     );
   }
 
   if (!request.body.last_name || request.body.last_name.trim() === "") {
     return badRequest(
       response,
-      Lang.LAST_NAME_REQUIRED || "Last Name is required"
+      Constants.MESSAGES.LAST_NAME_REQ.code || "Last Name is required"
     );
   }
 
   if (!request.body.national_id) {
     return badRequest(
       response,
-      Lang.NATIONAL_ID_REQUIRED || "National ID is required"
+      Constants.MESSAGES.NATIONAL_ID_REQ.code || "National ID is required"
     );
   }
 
   if (!request.body.employee_type) {
     return badRequest(
       response,
-      Lang.INVALID_EMPLOYEE_TYPE || "Invalid employee type"
+      Constants.MESSAGES.INVALID_EMP_TYPE.code || "Invalid employee type"
     );
   }
 
@@ -50,7 +50,8 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
   if (!request.body.hire_date || isNaN(Date.parse(request.body.hire_date))) {
     return badRequest(
       response,
-      Lang.HIRE_DATE_REQUIRED || "Valid hire date is required"
+      Constants.MESSAGES.HIRE_DATE_REQUIRED.code ||
+        "Valid hire date is required"
     );
   }
   if (request.body.specialisation.length > 0) {
@@ -69,7 +70,7 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
   if (!request.body.dob || isNaN(Date.parse(request.body.dob))) {
     return badRequest(
       response,
-      Lang.DOB_REQUIRED || "Valid date of birth is required"
+      Constants.MESSAGES.DOB_REQ.code || "Valid date of birth is required"
     );
   }
 
@@ -81,18 +82,23 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
   ) {
     return badRequest(
       response,
-      Lang.JOB_PERCENTAGE_INVALID || "Job percentage must be between 0 and 100"
+      Constants.MESSAGES.JOB_PERCENTAGE_INVALID.code ||
+        "Job percentage must be between 0 and 100"
     );
   }
 
   if (!request.body.address) {
-    return badRequest(response, Lang.ADDRESS_REQUIRED || "Address is required");
+    return badRequest(
+      response,
+      Constants.MESSAGES.ADDRESS_FIELD_REQ.code || "Address is required"
+    );
   }
   const { city, country, postal_code, address } = request.body.address;
   if (!city || !country || !address || !postal_code) {
     return badRequest(
       response,
-      Lang.ADDRESS_FIELDS_REQUIRED || "All address fields are required"
+      Constants.MESSAGES.ADDRESS_FIELD_REQ.code ||
+        "All address fields are required"
     );
   }
 
@@ -109,7 +115,7 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
   if (!request.body.mobile_phone) {
     return badRequest(
       response,
-      Lang.MOBILE_PHONE_REQUIRED ||
+      Constants.MESSAGES.CONTACT_NUM_REQ.code ||
         "At least one mobile phone number is required"
     );
   }
@@ -117,21 +123,23 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
   if (!request.body.email) {
     return badRequest(
       response,
-      Lang.EMAIL_REQUIRED || "Email address is required"
+      Constants.MESSAGES.EMAIL_REQ.code || "Email address is required"
     );
   }
 
   if (typeof request.body.team_leader !== "boolean") {
     return badRequest(
       response,
-      Lang.INVALID_TEAM_LEADER || "Team Leader must be true or false"
+      Constants.MESSAGES.TEAM_LEAD_REQ_TRUE_FALSE.code ||
+        "Team Leader must be true or false"
     );
   }
 
   if (!request.body.position_types) {
     return badRequest(
       response,
-      Lang.POSITION_TYPES_REQUIRED || "At least one position type is required"
+      Constants.MESSAGES.INVALID_EMP_TYPE.code ||
+        "At least one position type is required"
     );
   }
 
@@ -141,7 +149,8 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
   ) {
     return badRequest(
       response,
-      Lang.EMPLOYEE_ROLES_REQUIRED || "At least one employee role is required"
+      Constants.MESSAGES.INVALID_ROLE.code ||
+        "At least one employee role is required"
     );
   }
 
@@ -151,7 +160,8 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
   ) {
     return badRequest(
       response,
-      Lang.INVALID_WORKING_HOURS || "Working hours must be an array"
+      Constants.MESSAGES.INVALID_WORKING_HOURS.code ||
+        "Working hours must be an array"
     );
   }
   next();
@@ -223,6 +233,23 @@ export const listEmployeeValidator: ExpressMiddlewareNext = (
   }
   if (!request.body.limit) {
     return badRequest(response, Constants.MESSAGES.LIMIT.code);
+  }
+  next();
+};
+
+export const uploadDocumentsValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.employee_id) {
+    return badRequest(response, Constants.MESSAGES.EMP_ID_REQ.code);
+  }
+  if (!request.body.type) {
+    return badRequest(response, Constants.MESSAGES.DOC_TYPE_REQ.code);
+  }
+  if (!request.body.file_url) {
+    return badRequest(response, Constants.MESSAGES.DOCUMENT_REQUIRED.code);
   }
   next();
 };

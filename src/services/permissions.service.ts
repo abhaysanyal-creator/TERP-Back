@@ -30,7 +30,7 @@ export const assignPermissionService = (
           return mongoose
             .model("roles")
             .findOneAndUpdate(
-              { role: userPermission.role },
+              { name: userPermission.role },
               { permissions: userPermission.permissions },
               { new: true }
             );

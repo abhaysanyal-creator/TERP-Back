@@ -16,6 +16,8 @@ const roleSchema: Schema<Role> = new Schema(
         },
       ],
     },
+    is_deleted: { type: Boolean, default: false },
+    is_active: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
