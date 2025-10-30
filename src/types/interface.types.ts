@@ -110,12 +110,11 @@ export interface Employee extends Document {
   employee_roles: string[];
   team_leader: boolean;
   is_deleted: boolean;
-  documents: EmpDocuments;
   hire_date: Date;
-  role: string;
+  role?: string;
   job_percentage: number;
   dob: Date;
-  organization_assignments: string[];
+  organization_assignments: Organisation[];
   location_assignments: string[];
   address: Address;
   mobile_phone: string;
@@ -145,27 +144,27 @@ export interface FixedCost {
 }
 
 
-export interface Duration {
-  treatment_time:number;
-  documentation_time:number;
-}
-export interface Treatment {
-  org_cost:number;
-  patient_cost:number;
-  platform_cost:number;
-  duration:Duration;
-}
-export interface Activity {
-  name:string;
-  treatment:[Treatment];
-}
+// export interface Duration {
+//   treatment_time:number;
+//   documentation_time:number;
+// }
+// export interface Treatment {
+//   org_cost:number;
+//   patient_cost:number;
+//   platform_cost:number;
+//   duration:Duration;
+// }
+// export interface Activity {
+//   name:string;
+//   treatment:[Treatment];
+// }
 
-export interface Department {
-  name: string;
-  address: Address;
-  contact: Contact;
-  activity:[Activity]
-}
+// export interface Department {
+//   name: string;
+//   address: Address;
+//   contact: Contact;
+//   activity:[Activity]
+// }
 
 // label - name
 // value - name.toLowerCase()
@@ -177,7 +176,7 @@ export interface Organisations extends Document {
   address: Address;
   contacts: Contact[];
   is_active: boolean;
-  department: Department;
+  // department: Department;
   is_deleted: boolean;
 }
 

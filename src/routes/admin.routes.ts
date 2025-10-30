@@ -5,9 +5,11 @@ import {
 } from "../validators/admin.validator";
 import {
   adminCreateController,
+  listAdminController,
   viewAdminController,
 } from "../controllers/admin.controller";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
+import { listEmployeeValidator } from "../validators/employee.validator";
 
 const router = Router();
 
@@ -23,6 +25,13 @@ router.get(
   authorisationMiddleware,
   viewAdminValidator,
   viewAdminController
+);
+
+router.post(
+  "/list",
+  authorisationMiddleware,
+  listEmployeeValidator,
+  listAdminController
 );
 
 export default router;

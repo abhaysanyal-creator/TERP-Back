@@ -99,8 +99,6 @@ export const listRolesService = (
         mongoose.model("roles").aggregate(countPipeline),
       ]);
 
-console.log(roles)
-
       const totalCount = countResult[0]?.total || 0;
 
       resolve({

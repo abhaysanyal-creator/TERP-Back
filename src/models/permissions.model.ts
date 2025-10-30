@@ -3,7 +3,7 @@ import mongoose, { Schema, model } from "mongoose";
 
 const permissionSchema: Schema<IUserPermission> = new Schema(
   {
-    role: { type: String, required: true },
+    name: { type: String, required: true },
     permissions: {
       type: [
         {

@@ -7,13 +7,7 @@ export const createOrganisationService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      payload.organisation_id = generateCode("ORG",5);
-
-      const countryName: string = payload.address.country
-        .slice(0, 2)
-        .toUpperCase();
-
-      payload.institution_code = generateCode(countryName,6);
+      payload.internal_code = generateCode("ORG", 5);
 
       const newOrganisation = await mongoose
         .model("organisations")

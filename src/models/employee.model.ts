@@ -105,9 +105,3 @@ const employeeSchema = new Schema<Employee>(
 const employeeModel = model<Employee>("employees", employeeSchema, "employees");
 
 export default employeeModel;
-
-
-// 1. Integrated rooms, bookings, clinic apis.
-// 2. Managed with the frontend to complete the HR module.
-// 3. Seeded the Country, State, City.. Created APIs for them as well.
-// 4. Enabled Enums JSON API to the frontend

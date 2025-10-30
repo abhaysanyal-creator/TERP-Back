@@ -24,7 +24,6 @@ const contactSchema = new Schema<Contact>(
     name: { type: String, required: true },
     role: { type: String, required: true, ref: "roles" },
     phone: { type: String, required: true },
-    email: { type: String, required: true },
   },
   {
     _id: false,
@@ -61,6 +60,11 @@ const workingHourSchema: Schema<WorkingHour> = new Schema(
   { _id: false }
 );
 
+// const departmentSchema = new Schema({
+
+
+// });
+
 const organisationSchema: Schema<Organisations> = new Schema(
   {
     org_name: { type: String, required: true, unique: true },
@@ -69,28 +73,17 @@ const organisationSchema: Schema<Organisations> = new Schema(
       enum: enums.OrganisationType as any,
       required: true,
     },
-    organisation_id: { type: String, required: true, unique: true },
-    building_size: { type: Number, required: true },
+    internal_code: { type: String, required: true, unique: true },
 
-    area_in: {
-      type: Schema.Types.String,
-      enum: enums.AreaIn as any,
-      required: true,
-    },
-    number_of_rooms: { type: Number, required: true },
-    protected_space: { type: Boolean, required: true },
-    operating_hours: [workingHourSchema],
     address: addressSchema,
-    number_of_patients: { type: Number, required: true },
     contacts: [contactSchema],
     is_active: { type: Boolean, default: true },
     is_deleted: { type: Boolean, default: false },
-    fixed_cost: [fixedCostSchema],
   },
   { timestamps: true }
 );
 
-const organisationModel = model<Schema>(
+const organisationModel = model<Organisations>(
   "organisations",
   organisationSchema,
   "organisations"

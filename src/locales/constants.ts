@@ -4,23 +4,51 @@ export default {
       code: "NO_ACCESS",
       message: "Un-Authorised Access!!",
     },
-     INCLUDE_PERMISSION: {
+    EMP_ID_REQ: {
+      code: "EMP_ID_REQ",
+      message: "Employee Id Required!!",
+    },
+     DOC_TYPE_REQ: {
+      code: "DOC_TYPE_REQ",
+      message: "Document type is required!!",
+    },
+    TEAM_LEAD_REQ_TRUE_FALSE:{
+      code:"TEAM_LEAD_REQ_TRUE_FALSE"
+    },
+    DOCUMENT_REQUIRED: {
+      code: "DOCUMENT_REQUIRED",
+      message: "Document is required!!",
+    },
+    INVALID_WORKING_HOURS:{
+      code:"INVALID_WORKING_HOURS"
+    },
+    HIRE_DATE_REQUIRED:{
+      code:"HIRE_DATE_REQUIRED"
+    },
+    JOB_PERCENTAGE_INVALID:{
+      code:"JOB_PERCENTAGE_INVALID"
+    },
+    INVALID_EMP_TYPE:{
+code: "INVALID_EMP_TYPE",
+      message: "Invalid Employee Type!!",
+    },
+    INCLUDE_PERMISSION: {
       code: "INCLUDE_PERMISSION",
       message: "Include Permission!!",
     },
-     NO_TOKEN: {
+    NO_TOKEN: {
       code: "NO_TOKEN",
       message: "No Token Provided!!",
     },
-    NO_SUPER_ADMIN:{
-code: "CANNOT_CREATE_SUPER_ADMIN_FORBIDDEN",
+    NO_SUPER_ADMIN: {
+      code: "CANNOT_CREATE_SUPER_ADMIN_FORBIDDEN",
       message: "CANNOT_CREATE_SUPER_ADMIN_FORBIDDEN!!",
     },
     INTERNAL_SERVER_ERROR: {
       code: "INTERNAL_SERVER_ERROR",
       message: "Internal Server Error!!",
     },
-    DUPLICATE_NATIONAL_ID:{
+    DUPLICATE_NATIONAL_ID: {
       code: "DUPLICATE_NATIONAL_ID",
       message: "Duplicate National ID!!",
     },
@@ -92,7 +120,7 @@ code: "CANNOT_CREATE_SUPER_ADMIN_FORBIDDEN",
       code: "ID_REQ",
       message: "ID is required!!",
     },
-    SPECIALISATION_NAME:{
+    SPECIALISATION_NAME: {
       code: "SPECIALISATION_NAME_REQ",
       message: "Spec. name is required!!",
     },
@@ -226,7 +254,7 @@ code: "CANNOT_CREATE_SUPER_ADMIN_FORBIDDEN",
       code: "COUNTRY_REQ",
       message: "Country is required!!",
     },
-     STATE_REQ: {
+    STATE_REQ: {
       code: "STATE_REQ",
       message: "Country is required!!",
     },
