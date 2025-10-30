@@ -6,7 +6,7 @@ import {
 import type { JwtPayload } from "jsonwebtoken";
 import { stringList } from "aws-sdk/clients/datapipeline";
 
-export interface Role extends Document {
+export interface Role {
   name: string;
   permissions: {
     name: string;
@@ -15,6 +15,8 @@ export interface Role extends Document {
     description: string;
     default: boolean;
   }[];
+  is_deleted: boolean;
+  is_active: boolean;
 }
 
 export interface User extends Document {
@@ -38,7 +40,7 @@ export interface User extends Document {
 // }
 
 export interface IUserPermission extends Document {
-  role: string;
+  name: string;
   permissions: {
     name: string;
     permission: string;
@@ -92,7 +94,6 @@ export interface Specialisation {
 }
 
 export interface EmpDocuments extends Document {
-  employee_id: Types.ObjectId;
   type: string;
   file_url: string;
   uploaded_at: Date;
@@ -109,6 +110,7 @@ export interface Employee extends Document {
   employee_roles: string[];
   team_leader: boolean;
   is_deleted: boolean;
+  documents: EmpDocuments;
   hire_date: Date;
   role: string;
   job_percentage: number;
@@ -141,23 +143,42 @@ export interface FixedCost {
   recurrence: "one_time" | "monthly" | "yearly";
   description?: string;
 }
+
+
+export interface Duration {
+  treatment_time:number;
+  documentation_time:number;
+}
+export interface Treatment {
+  org_cost:number;
+  patient_cost:number;
+  platform_cost:number;
+  duration:Duration;
+}
+export interface Activity {
+  name:string;
+  treatment:[Treatment];
+}
+
+export interface Department {
+  name: string;
+  address: Address;
+  contact: Contact;
+  activity:[Activity]
+}
+
+// label - name
+// value - name.toLowerCase()
 export interface Organisations extends Document {
   org_name: string;
   org_type: string;
-  organisation_id: string;
-  building_size: number;
-  area_in: string;
-  number_of_rooms: number;
-  protected_space: boolean;
-  operating_hours: WorkingHour[];
-  address: Address;
+  internal_code: string;
   number_of_patients: number;
+  address: Address;
   contacts: Contact[];
   is_active: boolean;
-  created_at?: Date;
-  updated_at?: Date;
+  department: Department;
   is_deleted: boolean;
-  fixed_cost: FixedCost[];
 }
 
 export interface Companion {
