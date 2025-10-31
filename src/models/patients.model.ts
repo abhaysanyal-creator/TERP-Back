@@ -17,6 +17,37 @@ const addressSchema = new Schema<Address>(
   { _id: false }
 );
 
+const paymentMethodSchema = new Schema(
+  {
+    method_type: {
+      type: String,
+      enum: enums.PaymentType,
+      required: true,
+    },
+    method_name: { type: String, enum: enums.PaymentMethod, trim: true },
+    details: { type: String, trim: true },
+    is_default: { type: Boolean, default: false },
+  },
+  { _id: false }
+);
+
+const hmoDocsSchema = new Schema(
+  {
+    hmo_type: {
+      type: String,
+      enum: enums.HmoType,
+      required: true,
+    },
+    document_number: { type: String, required: true },
+    start_date: { type: Date, required: true },
+    end_date: { type: Date, required: true },
+    is_active: { type: Boolean, default: true },
+    document_url: { type: String },
+    notes: { type: String },
+  },
+  { _id: false }
+);
+
 const companionSchema = new Schema<Companion>(
   {
     full_name: { type: String, required: true },
@@ -24,6 +55,8 @@ const companionSchema = new Schema<Companion>(
     national_id: { type: String, required: true },
     relation_patient: { type: String, required: true },
     landline_number: { type: String },
+    payment_method: [paymentMethodSchema],
+    hmo_docs: [hmoDocsSchema],
   },
   {
     _id: false,

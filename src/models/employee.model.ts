@@ -79,7 +79,7 @@ const employeeSchema = new Schema<Employee>(
     is_deleted: { type: Boolean, default: false },
     is_active: { type: Boolean, default: true },
     position_types: { type: String, required: true }, // Full_time,Part_time etc
-    employee_roles: [{ type: String, required: true }], //
+    employee_roles: { type: String, required: true }, //
     team_leader: { type: Boolean, required: true },
     hire_date: { type: Date, required: true },
     role: { type: Schema.Types.String },
@@ -88,6 +88,7 @@ const employeeSchema = new Schema<Employee>(
     organization_assignments: [organisationSchema],
     location_assignments: [{ type: String, required: true }],
     address: { type: addressSchema, required: true },
+    time_zone:{type:String,required:true},
     mobile_phone: { type: String, required: true },
     specialisation: [{ type: String, required: true }],
     home_phone: { type: String },

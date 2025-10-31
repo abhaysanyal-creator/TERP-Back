@@ -48,5 +48,23 @@
     "FACILITATOR": "facilitator",
     "PATIENT": "patient",
     "THERAPIST": "therapist"
+  },
+  "PaymentType": {
+    "CREDIT_CARD": "credit_card",
+    "HMO": "hmo"
+  },
+  "PaymentMethod": {
+    "VISA": "visa",
+    "MASTER_CARD": "master_card",
+    "MACCABI": "maccabi",
+    "CLALIT": "clalit",
+    "MEUHEDET": "meuhedet",
+    "LEUMIT": "leumit"
+  },
+  "HmoType": {
+    "MACCABI": "maccabi",
+    "CLALIT": "clalit",
+    "MEUHEDET": "meuhedet",
+    "LEUMIT": "leumit"
   }
 }

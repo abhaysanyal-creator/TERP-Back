@@ -19,18 +19,17 @@ export const createEmployeeController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const creator = await mongoose
-      .model("users")
-      .findOne({ _id: request.body.created_by })
-      .exec();
-
     const existingEmployee = await mongoose
       .model("employees")
-      .findOne({ email: request.body.email })
+      .findOne({
+        email: request.body.email,
+        national_id: request.body.national_id,
+      })
       .exec();
 
-    if (existingEmployee)
-      return badRequest(response, Lang.EMAIL_ALREADY_EXISTS);
+    if (existingEmployee) {
+      return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
+    }
 
     const result = await createEmployeeService(request.body);
     return success(response, Lang.USER_CREATED, result);

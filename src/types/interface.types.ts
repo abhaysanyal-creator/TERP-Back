@@ -103,14 +103,15 @@ export interface EmpDocuments extends Document {
 export interface Employee extends Document {
   employee_id: string;
   first_name: string;
-  is_active:boolean;
+  is_active: boolean;
   last_name: string;
   national_id: string;
   employee_type: string;
   position_types: string;
-  employee_roles: string[];
+  employee_roles: string;
   team_leader: boolean;
   is_deleted: boolean;
+  time_zone:string;
   hire_date: Date;
   role?: string;
   job_percentage: number;
@@ -143,7 +144,6 @@ export interface FixedCost {
   recurrence: "one_time" | "monthly" | "yearly";
   description?: string;
 }
-
 
 // export interface Duration {
 //   treatment_time:number;
@@ -180,6 +180,21 @@ export interface Organisations extends Document {
   // department: Department;
   is_deleted: boolean;
 }
+export interface PaymentMethod {
+  method_type: string;
+  method_name: string;
+  details: string;
+  is_default: boolean;
+}
+
+export interface CompanionHMO {
+  hmo_type: string;
+  policy_number?: string;
+  validity_start: Date;
+  validity_end: Date;
+  status: string;
+  document_url?: string;
+}
 
 export interface Companion {
   full_name: string;
@@ -187,6 +202,8 @@ export interface Companion {
   national_id: string;
   relation_patient: string;
   landline_number: string;
+  payment_method: PaymentMethod[];
+  hmo_docs:CompanionHMO;
 }
 
 export interface Patients extends Document {
