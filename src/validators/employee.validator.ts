@@ -143,10 +143,7 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
     );
   }
 
-  if (
-    !Array.isArray(request.body.employee_roles) ||
-    request.body.employee_roles.length === 0
-  ) {
+  if (!request.body.employee_roles) {
     return badRequest(
       response,
       Constants.MESSAGES.INVALID_ROLE.code ||

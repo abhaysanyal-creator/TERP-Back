@@ -39,6 +39,7 @@ export const verifyOtpController: ExpressMiddleware = async (
       message: result.response.message,
       token: result.token,
       user: result.user,
+      scope: result.user.role.permissions.map((p: any) => p.permission),
     });
   } catch (error) {
     const err = error as any;
