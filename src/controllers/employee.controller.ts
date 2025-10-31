@@ -22,8 +22,10 @@ export const createEmployeeController: ExpressMiddleware = async (
     const existingEmployee = await mongoose
       .model("employees")
       .findOne({
-        email: request.body.email,
-        national_id: request.body.national_id,
+        $or: [
+          { email: request.body.email },
+          { national_id: request.body.national_id },
+        ],
       })
       .exec();
 

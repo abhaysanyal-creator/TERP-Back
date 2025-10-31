@@ -19,10 +19,7 @@ export const createPatientController: ExpressMiddleware = async (
   try {
     const isPatientExists = await mongoose
       .model("patients")
-      .findOne({
-        patient_id: request.body.patient_id,
-        national_id: request.body.national_id,
-      })
+      .findOne({ national_id: request.body.national_id })
       .exec();
 
     if (isPatientExists)

@@ -64,8 +64,8 @@ const specialisationSchema: Schema<Specialisation> = new Schema(
 const employeeSchema = new Schema<Employee>(
   {
     employee_id: { type: String, required: true, unique: true },
-    first_name: { type: String, required: true, maxlength: 20 },
-    last_name: { type: String, required: true, maxlength: 20 },
+    first_name: { type: String, required: true, maxlength: 50 },
+    last_name: { type: String, required: true, maxlength: 50 },
     national_id: {
       type: String,
       required: true,
