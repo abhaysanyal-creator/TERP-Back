@@ -413,8 +413,10 @@ module.exports = {
       },
     ];
 
+    console.log("Fresh File is executing")
+
     await db.collection("roles").updateOne(
-      { _id: ObjectId("68f9d0c16eacc955f24f87fe") },
+      { _id: new ObjectId("68f9d0c16eacc955f24f87fe") },
       {
         $set: {
           permissions: newPermissions,
