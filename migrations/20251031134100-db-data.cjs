@@ -9,7 +9,7 @@ module.exports = {
     roles.forEach((r) => {
       console.log(`_id: ${r._id}, name: ${r.name}`);
     });
-    console.log("================ END =================");
+    console.log("================ END ==================");
   },
 
   async down(db, client) {
