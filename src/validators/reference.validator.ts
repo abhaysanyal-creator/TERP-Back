@@ -37,3 +37,48 @@ export const createSpecialisationValidator: ExpressMiddlewareNext = (
   }
   next();
 };
+
+export const updateSpecialisationValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.name) {
+    return badRequest(response, Constants.MESSAGES.SPECIALISATION_NAME.code);
+  }
+    if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  next();
+};
+
+export const deleteSpecialisationValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  next();
+};
+
+export const uploadDocumentsValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.organisation_id) {
+    return badRequest(response, Constants.MESSAGES.ORG_ID_REQUIRED.code);
+  }
+  if (!request.body.file) {
+    return badRequest(response, Constants.MESSAGES.DOCUMENT_REQUIRED.code);
+  }
+  if (!request.body.module) {
+    return badRequest(response, Constants.MESSAGES.MODULE_REQUIRED.code);
+  }
+  if (!request.body.category) {
+    return badRequest(response, Constants.MESSAGES.CATEGORY_REQUIRED.code);
+  }
+  next();
+};

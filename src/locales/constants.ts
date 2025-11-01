@@ -8,28 +8,40 @@ export default {
       code: "EMP_ID_REQ",
       message: "Employee Id Required!!",
     },
-     DOC_TYPE_REQ: {
+    DOC_TYPE_REQ: {
       code: "DOC_TYPE_REQ",
       message: "Document type is required!!",
     },
-    TEAM_LEAD_REQ_TRUE_FALSE:{
-      code:"TEAM_LEAD_REQ_TRUE_FALSE"
+    TEAM_LEAD_REQ_TRUE_FALSE: {
+      code: "TEAM_LEAD_REQ_TRUE_FALSE",
     },
     DOCUMENT_REQUIRED: {
       code: "DOCUMENT_REQUIRED",
       message: "Document is required!!",
     },
-    INVALID_WORKING_HOURS:{
-      code:"INVALID_WORKING_HOURS"
+    MODULE_REQUIRED: {
+      code: "MODULE_NAME_REQUIRED",
+      message: "Module name is required!!",
     },
-    HIRE_DATE_REQUIRED:{
-      code:"HIRE_DATE_REQUIRED"
+     CATEGORY_REQUIRED: {
+      code: "CATEGORY_NAME_REQUIRED",
+      message: "Category name is required!!",
     },
-    JOB_PERCENTAGE_INVALID:{
-      code:"JOB_PERCENTAGE_INVALID"
+    DOESNT_EXIST: {
+      code: "ITEM_DOESNT_EXIST",
+      message: "Item doesnt exists",
     },
-    INVALID_EMP_TYPE:{
-code: "INVALID_EMP_TYPE",
+    INVALID_WORKING_HOURS: {
+      code: "INVALID_WORKING_HOURS",
+    },
+    HIRE_DATE_REQUIRED: {
+      code: "HIRE_DATE_REQUIRED",
+    },
+    JOB_PERCENTAGE_INVALID: {
+      code: "JOB_PERCENTAGE_INVALID",
+    },
+    INVALID_EMP_TYPE: {
+      code: "INVALID_EMP_TYPE",
       message: "Invalid Employee Type!!",
     },
     INCLUDE_PERMISSION: {
@@ -146,6 +158,10 @@ code: "INVALID_EMP_TYPE",
     },
     ORG_NAME_REQUIRED: {
       code: "ORG_NAME_REQUIRED",
+      message: "Organization name is required!!",
+    },
+    ORG_ID_REQUIRED: {
+      code: "ORG_ID_REQUIRED",
       message: "Organization name is required!!",
     },
     INVALID_ORG_TYPE: {
@@ -346,6 +362,10 @@ code: "INVALID_EMP_TYPE",
     ROOM_UNAVAIL: {
       code: "ROOM_UNAVAIL",
       message: "Room Un-Available!!",
+    },
+    ERROR_FETCHING_AUDIT_LOG: {
+      code: "ERROR_FETCHING_AUDIT_LOG",
+      message: "Error fetching audit logs!!",
     },
   },
 };

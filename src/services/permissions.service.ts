@@ -31,7 +31,7 @@ export const assignPermissionService = (
             .model("roles")
             .findOneAndUpdate(
               { name: userPermission.role },
-              { permissions: userPermission.permissions },
+              { $set: { permissions: userPermission.permissions } },
               { new: true }
             );
         })

@@ -234,19 +234,4 @@ export const listEmployeeValidator: ExpressMiddlewareNext = (
   next();
 };
 
-export const uploadDocumentsValidator: ExpressMiddlewareNext = (
-  request,
-  response,
-  next
-) => {
-  if (!request.body.employee_id) {
-    return badRequest(response, Constants.MESSAGES.EMP_ID_REQ.code);
-  }
-  if (!request.body.type) {
-    return badRequest(response, Constants.MESSAGES.DOC_TYPE_REQ.code);
-  }
-  if (!request.body.file_url) {
-    return badRequest(response, Constants.MESSAGES.DOCUMENT_REQUIRED.code);
-  }
-  next();
-};
+

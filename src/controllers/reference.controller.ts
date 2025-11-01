@@ -4,11 +4,13 @@ import { getErrorMessage } from "../middlewares/app.middlewares";
 import { badRequest, success } from "../response/response";
 import {
   createSpecialisationService,
+  deleteSpecialisationService,
   listCitiesService,
   listCountriesService,
   listEnumsService,
   listSpecialisationService,
   listStatesService,
+  updateSpecialisationService,
 } from "../services/reference.service";
 import { ExpressMiddleware } from "../types/express.types";
 
@@ -82,6 +84,44 @@ export const listSpecialisationController: ExpressMiddleware = async (
 ) => {
   try {
     const result = await listSpecialisationService();
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const deleteSpecialisationController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    if (
+      !(await mongoose.model("specialisations").findById(request.params.id))
+    ) {
+      return badRequest(response, Constants.MESSAGES.DOESNT_EXIST.code);
+    }
+
+    const result = await deleteSpecialisationService(request.params);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const updateSpecialisationController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    if (
+      !(await mongoose.model("specialisations").findById(request.params.id))
+    ) {
+      return badRequest(response, Constants.MESSAGES.DOESNT_EXIST.code);
+    }
+
+    const result = await updateSpecialisationService(request);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

@@ -112,14 +112,57 @@ export const createSpecialisationService = (
   });
 };
 
+export const updateSpecialisationService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const newSpecialisation = await mongoose
+        .model("specialisations")
+        .findOneAndUpdate(
+          { _id: payload.params.id },
+          { $set: payload.body },
+          { new: true, runValidators: true }
+        );
+
+      resolve(newSpecialisation);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 export const listSpecialisationService = (): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const specData = await mongoose.model("specialisations").find().exec();
+      const specData = await mongoose
+        .model("specialisations")
+        .find({ is_deleted: false })
+        .exec();
 
       if (!specData) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.FIND.code);
       }
+
+      resolve(specData);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const deleteSpecialisationService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const specData = await mongoose.model("specialisations").findOneAndUpdate(
+        { _id: ObjectId(payload.id) },
+        {
+          $set: { is_deleted: true },
+        },
+        { new: true, runValidators: true }
+      );
 
       resolve(specData);
     } catch (error) {

@@ -6,7 +6,6 @@ import {
   deleteEmployeeValidator,
   listEmployeeValidator,
   updateEmployeeValidator,
-  uploadDocumentsValidator,
   viewEmployeeValidator,
 } from "../validators/employee.validator";
 import {
@@ -62,11 +61,6 @@ router.post(
   listEmployeeController
 );
 
-// router.post(
-//   "/upload-documents",
-//   authorisationMiddleware,
-//   uploadDocumentsValidator,
-//   listEmployeeController
-// );
+
 
 export default router;

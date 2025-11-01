@@ -122,7 +122,6 @@ export const listPatientService = (
       const page = Number(payload.page) || 1;
       const limit = Number(payload.limit) || 10;
       const skip = (page - 1) * 10;
-
       const match: Record<string, any> = {
         is_deleted: false,
       };

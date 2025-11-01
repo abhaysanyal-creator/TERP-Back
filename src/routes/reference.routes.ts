@@ -1,8 +1,11 @@
 import { Router } from "express";
 import {
   createSpecialisationValidator,
+  deleteSpecialisationValidator,
   listCitiesValidator,
   listStatesValidator,
+  updateSpecialisationValidator,
+  uploadDocumentsValidator,
 } from "../validators/reference.validator";
 import {
   createSpecialisationController,
@@ -10,9 +13,12 @@ import {
   listCountriesController,
   listSpecialisationController,
   listStatesController,
-  listEnumsController
+  listEnumsController,
+  deleteSpecialisationController,
+  updateSpecialisationController,
 } from "../controllers/reference.controller";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
+import { uploadDocumentController } from "../controllers/upload.controller";
 
 const router = Router();
 
@@ -29,16 +35,33 @@ router.post(
   createSpecialisationController
 );
 
+router.patch(
+  "/specialisation/update/:id",
+  authorisationMiddleware,
+  updateSpecialisationValidator,
+  updateSpecialisationController
+);
+
 router.post(
   "/specialisation/list",
   authorisationMiddleware,
   listSpecialisationController
 );
 
-router.post(
-  "/enums",
+router.delete(
+  "/specialisation/delete/:id",
   authorisationMiddleware,
-  listEnumsController
+  deleteSpecialisationValidator,
+  deleteSpecialisationController
 );
+
+router.post(
+  "/s3Upload",
+  authorisationMiddleware,
+  uploadDocumentsValidator,
+  uploadDocumentController
+);
+
+router.post("/enums", authorisationMiddleware, listEnumsController);
 
 export default router;

@@ -216,6 +216,7 @@ export interface Patients extends Document {
   is_active: boolean;
   contact_number: string;
   email: string;
+  therapist:Types.ObjectId;
   dob: Date;
   is_deleted: boolean;
   organisation_assignment: Organisation;
@@ -268,7 +269,7 @@ export interface Clinics extends Document {
   address: Address;
   working_hours: WorkingHour;
   no_of_rooms: number;
-  specialisation: ClinicPricing;
+  specialisation: string[];
 }
 
 export interface Bookings extends Document {

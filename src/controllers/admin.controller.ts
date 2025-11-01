@@ -2,12 +2,14 @@ import { badRequest, success } from "../response/response";
 import {
   createAdmin,
   listAdminService,
+  updateAdminService,
   viewAdminService,
 } from "../services/admin.service";
 import type { ExpressMiddleware } from "../types/express.types";
 import Lang from "../locales/en.json";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import Constants from "../locales/constants";
+import mongoose from "mongoose";
 
 export const adminCreateController: ExpressMiddleware = async (
   request,
@@ -42,7 +44,16 @@ export const updateAdminController: ExpressMiddleware = async (
   response
 ) => {
   try {
-  } catch (error) {}
+    const payload = request;
+
+    if (!(await mongoose.model("users").findById(request.params.id))) {
+      return badRequest(response, Constants.MESSAGES.DOESNT_EXIST.code);
+    }
+    const result = await updateAdminService(payload);
+    return success(response, Lang.SUCCESS, result);
+  } catch (error) {
+    return badRequest(response, getErrorMessage(error));
+  }
 };
 
 export const listAdminController: ExpressMiddleware = async (

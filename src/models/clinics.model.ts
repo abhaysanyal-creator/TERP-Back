@@ -75,7 +75,7 @@ const clinicSchema: Schema<Clinics> = new Schema({
   rooms: [roomsSchema],
   working_hours: [workingHourSchema],
   no_of_rooms: { type: Number, required: true },
-  specialisation: [ClinicPricingSchema],
+  specialisation: { type: [String] },
 });
 
 const clinicModel = model<Clinics>("clinics", clinicSchema, "clinics");

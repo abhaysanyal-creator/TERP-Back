@@ -59,6 +59,28 @@ export const viewAdminService = (
   });
 };
 
+export const updateAdminService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await mongoose
+        .model("users")
+        .findOneAndUpdate(
+          { _id: ObjectId(payload.params.id) },
+          {
+            $set: payload.body,
+          },
+          { new: true, runValidators: true }
+        ).select("-password")
+        .exec();
+      return resolve(user);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 export const listAdminService = (
   payload: Record<string, any>
 ): Record<string, any> => {
@@ -77,11 +99,11 @@ export const listAdminService = (
 
       //  username: { type: String, required: true, unique: true },
       //     name: { type: String, required: true },
-      //     email: { type: String, required: true, unique: true },
+      // //     email: { type: String, required: true, unique: true },
 
-      if (payload.contact_number)
-        and.push({ contact_number: payload.contact_number });
-      if (payload.employee_id) and.push({ employee_id: payload.employee_id });
+      // if (payload.contact_number)
+      //   and.push({ contact_number: payload.contact_number });
+      // if (payload.employee_id) and.push({ employee_id: payload.employee_id });
 
       if (payload.search) {
         or.push(
@@ -99,6 +121,11 @@ export const listAdminService = (
         { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit },
+        {
+          $project: {
+            password: 0,
+          },
+        },
       ];
 
       const countPipeline = [{ $match: match }, { $count: "total" }];
