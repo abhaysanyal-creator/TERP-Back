@@ -27,9 +27,14 @@ export default {
       code: "FILE_NAME_REQUIRED",
       message: "File name is required!!",
     },
+
     FILE_TYPE_REQUIRED: {
       code: "FILE_TYPE_REQUIRED_IMAGE/VIDEO",
-      message: "File name is required!!",
+      message: "File Type is required!!",
+    },
+    TYPE_REQUIRED: {
+      code: "TYPE_REQUIRED",
+      message: "Type is required!!",
     },
     CATEGORY_REQUIRED: {
       code: "CATEGORY_NAME_REQUIRED",

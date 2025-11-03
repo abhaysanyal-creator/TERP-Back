@@ -11,7 +11,7 @@ import bookingModel from "./booking.model";
 import { Country } from "./country.model";
 import { State } from "./state.model";
 import { City } from "./city.model";
-import specialisationModel from "./specialisation.model";
+import metaDataModel from "./meta-data.model";
 
 export {
   Country,
@@ -20,7 +20,6 @@ export {
   userModel,
   roleModel,
   permissionModel,
-  specialisationModel,
   employeeModel,
   organisationModel,
   patientModel,
@@ -28,4 +27,5 @@ export {
   clinicModel,
   roomModel,
   bookingModel,
+  metaDataModel,
 };

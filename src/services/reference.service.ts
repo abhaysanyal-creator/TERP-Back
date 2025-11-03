@@ -98,14 +98,15 @@ export const createSpecialisationService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const newSpecialisation = await mongoose
-        .model("specialisations")
-        .create(payload);
+      const newItem = await mongoose.model("metadatas").create(payload);
 
-      if (!newSpecialisation) {
+      if (!newItem) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
       }
-      resolve(newSpecialisation);
+      newItem.value === payload.name;
+
+      console.log(newItem);
+      resolve(newItem);
     } catch (error) {
       reject(error);
     }
@@ -118,7 +119,7 @@ export const updateSpecialisationService = (
   return new Promise(async (resolve, reject) => {
     try {
       const newSpecialisation = await mongoose
-        .model("specialisations")
+        .model("metadatas")
         .findOneAndUpdate(
           { _id: payload.params.id },
           { $set: payload.body },
@@ -132,19 +133,21 @@ export const updateSpecialisationService = (
   });
 };
 
-export const listSpecialisationService = (): Record<string, any> => {
+export const listSpecialisationService = (
+  payload: Record<string, any>
+): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const specData = await mongoose
-        .model("specialisations")
-        .find({ is_deleted: false })
+      const data = await mongoose
+        .model("metadatas")
+        .find({ is_deleted: false, type: payload.params.type })
         .exec();
 
-      if (!specData) {
+      if (!data) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.FIND.code);
       }
 
-      resolve(specData);
+      resolve(data);
     } catch (error) {
       reject(error);
     }
@@ -156,7 +159,7 @@ export const deleteSpecialisationService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const specData = await mongoose.model("specialisations").findOneAndUpdate(
+      const specData = await mongoose.model("metadatas").findOneAndUpdate(
         { _id: ObjectId(payload.id) },
         {
           $set: { is_deleted: true },

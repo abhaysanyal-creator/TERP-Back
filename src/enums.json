@@ -66,5 +66,10 @@
     "CLALIT": "clalit",
     "MEUHEDET": "meuhedet",
     "LEUMIT": "leumit"
+  },
+  "ListType": {
+    "ALLERGY": "allergy",
+    "DISABIITY": "disability",
+    "SPECIALISATIONS": "specialisation"
   }
 }

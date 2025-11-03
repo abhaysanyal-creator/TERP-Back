@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { request, response, Response, Router } from "express";
 import {
   createSpecialisationValidator,
   deleteSpecialisationValidator,
@@ -29,31 +29,67 @@ router.post("/states", listStatesValidator, listStatesController);
 router.post("/cities", listCitiesValidator, listCitiesController);
 
 router.post(
-  "/specialisation/create",
+  "/meta-data/:type/create",
   authorisationMiddleware,
   createSpecialisationValidator,
-  createSpecialisationController
+  (request, response) => {
+    const type = request.params.type.toLowerCase();
+    createSpecialisationController(request, response, type);
+  }
+  // createSpecialisationController(request:request, response:response, "DISABILITY")
 );
 
 router.patch(
-  "/specialisation/update/:id",
+  "/meta-data/:type/update/:id",
   authorisationMiddleware,
-  updateSpecialisationValidator,
-  updateSpecialisationController
+  (request, response) => {
+    const type = request.params.type.toLowerCase();
+    updateSpecialisationController(request, response, type);
+  }
 );
 
 router.post(
-  "/specialisation/list",
+  "/meta-data/:type/list",
   authorisationMiddleware,
-  listSpecialisationController
+  (request, response) => {
+    const type = request.params.type.toLowerCase();
+    listSpecialisationController(request, response, type);
+  }
 );
 
 router.delete(
-  "/specialisation/delete/:id",
+  "/meta-data/delete/:id",
   authorisationMiddleware,
   deleteSpecialisationValidator,
   deleteSpecialisationController
 );
+
+// router.post(
+//   "/allergies/create",
+//   authorisationMiddleware,
+//   createSpecialisationValidator,
+//   createSpecialisationController
+// );
+
+// router.patch(
+//   "/allergies/update/:id",
+//   authorisationMiddleware,
+//   updateSpecialisationValidator,
+//   updateSpecialisationController
+// );
+
+// router.post(
+//   "/allergies/list",
+//   authorisationMiddleware,
+//   listSpecialisationController
+// );
+
+// router.delete(
+//   "/allergies/delete/:id",
+//   authorisationMiddleware,
+//   deleteSpecialisationValidator,
+//   deleteSpecialisationController
+// );
 
 router.post(
   "/s3Upload",

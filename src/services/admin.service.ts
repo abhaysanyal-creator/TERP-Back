@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { adminCheck, generateEmployeeId, ObjectId } from "../utils/helpers";
+import { generateEmployeeId, ObjectId } from "../utils/helpers";
 import Constants from "../locales/constants";
 
 export const createAdmin = (
@@ -9,7 +9,9 @@ export const createAdmin = (
     try {
       const user = await mongoose
         .model("users")
-        .findOne({ email: payload.email })
+        .findOne({
+          $or: [{ email: payload.email }, { username: payload.username }],
+        })
         .exec();
 
       if (user) {

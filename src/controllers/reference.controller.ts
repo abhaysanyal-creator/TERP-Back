@@ -13,6 +13,8 @@ import {
   updateSpecialisationService,
 } from "../services/reference.service";
 import { ExpressMiddleware } from "../types/express.types";
+import { Request, Response } from "express";
+import { ObjectId } from "../utils/helpers";
 
 export const listCountriesController: ExpressMiddleware = async (
   request,
@@ -53,14 +55,16 @@ export const listCitiesController: ExpressMiddleware = async (
   }
 };
 
-export const createSpecialisationController: ExpressMiddleware = async (
-  request,
-  response
+export const createSpecialisationController = async (
+  request: Request,
+  response: Response,
+  type: string
 ) => {
   try {
     const isExists = await mongoose
-      .model("specialisations")
+      .model("metadatas")
       .findOne({
+        type: type,
         name: request.body.name,
         is_deleted: false,
       })
@@ -78,12 +82,13 @@ export const createSpecialisationController: ExpressMiddleware = async (
   }
 };
 
-export const listSpecialisationController: ExpressMiddleware = async (
-  request,
-  response
+export const listSpecialisationController = async (
+  request: Request,
+  response: Response,
+  type: string
 ) => {
   try {
-    const result = await listSpecialisationService();
+    const result = await listSpecialisationService(request);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
@@ -96,9 +101,7 @@ export const deleteSpecialisationController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    if (
-      !(await mongoose.model("specialisations").findById(request.params.id))
-    ) {
+    if (!(await mongoose.model("metadatas").findById(request.params.id))) {
       return badRequest(response, Constants.MESSAGES.DOESNT_EXIST.code);
     }
 
@@ -110,13 +113,18 @@ export const deleteSpecialisationController: ExpressMiddleware = async (
   }
 };
 
-export const updateSpecialisationController: ExpressMiddleware = async (
-  request,
-  response
+export const updateSpecialisationController = async (
+  request: Request,
+  response: Response,
+  type: string
 ) => {
   try {
     if (
-      !(await mongoose.model("specialisations").findById(request.params.id))
+      !(await mongoose.model("metadatas").findOne({
+        _id: ObjectId(request.params.id),
+        type: type,
+        is_deleted: false,
+      }))
     ) {
       return badRequest(response, Constants.MESSAGES.DOESNT_EXIST.code);
     }

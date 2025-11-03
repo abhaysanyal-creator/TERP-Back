@@ -35,6 +35,9 @@ export const createSpecialisationValidator: ExpressMiddlewareNext = (
   if (!request.body.name) {
     return badRequest(response, Constants.MESSAGES.SPECIALISATION_NAME.code);
   }
+  if (!request.params.type) {
+    return badRequest(response, Constants.MESSAGES.TYPE_REQUIRED.code);
+  }
   next();
 };
 
@@ -45,6 +48,9 @@ export const updateSpecialisationValidator: ExpressMiddlewareNext = (
 ) => {
   if (!request.body.name) {
     return badRequest(response, Constants.MESSAGES.SPECIALISATION_NAME.code);
+  }
+   if (!request.params.type) {
+    return badRequest(response, Constants.MESSAGES.TYPE_REQUIRED.code);
   }
   if (!request.params.id) {
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
