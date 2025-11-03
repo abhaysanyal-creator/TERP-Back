@@ -57,7 +57,7 @@ export interface UploadCategoryMap {
 export type UploadCategory<M extends UploadModule> = UploadCategoryMap[M];
 
 export interface UploadParams<M extends UploadModule = UploadModule> {
-  org_id: string;
+  organisation_id: string;
   module: M;
   entityId?: string;
   category?: UploadCategory<M>;

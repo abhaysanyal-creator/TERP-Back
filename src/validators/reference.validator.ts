@@ -46,7 +46,7 @@ export const updateSpecialisationValidator: ExpressMiddlewareNext = (
   if (!request.body.name) {
     return badRequest(response, Constants.MESSAGES.SPECIALISATION_NAME.code);
   }
-    if (!request.params.id) {
+  if (!request.params.id) {
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
   }
   next();
@@ -71,8 +71,11 @@ export const uploadDocumentsValidator: ExpressMiddlewareNext = (
   if (!request.body.organisation_id) {
     return badRequest(response, Constants.MESSAGES.ORG_ID_REQUIRED.code);
   }
-  if (!request.body.file) {
-    return badRequest(response, Constants.MESSAGES.DOCUMENT_REQUIRED.code);
+  if (!request.body.fileName) {
+    return badRequest(response, Constants.MESSAGES.FILE_NAME_REQUIRED.code);
+  }
+  if (!request.body.fileType) {
+    return badRequest(response, Constants.MESSAGES.FILE_TYPE_REQUIRED.code);
   }
   if (!request.body.module) {
     return badRequest(response, Constants.MESSAGES.MODULE_REQUIRED.code);

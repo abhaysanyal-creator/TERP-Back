@@ -14,12 +14,12 @@ const s3 = new AWS.S3({
 
 export const uploadDocumentController = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?._id; // employee
+    const userId = (req as any).user?.id; // employee
 
     const body = req.body as UploadParams<UploadModule>;
-    const { org_id, module, category, fileType, fileName } = body;
+    const { organisation_id, module, category, fileType, fileName } = body;
 
-    if (!org_id || !module || !fileName) {
+    if (!organisation_id || !module || !fileName) {
       return res.status(400).json({ message: "Missing required params" });
     }
 
@@ -37,7 +37,7 @@ export const uploadDocumentController = async (req: Request, res: Response) => {
 
     // Generate S3 key based on org/module/entity/category/fileName
     const key = getS3Key({
-      org_id,
+      organisation_id,
       module,
       entityId,
       category: category as UploadCategory<UploadModule>,
@@ -46,7 +46,7 @@ export const uploadDocumentController = async (req: Request, res: Response) => {
 
     // Generate signed URL
     const signedUrl = await s3.getSignedUrlPromise("putObject", {
-      Bucket: process.env.AWS_S3_BUCKET!,
+      Bucket: process.env.AWS_BUCKET_NAME!,
       Key: key,
       ContentType: fileType,
       Expires: 60 * 5, // 5 minutes
@@ -55,7 +55,7 @@ export const uploadDocumentController = async (req: Request, res: Response) => {
     return res.json({
       signedUrl,
       key,
-      url: `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${key}`,
+      url: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${key}`,
     });
   } catch (err: any) {
     console.error("S3 Upload Error:", err);

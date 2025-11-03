@@ -23,7 +23,15 @@ export default {
       code: "MODULE_NAME_REQUIRED",
       message: "Module name is required!!",
     },
-     CATEGORY_REQUIRED: {
+    FILE_NAME_REQUIRED: {
+      code: "FILE_NAME_REQUIRED",
+      message: "File name is required!!",
+    },
+    FILE_TYPE_REQUIRED: {
+      code: "FILE_TYPE_REQUIRED_IMAGE/VIDEO",
+      message: "File name is required!!",
+    },
+    CATEGORY_REQUIRED: {
       code: "CATEGORY_NAME_REQUIRED",
       message: "Category name is required!!",
     },

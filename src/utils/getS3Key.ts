@@ -1,7 +1,7 @@
 import { UploadModule, UploadCategory } from "../types/reference.types";
 
 interface S3KeyParams {
-  org_id: string;
+  organisation_id: string;
   module: UploadModule;
   entityId?: string;
   category?: UploadCategory<UploadModule>;
@@ -9,13 +9,13 @@ interface S3KeyParams {
 }
 
 export const getS3Key = ({
-  org_id,
+  organisation_id,
   module,
   entityId,
   category,
   fileName,
 }: S3KeyParams) => {
-  let prefix = `orgs/${org_id}/${module}`;
+  let prefix = `orgs/${organisation_id}/${module}`;
 
   if (entityId) prefix += `/${entityId}`;
   if (category) prefix += `/${category}`;
