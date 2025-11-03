@@ -7,29 +7,20 @@ export const createAdmin = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const creator = await mongoose
-        .model("users")
-        .findOne({ _id: ObjectId(payload.created_by) })
-        .exec();
-
-      if (!creator) {
-        return reject(new Error("Creator not found"));
-      }
-
       const user = await mongoose
         .model("users")
         .findOne({ email: payload.email })
         .exec();
 
       if (user) {
-        throw new Error("User Already exists!!");
+        throw new Error(Constants.MESSAGES.ALREADY_EXISTS.code);
       }
 
       payload.employee_id = generateEmployeeId();
 
       const role = await mongoose
         .model("roles")
-        .findOne({ _id: ObjectId(payload.role) });
+        .findOne({ _id: ObjectId(payload.role._id) });
 
       payload.permissions = role.permissions;
 
@@ -72,7 +63,8 @@ export const updateAdminService = (
             $set: payload.body,
           },
           { new: true, runValidators: true }
-        ).select("-password")
+        )
+        .select("-password")
         .exec();
       return resolve(user);
     } catch (error) {
