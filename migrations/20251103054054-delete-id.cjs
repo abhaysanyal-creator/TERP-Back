@@ -3,9 +3,9 @@ const { ObjectId } = require("mongodb");
 module.exports = {
   async up(db) {
     const idsToDelete = [
-      ObjectId("6902128419fbb258393a3bb9"),
-      ObjectId("6902128419fbb258393a3bba"),
-      ObjectId("6902128419fbb258393a3bbb"),
+      new ObjectId("6902128419fbb258393a3bb9"),
+      new ObjectId("6902128419fbb258393a3bba"),
+      new ObjectId("6902128419fbb258393a3bbb"),
     ];
 
     console.log("Deleting specific roles...");
