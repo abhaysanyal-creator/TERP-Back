@@ -8,7 +8,7 @@ module.exports = {
       new ObjectId("6902128419fbb258393a3bbb"),
     ];
 
-    console.log("Deleting specific roles...");
+    console.log("Deleting specific roles......");
 
     const result = await db.collection("roles").deleteMany({
       _id: { $in: idsToDelete }
