@@ -98,14 +98,18 @@ export const createSpecialisationService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const newItem = await mongoose.model("metadatas").create(payload);
+      const finalPayload = payload.body;
+      const type: string = payload.params.type;
+
+      finalPayload.type = type;
+
+      const newItem = await mongoose.model("metadatas").create(finalPayload);
 
       if (!newItem) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
       }
       newItem.value === payload.name;
 
-      console.log(newItem);
       resolve(newItem);
     } catch (error) {
       reject(error);

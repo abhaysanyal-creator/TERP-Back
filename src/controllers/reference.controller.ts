@@ -74,7 +74,7 @@ export const createSpecialisationController = async (
       return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
     }
 
-    const result = await createSpecialisationService(request.body);
+    const result = await createSpecialisationService(request);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
