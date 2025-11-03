@@ -52,14 +52,13 @@ const organisationSchema: Schema<Organisation> = new Schema(
 
 const specialisationSchema: Schema<Specialisation> = new Schema(
   {
-    id: { type: String, required: true, unique: true },
+    id: { type: Schema.Types.ObjectId, required: true, ref: "metadatas" },
     name: { type: String, required: true },
   },
   {
     _id: false,
   }
 );
-
 
 const employeeSchema = new Schema<Employee>(
   {
@@ -71,7 +70,8 @@ const employeeSchema = new Schema<Employee>(
       required: true,
       unique: true,
     },
-    employee_type: { //
+    employee_type: {
+      //
       type: String,
       enum: enums.EmployeeType as any,
       required: true,
@@ -88,9 +88,9 @@ const employeeSchema = new Schema<Employee>(
     organization_assignments: [organisationSchema],
     location_assignments: [{ type: String, required: true }],
     address: { type: addressSchema, required: true },
-    time_zone:{type:String,required:true},
+    time_zone: { type: String, required: true },
     mobile_phone: { type: String, required: true },
-    specialisation: [{ type: String, required: true }],
+    specialisation: [specialisationSchema],
     home_phone: { type: String },
     email: { type: String, required: true, unique: true },
     notes: { type: String },

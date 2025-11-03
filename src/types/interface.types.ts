@@ -89,7 +89,7 @@ export interface Organisation {
 }
 
 export interface Specialisation {
-  id: string;
+  id: Types.ObjectId;
   name: string;
 }
 

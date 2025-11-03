@@ -121,7 +121,6 @@ export const listAdminService = (
             localField: "role",
             as: "role",
             from: "roles",
-            pipeline: [{ $project: { _id: 1, name: 1 } }],
           },
         },
         {
@@ -133,6 +132,11 @@ export const listAdminService = (
         {
           $project: {
             password: 0,
+            "role.permissions": 0,
+            "role.updated_at": 0,
+            "role.created_at": 0,
+            "role.is_active": 0,
+            "role.is_deleted": 0,
           },
         },
       ];
