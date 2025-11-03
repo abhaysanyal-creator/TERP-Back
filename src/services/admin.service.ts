@@ -116,6 +116,21 @@ export const listAdminService = (
         { $skip: skip },
         { $limit: limit },
         {
+          $lookup: {
+            foreignField: "_id",
+            localField: "role",
+            as: "role",
+            from: "roles",
+            pipeline: [{ $project: { _id: 1, name: 1 } }],
+          },
+        },
+        {
+          $unwind: {
+            path: "$role",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
           $project: {
             password: 0,
           },
