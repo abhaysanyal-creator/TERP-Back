@@ -12,7 +12,6 @@ import {
 } from "../controllers/admin.controller";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import { listEmployeeValidator } from "../validators/employee.validator";
-import { requireScope } from "../middlewares/scope.middlewares";
 import axios from "axios";
 import Constants from "../locales/constants";
 
@@ -49,7 +48,6 @@ router.post(
 router.get(
   "/audit/logs",
   authorisationMiddleware,
-  requireScope("audit.view"),
   async (request, response) => {
     try {
       const { resource_type, resource_id, actor_id } = request.query;

@@ -77,10 +77,8 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
       };
     }
 
-    const scopes = user.role?.permissions?.map((p: any) => p.permission) || [];
-
     const token = generateToken(
-      { id: user._id.toString(), role: user.role, scope: scopes },
+      { id: user._id.toString(), role: user.role},
       JWT_SECRET,
       1296000
     );
