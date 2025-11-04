@@ -4,21 +4,22 @@ dotenv.config();
 import rateLimit from "express-rate-limit";
 import "./models/index";
 import express from "express";
-import ConnectDB from "./db/ConnectDb"
+import ConnectDB from "./db/ConnectDb";
 import { applicationMiddlewares } from "./middlewares/app.middlewares";
 import routes from "./routes/router";
 import cors from "cors";
+import { success } from "./response/response";
 
 const app = express();
 
 applicationMiddlewares(app);
 
-ConnectDB()
+ConnectDB();
 
 app.use(
   cors({
     origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -45,10 +46,8 @@ app.listen(PORT || 5000, "0.0.0.0", () => {
 });
 
 app.get("/health", (request, response) => {
-
-  response.status(200).json({
+  return success(response, "Server is healthy", {
     status: "ok",
-    message: "Server is healthy",
     uptime: process.uptime(),
     timestamp: new Date(),
   });

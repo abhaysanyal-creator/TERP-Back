@@ -49,12 +49,9 @@ router.patch(
 );
 
 router.post(
-  "/meta-data/:type/list",
+  "/meta-data/list",
   authorisationMiddleware,
-  (request, response) => {
-    const type = request.params.type.toLowerCase();
-    listSpecialisationController(request, response, type);
-  }
+  listSpecialisationController
 );
 
 router.delete(

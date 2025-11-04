@@ -84,8 +84,7 @@ export const createSpecialisationController = async (
 
 export const listSpecialisationController = async (
   request: Request,
-  response: Response,
-  type: string
+  response: Response
 ) => {
   try {
     const result = await listSpecialisationService(request);
