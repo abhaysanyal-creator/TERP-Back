@@ -36,6 +36,10 @@ export default {
       code: "TYPE_REQUIRED",
       message: "Type is required!!",
     },
+    S3_KEY_REQUIRED: {
+      code: "S3_KEY_REQUIRED",
+      message: "S3 Key Required!!",
+    },
     CATEGORY_REQUIRED: {
       code: "CATEGORY_NAME_REQUIRED",
       message: "Category name is required!!",

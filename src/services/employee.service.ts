@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 import { generateCode, ObjectId } from "../utils/helpers";
 import { success } from "../response/response";
+import { getSignedUrlForView } from "../controllers/upload.controller";
 
 export const createEmployeeService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      payload.employee_id = generateCode("EMP",6)
+      payload.employee_id = generateCode("EMP", 6);
       const newEmployee = await mongoose.model("employees").create(payload);
       resolve(newEmployee);
     } catch (error) {
@@ -25,7 +26,18 @@ export const viewEmployeeService = (
         .model("employees")
         .findOne({ _id: ObjectId(payload.id) })
         .exec();
-      return resolve(employee);
+
+      const docsWithUrls = await Promise.all(
+        (employee.documents || []).map(async (doc: any) => ({
+          ...doc,
+          signedUrl: await getSignedUrlForView(doc.key),
+        }))
+      );
+
+      return resolve({
+        ...employee,
+        documents: docsWithUrls,
+      });
     } catch (error) {
       reject(error);
     }
