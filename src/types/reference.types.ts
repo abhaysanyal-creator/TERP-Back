@@ -1,5 +1,4 @@
 import { Types, Document } from "mongoose";
-import { uploadPaths } from "../config/upload.paths";
 
 export interface ICountry {
   name: string;
@@ -42,17 +41,23 @@ export interface ICityDocument extends ICity, Document<Types.ObjectId> {
 export type UploadModule = "employees" | "patients" | "orgDocs";
 
 export interface UploadCategoryMap {
-  employees: "aadhaar" | "pan" | "resume" | "certificates";
-  patients: "reports" | "prescriptions" | "insurance";
-  orgDocs:
-    | "gst"
-    | "licenses"
-    | "agreements"
-    | "invoices"
-    | "bills"
-    | "contracts"
-    | "leave-forms";
+  employees: string;
+  patients: string;
+  orgDocs:string;
 }
+
+// export interface UploadCategoryMap {
+//   employees: "aadhaar" | "pan" | "resume" | "certificates";
+//   patients: "reports" | "prescriptions" | "insurance";
+//   orgDocs:
+//     | "gst"
+//     | "licenses"
+//     | "agreements"
+//     | "invoices"
+//     | "bills"
+//     | "contracts"
+//     | "leave-forms";
+// }
 
 export type UploadCategory<M extends UploadModule> = UploadCategoryMap[M];
 

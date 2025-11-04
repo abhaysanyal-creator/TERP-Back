@@ -49,7 +49,7 @@ export const updateSpecialisationValidator: ExpressMiddlewareNext = (
   if (!request.body.name) {
     return badRequest(response, Constants.MESSAGES.SPECIALISATION_NAME.code);
   }
-   if (!request.params.type) {
+  if (!request.params.type) {
     return badRequest(response, Constants.MESSAGES.TYPE_REQUIRED.code);
   }
   if (!request.params.id) {
@@ -88,6 +88,23 @@ export const uploadDocumentsValidator: ExpressMiddlewareNext = (
   }
   if (!request.body.category) {
     return badRequest(response, Constants.MESSAGES.CATEGORY_REQUIRED.code);
+  }
+  next();
+};
+
+export const confirmUploadValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.file_name) {
+    return badRequest(response, Constants.MESSAGES.FILE_NAME_REQUIRED.code);
+  }
+  if (!request.body.type) {
+    return badRequest(response, Constants.MESSAGES.FILE_TYPE_REQUIRED.code);
+  }
+  if (!request.body.employee_id) {
+    return badRequest(response, Constants.MESSAGES.EMP_ID_REQ.code);
   }
   next();
 };

@@ -78,7 +78,7 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
     }
 
     const token = generateToken(
-      { id: user._id.toString(), role: user.role},
+      { id: user._id.toString(), role: user.role, origin_service: "ERP" },
       JWT_SECRET,
       1296000
     );

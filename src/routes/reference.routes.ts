@@ -1,10 +1,10 @@
 import { request, response, Response, Router } from "express";
 import {
+  confirmUploadValidator,
   createSpecialisationValidator,
   deleteSpecialisationValidator,
   listCitiesValidator,
   listStatesValidator,
-  updateSpecialisationValidator,
   uploadDocumentsValidator,
 } from "../validators/reference.validator";
 import {
@@ -18,7 +18,10 @@ import {
   updateSpecialisationController,
 } from "../controllers/reference.controller";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
-import { uploadDocumentController } from "../controllers/upload.controller";
+import {
+  confirmUploadController,
+  getSignedUrlController,
+} from "../controllers/upload.controller";
 
 const router = Router();
 
@@ -92,7 +95,14 @@ router.post(
   "/s3Upload",
   authorisationMiddleware,
   uploadDocumentsValidator,
-  uploadDocumentController
+  getSignedUrlController
+);
+
+router.post(
+  "/s3Upload/confirm",
+  authorisationMiddleware,
+  confirmUploadValidator,
+  confirmUploadController
 );
 
 router.post("/enums", authorisationMiddleware, listEnumsController);

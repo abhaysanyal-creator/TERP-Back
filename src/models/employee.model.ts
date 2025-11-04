@@ -2,6 +2,7 @@ import { Specialisation } from "./../types/interface.types";
 import { Schema, model } from "mongoose";
 import type {
   Address,
+  EmpDocuments,
   Employee,
   Organisation,
   TimeSlot,
@@ -60,6 +61,12 @@ const specialisationSchema: Schema<Specialisation> = new Schema(
   }
 );
 
+export const DocSchema: Schema<EmpDocuments> = new Schema({
+  type: { type: String },
+  key: { type: String },
+  file_name: { type: String },
+});
+
 const employeeSchema = new Schema<Employee>(
   {
     employee_id: { type: String, required: true, unique: true },
@@ -84,6 +91,7 @@ const employeeSchema = new Schema<Employee>(
     hire_date: { type: Date, required: true },
     role: { type: Schema.Types.String },
     job_percentage: { type: Number, min: 0, max: 100, required: true },
+    documents: [DocSchema],
     dob: { type: Date, required: true },
     organization_assignments: [organisationSchema],
     location_assignments: [{ type: String, required: true }],

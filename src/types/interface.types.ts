@@ -95,9 +95,8 @@ export interface Specialisation {
 
 export interface EmpDocuments extends Document {
   type: string;
-  file_url: string;
-  uploaded_at: Date;
-  uploaded_by: Types.ObjectId;
+  key: string;
+  file_name:string;
 }
 
 export interface Employee extends Document {
@@ -109,9 +108,10 @@ export interface Employee extends Document {
   employee_type: string;
   position_types: string;
   employee_roles: string;
+  documents: EmpDocuments;
   team_leader: boolean;
   is_deleted: boolean;
-  time_zone:string;
+  time_zone: string;
   hire_date: Date;
   role?: string;
   job_percentage: number;
@@ -203,7 +203,7 @@ export interface Companion {
   relation_patient: string;
   landline_number: string;
   payment_method: PaymentMethod[];
-  hmo_docs:CompanionHMO;
+  hmo_docs: CompanionHMO;
 }
 
 export interface Patients extends Document {
@@ -216,7 +216,7 @@ export interface Patients extends Document {
   is_active: boolean;
   contact_number: string;
   email: string;
-  therapist:Types.ObjectId;
+  therapist: Types.ObjectId;
   dob: Date;
   is_deleted: boolean;
   organisation_assignment: Organisation;
