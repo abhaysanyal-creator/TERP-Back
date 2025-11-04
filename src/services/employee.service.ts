@@ -27,17 +27,14 @@ export const viewEmployeeService = (
         .findOne({ _id: ObjectId(payload.id) })
         .exec();
 
-      const docsWithUrls = await Promise.all(
+      employee.documents = await Promise.all(
         (employee.documents || []).map(async (doc: any) => ({
           ...doc,
-          signedUrl: await getSignedUrlForView(doc.key),
+          signedUrl: await getSignedUrlForView(doc.key), // ⬅️ signed URL included here
         }))
       );
 
-      return resolve({
-        ...employee,
-        documents: docsWithUrls,
-      });
+      return resolve(employee);
     } catch (error) {
       reject(error);
     }

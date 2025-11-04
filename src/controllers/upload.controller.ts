@@ -20,20 +20,20 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
-export const getSignedUrlController = async (req: Request, res: Response) => {
+export const getSignedUrlController: ExpressMiddleware = async (req, res) => {
   try {
-    const userId = (req as any).user?.id;
 
     const body = req.body as UploadParams<UploadModule>;
-    const { organisation_id, module, category, fileType, fileName } = body;
+    const { organisation_id, module, category, fileType, fileName, entityId } =
+      body;
 
     if (!organisation_id || !module || !fileName) {
-      return res.status(400).json({ message: "Missing required params" });
+      return res.status(400).json({ code: "MISSING_PARAMS" });
     }
 
-    let entityId: string | undefined;
-    if (module === "employees") entityId = userId;
-    if (module === "patients") entityId = userId;
+    // let entityId: string | undefined;
+    // if (module === "employees") entityId = userId;
+    // if (module === "patients") entityId = userId;
 
     // Generate S3 key based on org/module/entity/category/fileName
     const key = getS3Key({
@@ -76,24 +76,24 @@ export const confirmUploadController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const { employee_id, type, key, file_name } = request.body;
+    const { entityId, type, key, file_name, module } = request.body;
 
-    const employee = await mongoose
-      .model("employees")
-      .findById(ObjectId(employee_id))
+    const entity = await mongoose
+      .model(module)
+      .findById(ObjectId(entityId))
       .exec();
 
-    if (!employee) {
+    if (!entity) {
       return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
     }
 
-    employee.documents.push({
+    entity.documents.push({
       type,
       key,
       original_name: file_name || null,
     });
 
-    await employee.save();
+    await entity.save();
 
     return success(response, Constants.MESSAGES.SUCCESS.code, {});
   } catch (error) {

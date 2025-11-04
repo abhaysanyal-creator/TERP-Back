@@ -15,7 +15,7 @@ export const getS3Key = ({
   category,
   fileName,
 }: S3KeyParams) => {
-  let prefix = `orgs/${organisation_id}/${module}`;
+  let prefix = `organisation/${organisation_id}/${module}`;
 
   if (entityId) prefix += `/${entityId}`;
   if (category) prefix += `/${category}`;

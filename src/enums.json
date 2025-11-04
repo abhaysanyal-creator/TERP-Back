@@ -71,5 +71,10 @@
     "ALLERGY": "allergy",
     "DISABIITY": "disability",
     "SPECIALISATIONS": "specialisation"
+  },
+  "s3Upload": {
+    "ORGANISATIONS": "organisations",
+    "EMPLOYEES": "employees",
+    "PATIENTS": "patients"
   }
 }

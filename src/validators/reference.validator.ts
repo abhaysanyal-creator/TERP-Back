@@ -1,6 +1,7 @@
 import { badRequest } from "../response/response";
 import type { ExpressMiddlewareNext } from "../types/express.types";
 import Constants from "../locales/constants";
+import enums from "../enums.json";
 
 export const listStatesValidator: ExpressMiddlewareNext = (
   request,
@@ -89,6 +90,9 @@ export const uploadDocumentsValidator: ExpressMiddlewareNext = (
   if (!request.body.category) {
     return badRequest(response, Constants.MESSAGES.CATEGORY_REQUIRED.code);
   }
+  if (!request.body.entityId) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
   next();
 };
 
@@ -106,8 +110,16 @@ export const confirmUploadValidator: ExpressMiddlewareNext = (
   if (!request.body.key) {
     return badRequest(response, Constants.MESSAGES.S3_KEY_REQUIRED.code);
   }
-  if (!request.params.id) {
+   if (!request.body.entityId) {
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  if (!request.body.module) {
+    return badRequest(response, Constants.MESSAGES.MODULE_REQUIRED.code);
+  }
+  if (request.body.module) {
+    if (!Object.values(enums.s3Upload).includes(request.body.module)) {
+      return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
+    }
   }
   next();
 };
