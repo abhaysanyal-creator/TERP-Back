@@ -22,7 +22,9 @@ export const loginService = async (payload: LoginPaylaod) => {
 
   const user = await mongoose.model("users").findOne({ email: email }).exec();
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
+  const passwordCompare = await bcrypt.compare(password, user.password);
+
+  if (!user || !passwordCompare) {
     throw {
       status: 401,
       error: {

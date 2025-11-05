@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { generateEmployeeId, ObjectId } from "../utils/helpers";
+import bcrypt from "bcrypt";
 import Constants from "../locales/constants";
 
 export const createAdmin = (
@@ -20,11 +21,18 @@ export const createAdmin = (
 
       payload.employee_id = generateEmployeeId();
 
+      const hashedPassword = await bcrypt.hash(payload.password, 10);
+
       const role = await mongoose
         .model("roles")
         .findOne({ _id: ObjectId(payload.role._id) });
 
+      if (!role) {
+        throw new Error(Constants.MESSAGES.INVALID_ROLE.code);
+      }
+
       payload.permissions = role.permissions;
+      payload.password = hashedPassword;
 
       const newUser = await mongoose.model("users").create(payload);
 

@@ -61,11 +61,16 @@ const specialisationSchema: Schema<Specialisation> = new Schema(
   }
 );
 
-export const DocSchema: Schema<EmpDocuments> = new Schema({
-  type: { type: String },
-  key: { type: String },
-  file_name: { type: String },
-});
+export const DocSchema: Schema<EmpDocuments> = new Schema(
+  {
+    type: { type: String },
+    key: { type: String },
+    file_name: { type: String },
+  },
+  {
+    _id: false,
+  }
+);
 
 const employeeSchema = new Schema<Employee>(
   {
