@@ -22,20 +22,29 @@ export const loginService = async (payload: LoginPaylaod) => {
 
   const user = await mongoose.model("users").findOne({ email: email }).exec();
 
-  const passwordCompare = await bcrypt.compare(password, user.password);
-
-  if (!user || !passwordCompare) {
+  if (!user) {
     throw {
       status: 401,
       error: {
-        code: Constants.MESSAGES.INVALID_CREDENTIALS.code,
-        message: Constants.MESSAGES.INVALID_CREDENTIALS.message,
+        code: Constants.MESSAGES.NOT_FOUND.code,
+        message: Constants.MESSAGES.NOT_FOUND.message,
+      },
+    };
+  }
+
+  const passwordCompare = await bcrypt.compare(password, user.password);
+
+  if (!passwordCompare) {
+    throw {
+      status: 401,
+      error: {
+        code: Constants.MESSAGES.INVALID_PASSWORD.code,
+        message: Constants.MESSAGES.INVALID_PASSWORD.message,
       },
     };
   }
 
   const otp = generateOTP();
-
   saveOtp(user._id.toString(), otp);
 
   console.log(`OTP for user ${email}: ${otp}`);
@@ -44,7 +53,7 @@ export const loginService = async (payload: LoginPaylaod) => {
   return {
     message: "OTP sent. Please verify to complete login.",
     userId: user._id,
-    otp: otp,
+    otp,
   };
 };
 
