@@ -110,9 +110,6 @@ export const confirmUploadValidator: ExpressMiddlewareNext = (
   if (!request.body.key) {
     return badRequest(response, Constants.MESSAGES.S3_KEY_REQUIRED.code);
   }
-   if (!request.body.entityId) {
-    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
-  }
   if (!request.body.module) {
     return badRequest(response, Constants.MESSAGES.MODULE_REQUIRED.code);
   }

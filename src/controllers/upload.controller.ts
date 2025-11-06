@@ -22,7 +22,6 @@ const s3 = new AWS.S3({
 
 export const getSignedUrlController: ExpressMiddleware = async (req, res) => {
   try {
-
     const body = req.body as UploadParams<UploadModule>;
     const { organisation_id, module, category, fileType, fileName, entityId } =
       body;
@@ -57,9 +56,9 @@ export const getSignedUrlController: ExpressMiddleware = async (req, res) => {
       key,
       url: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${key}`,
     });
-  } catch (err: any) {
-    console.error("S3 Upload Error:", err);
-    return res.status(500).json({ error: err.message });
+  } catch (error: any) {
+    console.error("S3 Upload Error:", error);
+    return badRequest(res, getErrorMessage(error));
   }
 };
 

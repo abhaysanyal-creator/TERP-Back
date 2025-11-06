@@ -99,7 +99,7 @@ router.post(
 );
 
 router.post(
-  "/s3Upload/confirm/:id",
+  "/s3Upload/confirm",
   authorisationMiddleware,
   confirmUploadValidator,
   confirmUploadController

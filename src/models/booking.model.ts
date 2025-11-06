@@ -69,6 +69,8 @@ const bookingsSchema: Schema<Bookings> = new Schema(
       ref: "patients",
       required: true,
     },
+    is_active: { type: Boolean, default: true },
+    is_deleted: { type: Boolean, default: false },
     booking_details: bookingDetailSchema,
     status: {
       type: String,

@@ -76,5 +76,16 @@
     "ORGANISATIONS": "organisations",
     "EMPLOYEES": "employees",
     "PATIENTS": "patients"
+  },
+  "ModuleType": {
+    "ORGANISATIONS": "organisations",
+    "EMPLOYEES": "employees",
+    "PATIENTS": "patients",
+    "DEPARTMENTS": "departments",
+    "ACTIVITIES": "activities"
+  },
+  "ActiveStatus": {
+    "ACTIVE": "true",
+    "IN_ACTIVE": "false"
   }
 }

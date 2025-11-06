@@ -61,6 +61,7 @@ export interface OTP {
 }
 
 export interface TimeSlot {
+  id: String;
   start_time: Date;
   end_time: Date;
 }
@@ -93,10 +94,11 @@ export interface Specialisation {
   name: string;
 }
 
-export interface EmpDocuments extends Document {
+export interface EmpDocuments {
   type: string;
+  signedUrl?:string;
   key: string;
-  file_name:string;
+  file_name: string;
 }
 
 export interface Employee extends Document {
@@ -108,7 +110,7 @@ export interface Employee extends Document {
   employee_type: string;
   position_types: string;
   employee_roles: string;
-  documents: EmpDocuments;
+  documents: EmpDocuments[];
   team_leader: boolean;
   is_deleted: boolean;
   time_zone: string;
@@ -280,6 +282,8 @@ export interface Bookings extends Document {
   created_by: Types.ObjectId;
   // start_time: Date;
   // end_time: Date;
+  is_active: Boolean;
+  is_deleted: Boolean;
   booking_details: BookingDetails;
   patient_id: Types.ObjectId;
   status: string;

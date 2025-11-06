@@ -127,6 +127,10 @@ export default {
       code: "INVALID_PASSWORD",
       message: "Invalid Password!!",
     },
+    STATUS_REQ: {
+      code: "STATUS_REQUIRED",
+      message: "Status Required!!",
+    },
     INVALID_OTP: {
       code: "INVALID_OTP",
       message: "Invalid Otp!!",

@@ -21,6 +21,7 @@ const addressSchema = new Schema<Address>(
 
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {
+    id: { type: String },
     start_time: { type: Date, required: true },
     end_time: { type: Date, required: true },
   },

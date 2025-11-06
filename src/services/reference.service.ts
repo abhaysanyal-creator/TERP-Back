@@ -145,6 +145,7 @@ export const listSpecialisationService = (
       const data = await mongoose
         .model("metadatas")
         .find({ is_deleted: false, type: payload.body.type })
+        .sort({ createdAt: -1 })
         .exec();
 
       if (!data) {

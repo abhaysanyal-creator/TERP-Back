@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { generateCode, ObjectId } from "../utils/helpers";
 import { success } from "../response/response";
 import { getSignedUrlForView } from "../controllers/upload.controller";
+import { Employee } from "../types/interface.types";
+import Constants from "../locales/constants";
 
 export const createEmployeeService = (
   payload: Record<string, any>
@@ -17,28 +19,29 @@ export const createEmployeeService = (
   });
 };
 
-export const viewEmployeeService = (
-  payload: Record<string, any>
-): Record<string, any> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const employee = await mongoose
-        .model("employees")
-        .findOne({ _id: ObjectId(payload.id) })
-        .exec();
+export const viewEmployeeService = async (payload: Record<string, any>) => {
+  try {
+    const EmployeeModel = mongoose.model<Employee>("employees");
 
-      employee.documents = await Promise.all(
-        (employee.documents || []).map(async (doc: any) => ({
-          ...doc,
-          signedUrl: await getSignedUrlForView(doc.key), // ⬅️ signed URL included here
-        }))
-      );
+    const employee = await EmployeeModel.findOne({ _id: ObjectId(payload.id) })
+      .lean()
+      .exec();
 
-      return resolve(employee);
-    } catch (error) {
-      reject(error);
+    if (!employee) {
+      throw new Error(Constants.MESSAGES.NOT_FOUND.code);
     }
-  });
+
+    employee.documents = await Promise.all(
+      (employee.documents || []).map(async (doc) => ({
+        ...doc,
+        signedUrl: await getSignedUrlForView(doc.key),
+      }))
+    );
+
+    return employee;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const updateEmployeeService = (
