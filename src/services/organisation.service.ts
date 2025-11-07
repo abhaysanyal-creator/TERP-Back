@@ -7,7 +7,6 @@ export const createOrganisationService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      payload.internal_code = generateCode("ORG", 5);
 
       const newOrganisation = await mongoose
         .model("organisations")
