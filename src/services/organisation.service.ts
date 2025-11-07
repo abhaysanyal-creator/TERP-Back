@@ -30,8 +30,22 @@ export const viewOrganisationService = (
     try {
       const existingOrganisation = await mongoose
         .model("organisations")
-        .findOne({ _id: ObjectId(payload.id), is_deleted: false })
-        .exec();
+        .aggregate([
+          {
+            $match: {
+              _id: ObjectId(payload.id),
+              is_deleted: false,
+            },
+          },
+          {
+            $lookup: {
+              from: "departments",
+              localField: "_id",
+              foreignField: "organisation.id",
+              as: "departments",
+            },
+          },
+        ]);
 
       existingOrganisation
         ? resolve(existingOrganisation)
@@ -112,8 +126,8 @@ export const listOrganisationService = (
       const or: any[] = [];
       const and: any[] = [];
 
-      if (payload.organisation_type) and.push({ organisation_type: payload.organisation_type });
-      
+      if (payload.organisation_type)
+        and.push({ organisation_type: payload.organisation_type });
 
       if (payload.search) {
         or.push(

@@ -30,20 +30,6 @@ export const contactSchema = new Schema<Contact>(
   }
 );
 
-const fixedCostSchema = new Schema<FixedCost>(
-  {
-    type: { type: String, required: true, trim: true },
-    amount: { type: Number, required: true, min: 0 },
-    recurrence: {
-      type: String,
-      enum: ["monthly", "yearly"],
-      required: true,
-    },
-    description: { type: String, trim: true },
-  },
-  { _id: false }
-);
-
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {
     start_time: { type: Date, required: true },
@@ -78,7 +64,7 @@ const organisationSchema: Schema<Organisations> = new Schema(
     address: addressSchema,
     contacts: [contactSchema],
     is_active: { type: Boolean, default: true },
-    is_deleted: { type: Boolean, default: false },
+    is_deleted: { type: Boolean, default: false }
   },
   { timestamps: true }
 );

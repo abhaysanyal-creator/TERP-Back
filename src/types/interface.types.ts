@@ -182,6 +182,7 @@ export interface Organisations extends Document {
   is_active: boolean;
   // department: Department;
   is_deleted: boolean;
+  departments:IDepartment[]
 }
 export interface PaymentMethod {
   method_type: string;
@@ -301,7 +302,7 @@ export interface Activity extends Document {
   therapists: [Therapists];
   rooms: IRoom[];
   address: Address;
-  working_hours: WorkingHour;
+  operating_hours: WorkingHour;
   no_of_rooms: number;
   treatment:TreatmentPriceIndexing[];
 }

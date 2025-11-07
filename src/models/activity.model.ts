@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 import type {
   Activity,
   Address,
@@ -72,6 +72,7 @@ export const roomSchema: Schema<IRoom> = new Schema(
   {
     id: {
       type: Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
     },
     name: { type: String },
   },
@@ -101,7 +102,7 @@ const activitySchema: Schema<Activity> = new Schema({
   therapists: [TherapistSchema],
   address: AddressSchema,
   rooms: [roomSchema],
-  working_hours: [workingHourSchema],
+  operating_hours: [workingHourSchema],
   treatment: [TreatmentPricingSchema],
 });
 

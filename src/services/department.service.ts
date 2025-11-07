@@ -26,10 +26,26 @@ export const viewDepartmentService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
+      const aggregationPipeline: any[] = [
+        {
+          $match: {
+            _id: ObjectId(payload.id),
+            is_deleted: false,
+          },
+        },
+        {
+          $lookup: {
+            localField: "_id",
+            foreignField: "department.id",
+            as: "activities",
+            from: "activities",
+          },
+        },
+      ];
+
       const existingOrganisation = await mongoose
         .model("departments")
-        .findOne({ _id: ObjectId(payload.id), is_deleted: false })
-        .exec();
+        .aggregate(aggregationPipeline);
 
       existingOrganisation
         ? resolve(existingOrganisation)
@@ -112,7 +128,8 @@ export const listDepartmentService = (
 
       if (payload.department_name)
         and.push({ department_name: payload.department_name });
-      if (payload.organisation_id) and.push({ "organisation.id": ObjectId(payload.organisation_id) });
+      if (payload.organisation_id)
+        and.push({ "organisation.id": ObjectId(payload.organisation_id) });
       // if (payload.number_of_rooms)
       //   and.push({
       //     number_of_rooms: payload.number_of_rooms,
