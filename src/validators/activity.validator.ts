@@ -78,7 +78,7 @@ export const createActivityValidator: ExpressMiddlewareNext = (
     return badRequest(response, Constants.MESSAGES.CONTACT_REQUIRED.code);
   }
   for (const contact of request.body.contacts) {
-    if (!contact.name || !contact.role || !contact.phone || !contact.email) {
+    if (!contact.name || !contact.role || !contact.phone) {
       return badRequest(response, Constants.MESSAGES.INVALID_CONTACT.code);
     }
   }

@@ -18,7 +18,13 @@ export const createOrganisationController: ExpressMiddleware = async (
   try {
     const existingOrg = await mongoose
       .model("organisations")
-      .findOne({ organisation_name: request.body.organisation_name })
+      .findOne({
+        $or: [
+          { organisation_name: request.body.organisation_name },
+          { internal_code: request.body.internal_code },
+          { organisation_id: request.body.organisation_id },
+        ],
+      })
       .exec();
 
     if (existingOrg) {

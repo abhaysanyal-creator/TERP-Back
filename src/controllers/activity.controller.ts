@@ -4,7 +4,7 @@ import { badRequest, success } from "../response/response";
 import Constants from "../locales/constants";
 import {
   createActivityService,
-  deleteClinicService,
+  deleteActivityService,
   listActivityService,
   updateActivityService,
   viewActivityService,
@@ -95,7 +95,7 @@ export const updateActivityController: ExpressMiddleware = async (
   }
 };
 
-export const deleteClinicController: ExpressMiddleware = async (
+export const deleteActivityController: ExpressMiddleware = async (
   request,
   response
 ) => {
@@ -110,7 +110,7 @@ export const deleteClinicController: ExpressMiddleware = async (
     if (!existingClinic) {
       return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
     }
-    const result = await deleteClinicService(request.params);
+    const result = await deleteActivityService(request.params);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     return badRequest(response, getErrorMessage(error));

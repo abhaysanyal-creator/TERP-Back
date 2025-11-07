@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
   createActivityController,
-  deleteClinicController,
+  deleteActivityController,
   listActivityController,
   updateActivityController,
   viewActivityController,
@@ -38,12 +38,12 @@ router.patch(
   updateActivityController
 );
 
-// router.delete(
-//   "/delete/:id",
-//   authorisationMiddleware,
-//   deleteClinicValidator,
-//   deleteClinicController
-// );
+router.delete(
+  "/delete/:id",
+  authorisationMiddleware,
+  deleteClinicValidator,
+  deleteActivityController
+);
 
 router.post(
   "/list",

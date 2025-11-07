@@ -74,21 +74,23 @@ export const updateActivityService = (
   });
 };
 
-export const deleteClinicService = (
+export const deleteActivityService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const deletedClinic = await mongoose.model("clinics").findOneAndUpdate(
-        {
-          _id: ObjectId(payload.id),
-        },
-        {
-          $set: { is_deleted: true },
-        },
-        { new: true }
-      );
-      resolve(deletedClinic);
+      const deletedActivity = await mongoose
+        .model("activities")
+        .findOneAndUpdate(
+          {
+            _id: ObjectId(payload.id),
+          },
+          {
+            $set: { is_deleted: true },
+          },
+          { new: true }
+        );
+      resolve(deletedActivity);
     } catch (error) {
       console.error(error);
       reject(error);
