@@ -2,68 +2,72 @@ import mongoose from "mongoose";
 import Constants from "../locales/constants";
 import { ObjectId } from "../utils/helpers";
 
-export const createClinicService = (
+export const createActivityService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const newClinic = await mongoose.model("clinics").create(payload);
+      const newActivity = await mongoose.model("activities").create(payload);
 
-      if (!newClinic) {
+      if (!newActivity) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
       }
-      resolve(newClinic);
+      resolve(newActivity);
     } catch (error) {
       reject(error);
     }
   });
 };
 
-export const viewClinicService = (
+export const viewActivityService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
       const id = ObjectId(payload.id);
 
-      const clinic = await mongoose
-        .model("clinics")
+      const activity = await mongoose
+        .model("activities")
         .findOne({ _id: id })
         .exec();
 
-      if (!clinic) {
+      if (!activity) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.FIND.code);
       }
 
-      resolve(clinic);
+      resolve(activity);
     } catch (error) {
       reject(error);
     }
   });
 };
 
-export const updateClinicService = (
+export const updateActivityService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (payload.clinic_id) {
-        delete payload.clinic_id;
+      if (payload.body.activity_id) {
+        delete payload.body.activity_id;
       }
 
-      const updatedClinic = await mongoose
-        .model("clinics")
+      if (payload.body.internal_code) {
+        delete payload.body.internal_code;
+      }
+
+      const updatedActivity = await mongoose
+        .model("activities")
         .findOneAndUpdate(
-          { _id: ObjectId(payload.id) },
-          { $set: payload },
+          { _id: ObjectId(payload.params.id) },
+          { $set: payload.body },
           { new: true, runValidators: true }
         )
         .exec();
 
-      if (!updatedClinic) {
+      if (!updatedActivity) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
       }
-      resolve(updatedClinic);
+      resolve(updatedActivity);
     } catch (error) {
       reject(error);
     }
@@ -92,7 +96,7 @@ export const deleteClinicService = (
   });
 };
 
-export const listClinicService = (
+export const listActivityService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
@@ -108,13 +112,19 @@ export const listClinicService = (
       const or: any[] = [];
       const and: any[] = [];
 
-      // if (payload.org_type) and.push({ org_type: payload.org_type });
-      // if (payload.number_of_rooms)
-      //   and.push({
-      //     number_of_rooms: payload.number_of_rooms,
-      //   });
-      // if (payload.protected_space)
-      //   and.push({ protected_space: payload.protected_space });
+      if (payload.id) and.push({ id: ObjectId(payload.id) });
+      if (payload.activity_name) and.push({ id: payload.activity_name });
+      if (payload.organisation_id)
+        and.push({
+          "organisation.id": ObjectId(payload.organisation_id),
+        });
+      if (payload.department_id)
+        and.push({
+          "department.id": ObjectId(payload.department_id),
+        });
+
+      if (payload.protected_space)
+        and.push({ protected_space: payload.protected_space });
 
       if (payload.working_hours)
         and.push({
@@ -123,8 +133,8 @@ export const listClinicService = (
 
       if (payload.search) {
         or.push(
-          { clinic_id: { $regex: payload.search, $options: "i" } },
-          { name: { $regex: payload.search, $options: "i" } }
+          { "organisation.name": { $regex: payload.search, $options: "i" } },
+          { "department.name": { $regex: payload.search, $options: "i" } }
         );
       }
 
@@ -140,15 +150,15 @@ export const listClinicService = (
 
       const countPipeline = [{ $match: match }, { $count: "total" }];
 
-      const [clinics, countResult] = await Promise.all([
-        mongoose.model("clinics").aggregate(pipeline),
-        mongoose.model("clinics").aggregate(countPipeline),
+      const [activities, countResult] = await Promise.all([
+        mongoose.model("activities").aggregate(pipeline),
+        mongoose.model("activities").aggregate(countPipeline),
       ]);
 
       const totalCount = countResult[0]?.total || 0;
 
       resolve({
-        data: clinics,
+        data: activities,
         count: totalCount,
       });
     } catch (error) {

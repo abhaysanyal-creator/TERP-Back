@@ -34,7 +34,7 @@ export const createEmployeeController: ExpressMiddleware = async (
     }
 
     const result = await createEmployeeService(request.body);
-    return success(response, Lang.USER_CREATED, result);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
     return badRequest(response, getErrorMessage(error));
@@ -47,7 +47,7 @@ export const viewEmployeeController: ExpressMiddleware = async (
 ) => {
   try {
     const result = await viewEmployeeService(request.params);
-    return success(response, Lang.SUCCESS, result);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
     return badRequest(response, getErrorMessage(error));

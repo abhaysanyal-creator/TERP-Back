@@ -17,6 +17,7 @@
     "OTHER": "other"
   },
   "AreaIn": {
+    "SQ_MTR": "sq.mtr",
     "SQ_FT": "sq.ft",
     "ACRE": "acre"
   },
@@ -87,5 +88,11 @@
   "ActiveStatus": {
     "ACTIVE": "true",
     "IN_ACTIVE": "false"
+  },
+  "ActivityType": {
+    "CLINIC": "clinic",
+    "KINDERGARTEN": "kindergarten",
+    "HOME_VIIST": "home_visit",
+    "CAMPUS": "campus"
   }
 }

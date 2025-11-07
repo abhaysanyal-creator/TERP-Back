@@ -5,7 +5,7 @@ import employeeModel from "./employee.model";
 import organisationModel from "./organisation.model";
 import patientModel from "./patients.model";
 import otpModel from "./otp.model";
-import clinicModel from "./clinics.model";
+import activityModel from "./activity.model";
 import roomModel from "./rooms.model";
 import bookingModel from "./booking.model";
 import { Country } from "./country.model";
@@ -25,7 +25,7 @@ export {
   organisationModel,
   patientModel,
   otpModel,
-  clinicModel,
+  activityModel,
   roomModel,
   bookingModel,
   metaDataModel,

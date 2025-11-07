@@ -3,38 +3,42 @@ import type { ExpressMiddleware } from "../types/express.types";
 import { badRequest, success } from "../response/response";
 import Constants from "../locales/constants";
 import {
-  createClinicService,
+  createActivityService,
   deleteClinicService,
-  listClinicService,
-  updateClinicService,
-  viewClinicService,
-} from "../services/clinic.service";
+  listActivityService,
+  updateActivityService,
+  viewActivityService,
+} from "../services/activity.service";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import { ObjectId } from "../utils/helpers";
 
-export const createClinicController: ExpressMiddleware = async (
+export const createActivityController: ExpressMiddleware = async (
   request,
   response
 ) => {
   try {
-    const creator = await mongoose
-      .model("employees")
-      .findOne({ _id: request.body.created_by })
+    // const creator = await mongoose
+    //   .model("employees")
+    //   .findOne({ _id: request.body.created_by })
+    //   .exec();
+
+    // if (!creator)
+    //   return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
+
+    const isActivityExist = await mongoose
+      .model("activities")
+      .findOne({
+        activity_name: request.body.activity_name,
+        "organisation.id": request.body.organisation.id,
+        "department.id": request.body.department.id,
+      })
       .exec();
 
-    if (!creator)
-      return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-
-    const isClinicExist = await mongoose
-      .model("clinics")
-      .findOne({ branch_name: request.body.branch_name })
-      .exec();
-
-    if (isClinicExist) {
+    if (isActivityExist) {
       return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
     }
 
-    const result = await createClinicService(request.body);
+    const result = await createActivityService(request.body);
 
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
@@ -43,24 +47,24 @@ export const createClinicController: ExpressMiddleware = async (
   }
 };
 
-export const viewClinicController: ExpressMiddleware = async (
+export const viewActivityController: ExpressMiddleware = async (
   request,
   response
 ) => {
   try {
-    const existingClinic = await mongoose
-      .model("clinics")
+    const existingActivity = await mongoose
+      .model("activities")
       .findOne({
-        _id: ObjectId(request.params.id as string),
+        _id: ObjectId(request.params.id),
         is_deleted: false,
       })
       .exec();
 
-    if (!existingClinic) {
+    if (!existingActivity) {
       return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
     }
 
-    const result = await viewClinicService(request.params);
+    const result = await viewActivityService(request.params);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
@@ -68,21 +72,21 @@ export const viewClinicController: ExpressMiddleware = async (
   }
 };
 
-export const updateClinicController: ExpressMiddleware = async (
+export const updateActivityController: ExpressMiddleware = async (
   request,
   response
 ) => {
   try {
-    const foundClinic = await mongoose
-      .model("clinics")
-      .findOne({ _id: ObjectId(request.body.id), is_deleted: false })
+    const foundActivity = await mongoose
+      .model("activities")
+      .findOne({ _id: ObjectId(request.params.id), is_deleted: false })
       .exec();
 
-    if (!foundClinic) {
+    if (!foundActivity) {
       return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
     }
 
-    const result = await updateClinicService(request.body);
+    const result = await updateActivityService(request);
 
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
@@ -113,13 +117,12 @@ export const deleteClinicController: ExpressMiddleware = async (
   }
 };
 
-
-export const listClinicController: ExpressMiddleware = async (
+export const listActivityController: ExpressMiddleware = async (
   request,
   response
 ) => {
   try {
-    const result = await listClinicService(request.body);
+    const result = await listActivityService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

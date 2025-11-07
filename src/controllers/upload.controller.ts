@@ -75,7 +75,7 @@ export const confirmUploadController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const { entityId, type, key, file_name, module } = request.body;
+    const { entityId, type, key, file_name, module, category } = request.body;
 
     const entity = await mongoose
       .model(module)
@@ -89,7 +89,8 @@ export const confirmUploadController: ExpressMiddleware = async (
     entity.documents.push({
       type,
       key,
-      original_name: file_name || null,
+      file_name: file_name || null,
+      category: category,
     });
 
     await entity.save();

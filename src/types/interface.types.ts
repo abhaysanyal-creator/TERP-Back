@@ -259,7 +259,38 @@ export interface ClinicPricing {
   cost_price: number;
 }
 
-export interface Clinics extends Document {
+export interface IRoom {
+  id: Types.ObjectId;
+  name: string;
+}
+
+export interface TreatmentPriceIndexing {
+  type:string;
+  specialisation: {
+    id: Types.ObjectId;
+    name: string;
+  };
+  organisation_cost: number;
+  platform_cost: number;
+  patient_cost: number;
+}
+export interface Activity extends Document {
+  organisation: {
+    _id: Types.ObjectId;
+    name: string;
+  };
+  activity_name:string;
+  department: {
+    _id: Types.ObjectId;
+    name: string;
+  };
+  activity_id: string;
+  internal_code: string;
+  building_size: number;
+  protected_space: boolean;
+  contacts: Contact[];
+  area_in: string;
+  type: string;
   created_by: Types.ObjectId;
   is_deleted: boolean;
   branch_name: string;
@@ -268,11 +299,11 @@ export interface Clinics extends Document {
   is_active: boolean;
   manager: Types.ObjectId;
   therapists: [Therapists];
-  rooms: [Room];
+  rooms: IRoom[];
   address: Address;
   working_hours: WorkingHour;
   no_of_rooms: number;
-  specialisation: string[];
+  treatment:TreatmentPriceIndexing[];
 }
 
 export interface Bookings extends Document {
@@ -306,11 +337,11 @@ export interface IDepartment extends Document {
     _id: Types.ObjectId;
     name: string;
   };
-  is_deleted:boolean;
-  is_active:boolean;
-  department_id:string;
-  address:Address;
-  contacts:Contact;
+  is_deleted: boolean;
+  is_active: boolean;
+  department_id: string;
+  address: Address;
+  contacts: Contact;
   region: {
     _id: Types.ObjectId;
     country: string;
@@ -319,7 +350,7 @@ export interface IDepartment extends Document {
     timezone: string;
   };
   department_name: string;
-  internal_code:string;
+  internal_code: string;
   external_id: string;
   service_model: ServiceModelEnum;
   service_pricings: {
