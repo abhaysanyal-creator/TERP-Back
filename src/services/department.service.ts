@@ -41,13 +41,6 @@ export const viewDepartmentService = (
             from: "activities",
           },
         },
-        {
-          $addFields: {
-            departments: {
-              $ifNull: ["$activities", []],
-            },
-          },
-        },
       ];
 
       const existingOrganisation = await mongoose
