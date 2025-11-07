@@ -45,10 +45,19 @@ export const viewOrganisationService = (
               as: "departments",
             },
           },
+          {
+            $addFields: {
+              departments: {
+                $ifNull: ["$departments", []],
+              },
+            },
+          },
         ]);
 
-      existingOrganisation
-        ? resolve(existingOrganisation)
+      const organisation = existingOrganisation[0] || null;
+
+      organisation
+        ? resolve(organisation)
         : reject(Constants.MESSAGES.INVALID_FORMAT.code);
     } catch (error) {
       console.error(error);

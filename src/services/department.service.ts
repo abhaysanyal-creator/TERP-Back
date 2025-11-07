@@ -41,14 +41,23 @@ export const viewDepartmentService = (
             from: "activities",
           },
         },
+        {
+          $addFields: {
+            departments: {
+              $ifNull: ["$activities", []],
+            },
+          },
+        },
       ];
 
       const existingOrganisation = await mongoose
         .model("departments")
         .aggregate(aggregationPipeline);
 
-      existingOrganisation
-        ? resolve(existingOrganisation)
+      const department = existingOrganisation[0] || null;
+
+      department
+        ? resolve(department)
         : reject(Constants.MESSAGES.INVALID_FORMAT.code);
     } catch (error) {
       console.error(error);
