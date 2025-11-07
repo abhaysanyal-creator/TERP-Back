@@ -96,7 +96,7 @@ export interface Specialisation {
 
 export interface EmpDocuments {
   type: string;
-  signedUrl?:string;
+  signedUrl?: string;
   key: string;
   file_name: string;
 }
@@ -172,9 +172,10 @@ export interface FixedCost {
 // label - name
 // value - name.toLowerCase()
 export interface Organisations extends Document {
-  org_name: string;
-  org_type: string;
+  organisation_name: string;
+  organisation_type: string;
   internal_code: string;
+  organisation_id: string;
   number_of_patients: number;
   address: Address;
   contacts: Contact[];
@@ -294,4 +295,50 @@ export interface SpecialisationType {
   name: string;
   is_deleted: boolean;
   is_active: boolean;
+}
+
+export enum ServiceModelEnum {
+  CASE_BASED = "case_based",
+  HOURLY_CHARGED = "hourly_charged",
+}
+export interface IDepartment extends Document {
+  organisation: {
+    _id: Types.ObjectId;
+    name: string;
+  };
+  is_deleted:boolean;
+  is_active:boolean;
+  department_id:string;
+  address:Address;
+  contacts:Contact;
+  region: {
+    _id: Types.ObjectId;
+    country: string;
+    state: string;
+    city?: string;
+    timezone: string;
+  };
+  department_name: string;
+  internal_code:string;
+  external_id: string;
+  service_model: ServiceModelEnum;
+  service_pricings: {
+    occupation: {
+      _id: Types.ObjectId;
+      label: string;
+      value: string;
+    };
+    treatment_area: {
+      _id: Types.ObjectId;
+      label: string;
+      value: string;
+    };
+    treatment_cost: number;
+    tech_commission: number;
+  }[];
+  service_manager?: {
+    _id: Types.ObjectId;
+    name: string;
+  };
+  department_end_date?: Date;
 }

@@ -15,9 +15,21 @@ export default {
     TEAM_LEAD_REQ_TRUE_FALSE: {
       code: "TEAM_LEAD_REQ_TRUE_FALSE",
     },
+    DEPARTMENT_ID_REQ:{
+      code:"DEPARTMENT_ID_REQUIRED",
+      message:"Department ID is required!!"
+    },
+    DEPARTMENT_NAME_REQUIRED:{
+      code:"DEPARTMENT_NAME_REQUIRED",
+      message:"Department Name is required!!"
+    },
     DOCUMENT_REQUIRED: {
       code: "DOCUMENT_REQUIRED",
       message: "Document is required!!",
+    },
+    INCOMPLETE_ORG_DETAILS: {
+      code: "INCOMPLETE_ORGANISATION_DETAILS",
+      message: "Module name is required!!",
     },
     MODULE_REQUIRED: {
       code: "MODULE_NAME_REQUIRED",

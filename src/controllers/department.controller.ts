@@ -2,29 +2,35 @@ import mongoose from "mongoose";
 import type { ExpressMiddleware } from "../types/express.types";
 import { badRequest, success } from "../response/response";
 import Constants from "../locales/constants";
-import {
-  createOrganisationService,
-  listOrganisationService,
-  updateOrganisationService,
-  viewOrganisationService,
-} from "../services/organisation.service";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import { ObjectId } from "../utils/helpers";
+import { createDepartmentService, listDepartmentService, updateDepartmentService, viewDepartmentService } from "../services/department.service";
 
-export const createOrganisationController: ExpressMiddleware = async (
+export const createDeptController: ExpressMiddleware = async (
   request,
   response
 ) => {
   try {
     const existingOrg = await mongoose
-      .model("organisations")
-      .findOne({ organisation_name: request.body.organisation_name })
+      .model("departments")
+      .findOne({
+        department_name: request.body.department_name,
+        is_deleted: false,
+      })
       .exec();
 
     if (existingOrg) {
       return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
     }
-    const result = await createOrganisationService(request.body);
+
+    if (
+      !(await mongoose
+        .model("organisations")
+        .findById(ObjectId(request.body.organisation.id)))
+    ) {
+      return badRequest(response, Constants.MESSAGES.ORG_ID_REQUIRED.code);
+    }
+    const result = await createDepartmentService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
@@ -32,7 +38,7 @@ export const createOrganisationController: ExpressMiddleware = async (
   }
 };
 
-export const viewOrganisationController: ExpressMiddleware = async (
+export const viewDeptController: ExpressMiddleware = async (
   request,
   response
 ) => {
@@ -40,34 +46,34 @@ export const viewOrganisationController: ExpressMiddleware = async (
     const id = request.params.id as string;
 
     const existingOrg = await mongoose
-      .model("organisations")
+      .model("departments")
       .findOne({ _id: ObjectId(id), is_deleted: false })
       .exec();
 
     if (!existingOrg) {
       return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
     }
-    const result = await viewOrganisationService(request.params);
+    const result = await viewDepartmentService(request.params);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     return badRequest(response, getErrorMessage(error));
   }
 };
 
-export const updateOrganisationController: ExpressMiddleware = async (
+export const updateDeptController: ExpressMiddleware = async (
   request,
   response
 ) => {
   try {
     const existingOrganisation = await mongoose
-      .model("organisations")
+      .model("departments")
       .findOne({ _id: ObjectId(request.params.id) })
       .exec();
 
     if (!existingOrganisation)
       return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
 
-    const result = await updateOrganisationService(request);
+    const result = await updateDepartmentService(request);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
@@ -97,18 +103,18 @@ export const updateOrganisationController: ExpressMiddleware = async (
 //   }
 // };
 
-export const listOrganisationController: ExpressMiddleware = async (
-  request,
-  response
-) => {
-  try {
-    const result = await listOrganisationService(request.body);
-    return success(response, Constants.MESSAGES.SUCCESS.code, result);
-  } catch (error) {
-    console.error(error);
-    return badRequest(response, getErrorMessage(error));
-  }
-};
+// export const listOrganisationController: ExpressMiddleware = async (
+//   request,
+//   response
+// ) => {
+//   try {
+//     const result = await listOrganisationService(request.body);
+//     return success(response, Constants.MESSAGES.SUCCESS.code, result);
+//   } catch (error) {
+//     console.error(error);
+//     return badRequest(response, getErrorMessage(error));
+//   }
+// };
 
 // export const changeOperatingHoursOrganisationController: ExpressMiddleware =
 //   async (request, response) => {
@@ -139,3 +145,16 @@ export const listOrganisationController: ExpressMiddleware = async (
 //       return badRequest(response, getErrorMessage(error));
 //     }
 //   };
+
+export const listDeptController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const result = await listDepartmentService(request.body);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};

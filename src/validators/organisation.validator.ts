@@ -8,77 +8,20 @@ export const createOrganisationValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (!request.body.org_name) {
+  if (!request.body.organisation_name) {
     return badRequest(response, Constants.MESSAGES.ORG_NAME_REQUIRED.code);
   }
 
   if (
-    !request.body.org_type ||
-    !Object.values(enums.OrganisationType).includes(request.body.org_type)
+    !request.body.organisation_type ||
+    !Object.values(enums.OrganisationType).includes(
+      request.body.organisation_type
+    )
   ) {
     return badRequest(response, Constants.MESSAGES.INVALID_ORG_TYPE.code);
   }
-  // if (!request.body.institution_code) {
-  //   return badRequest(response, Constants.MESSAGES.INSTITUTION_CODE_REQUIRED.code);
-  // }
-  // if (!request.body.internal_code) {
-  //   return badRequest(response, Constants.MESSAGES.INTERNAL_CODE_REQUIRED.code);
-  // }
-  if (
-    typeof request.body.building_size !== "number" ||
-    request.body.building_size < 3 ||
-    request.body.building_size > 1000
-  ) {
-    return badRequest(response, Constants.MESSAGES.INVALID_BUILDING_SIZE.code);
-  }
-  if (
-    !request.body.area_in ||
-    !Object.values(enums.AreaIn).includes(request.body.area_in)
-  ) {
-    return badRequest(response, Constants.MESSAGES.INVALID_AREA_IN.code);
-  }
-  if (
-    typeof request.body.number_of_rooms !== "number" ||
-    request.body.number_of_rooms < 0
-  ) {
-    return badRequest(response, Constants.MESSAGES.INVALID_ROOMS_FORMAT.code);
-  }
-  if (typeof request.body.protected_space !== "boolean") {
-    return badRequest(
-      response,
-      Constants.MESSAGES.INVALID_PROTECTED_SPACE.code
-    );
-  }
-  if (
-    typeof request.body.number_of_patients !== "number" ||
-    request.body.number_of_patients < 0 ||
-    request.body.number_of_patients > 30
-  ) {
-    return badRequest(response, Constants.MESSAGES.INVALID_PATIENT_COUNT.code);
-  }
-  if (
-    !Array.isArray(request.body.operating_hours) ||
-    request.body.operating_hours.length === 0
-  ) {
-    return badRequest(response, Constants.MESSAGES.OPERATING_HOURS_REQUIRED.code);
-  }
-
-  for (const item of request.body.operating_hours) {
-    if (!item.day || !Array.isArray(item.slots) || item.slots.length === 0) {
-      return badRequest(
-        response,
-        Constants.MESSAGES.INVALID_OPERATING_HOURS.code
-      );
-    }
-
-    for (const slot of item.slots) {
-      if (!slot.start_time || !slot.end_time) {
-        return badRequest(
-          response,
-          Constants.MESSAGES.INVALID_OPERATING_HOURS.code
-        );
-      }
-    }
+  if (!request.body.organisation_id) {
+    return badRequest(response, Constants.MESSAGES.ORG_ID_REQUIRED.code);
   }
 
   if (!request.body.address) {
@@ -94,17 +37,6 @@ export const createOrganisationValidator: ExpressMiddlewareNext = (
   for (const contact of request.body.contacts) {
     if (!contact.name || !contact.role || !contact.phone || !contact.email) {
       return badRequest(response, Constants.MESSAGES.INVALID_CONTACT.code);
-    }
-  }
-  if (Array.isArray(request.body.fixed_cost)) {
-    for (const cost of request.body.fixed_cost) {
-      if (
-        !cost.type ||
-        typeof cost.amount !== "number" ||
-        !["monthly", "yearly"].includes(cost.recurrence)
-      ) {
-        return badRequest(response, Constants.MESSAGES.INVALID_FIXED_COST.code);
-      }
     }
   }
   next();
@@ -250,129 +182,31 @@ export const updateOrganisationValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  const body = request.body;
-
-  // --- Optional fields but validate if provided ---
-
-  if (body.org_name && typeof body.org_name !== "string") {
-    return badRequest(response, Constants.MESSAGES.ORG_NAME_REQUIRED.code);
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ORG_ID_REQUIRED.code);
   }
 
-  if (
-    body.org_type &&
-    !Object.values(enums.OrganisationType).includes(body.org_type)
-  ) {
-    return badRequest(response, Constants.MESSAGES.INVALID_ORG_TYPE.code);
-  }
-
-  if (
-    body.building_size !== undefined &&
-    (typeof body.building_size !== "number" ||
-      body.building_size < 3 ||
-      body.building_size > 1000)
-  ) {
-    return badRequest(response, Constants.MESSAGES.INVALID_BUILDING_SIZE.code);
-  }
-
-  if (
-    body.area_in &&
-    !Object.values(enums.AreaIn).includes(body.area_in)
-  ) {
-    return badRequest(response, Constants.MESSAGES.INVALID_AREA_IN.code);
-  }
-
-  if (
-    body.number_of_rooms !== undefined &&
-    (typeof body.number_of_rooms !== "number" || body.number_of_rooms < 0)
-  ) {
-    return badRequest(response, Constants.MESSAGES.INVALID_ROOMS_FORMAT.code);
-  }
-
-  if (
-    body.protected_space !== undefined &&
-    typeof body.protected_space !== "boolean"
-  ) {
+  if (request.body.organisation_id) {
     return badRequest(
       response,
-      Constants.MESSAGES.INVALID_PROTECTED_SPACE.code
+      Constants.MESSAGES.FORBIDDEN_INTERNAL_FIELDS.FORBIDDEN.code
     );
   }
-
-  if (
-    body.number_of_patients !== undefined &&
-    (typeof body.number_of_patients !== "number" ||
-      body.number_of_patients < 0 ||
-      body.number_of_patients > 30)
-  ) {
-    return badRequest(response, Constants.MESSAGES.INVALID_PATIENT_COUNT.code);
+  if (request.body.internal_code) {
+    return badRequest(
+      response,
+      Constants.MESSAGES.FORBIDDEN_INTERNAL_FIELDS.FORBIDDEN.code
+    );
   }
-
-  if (body.operating_hours) {
-    if (
-      !Array.isArray(body.operating_hours) ||
-      body.operating_hours.length === 0
-    ) {
-      return badRequest(
-        response,
-        Constants.MESSAGES.OPERATING_HOURS_REQUIRED.code
-      );
-    }
-
-    for (const item of body.operating_hours) {
-      if (!item.day || !Array.isArray(item.slots) || item.slots.length === 0) {
-        return badRequest(
-          response,
-          Constants.MESSAGES.INVALID_OPERATING_HOURS.code
-        );
-      }
-
-      for (const slot of item.slots) {
-        if (!slot.start_time || !slot.end_time) {
-          return badRequest(
-            response,
-            Constants.MESSAGES.INVALID_OPERATING_HOURS.code
-          );
-        }
-      }
-    }
-  }
-
-  if (body.address && typeof body.address !== "string") {
-    return badRequest(response, Constants.MESSAGES.INVALID_ADDRESS.code);
-  }
-
-  if (body.contacts) {
-    if (!Array.isArray(body.contacts) || body.contacts.length === 0) {
-      return badRequest(response, Constants.MESSAGES.CONTACT_REQUIRED.code);
-    }
-
-    for (const contact of body.contacts) {
-      if (
-        (contact.name && typeof contact.name !== "string") ||
-        (contact.role && typeof contact.role !== "string") ||
-        (contact.phone && typeof contact.phone !== "string") ||
-        (contact.email && typeof contact.email !== "string")
-      ) {
-        return badRequest(response, Constants.MESSAGES.INVALID_CONTACT.code);
-      }
-    }
-  }
-
-  if (Array.isArray(body.fixed_cost)) {
-    for (const cost of body.fixed_cost) {
-      if (
-        !cost.type ||
-        typeof cost.amount !== "number" ||
-        !["monthly", "yearly"].includes(cost.recurrence)
-      ) {
-        return badRequest(response, Constants.MESSAGES.INVALID_FIXED_COST.code);
-      }
-    }
+  if (request.body.is_deleted) {
+    return badRequest(
+      response,
+      Constants.MESSAGES.FORBIDDEN_INTERNAL_FIELDS.FORBIDDEN.code
+    );
   }
 
   next();
 };
-
 
 export const deleteOrganisationValidator: ExpressMiddlewareNext = (
   request,

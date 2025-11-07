@@ -2,15 +2,13 @@ import mongoose from "mongoose";
 import Constants from "../locales/constants";
 import { generateCode, ObjectId } from "../utils/helpers";
 
-export const createOrganisationService = (
+export const createDepartmentService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      payload.internal_code = generateCode("ORG", 5);
-
       const newOrganisation = await mongoose
-        .model("organisations")
+        .model("departments")
         .create(payload);
 
       newOrganisation
@@ -23,13 +21,13 @@ export const createOrganisationService = (
   });
 };
 
-export const viewOrganisationService = (
+export const viewDepartmentService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
       const existingOrganisation = await mongoose
-        .model("organisations")
+        .model("departments")
         .findOne({ _id: ObjectId(payload.id), is_deleted: false })
         .exec();
 
@@ -43,16 +41,16 @@ export const viewOrganisationService = (
   });
 };
 
-export const updateOrganisationService = (
+export const updateDepartmentService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      delete payload.institution_code;
+      delete payload.department_id;
       delete payload.internal_code;
 
       const updatedOrganisation = await mongoose
-        .model("organisations")
+        .model("departments")
         .findOneAndUpdate(
           { _id: ObjectId(payload.params.id), is_deleted: false },
           { $set: payload.body },
@@ -71,32 +69,32 @@ export const updateOrganisationService = (
   });
 };
 
-// export const deleteOrganisationService = (
-//   payload: Record<string, any>
-// ): Record<string, any> => {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       const deletedOrganisation = await mongoose
-//         .model("organisations")
-//         .findOneAndUpdate(
-//           {
-//             _id: ObjectId(payload.id),
-//             is_deleted: false,
-//           },
-//           {
-//             $set: { is_deleted: true },
-//           },
-//           { new: true }
-//         );
-//       resolve(deletedOrganisation);
-//     } catch (error) {
-//       console.error(error);
-//       reject(error);
-//     }
-//   });
-// };
+export const deleteOrganisationService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const deletedOrganisation = await mongoose
+        .model("organisations")
+        .findOneAndUpdate(
+          {
+            _id: ObjectId(payload.id),
+            is_deleted: false,
+          },
+          {
+            $set: { is_deleted: true },
+          },
+          { new: true }
+        );
+      resolve(deletedOrganisation);
+    } catch (error) {
+      console.error(error);
+      reject(error);
+    }
+  });
+};
 
-export const listOrganisationService = (
+export const listDepartmentService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
@@ -112,12 +110,24 @@ export const listOrganisationService = (
       const or: any[] = [];
       const and: any[] = [];
 
-      if (payload.organisation_type) and.push({ organisation_type: payload.organisation_type });
-      
+      if (payload.department_name)
+        and.push({ department_name: payload.department_name });
+      if (payload.organisation_id) and.push({ "organisation.id": ObjectId(payload.organisation_id) });
+      // if (payload.number_of_rooms)
+      //   and.push({
+      //     number_of_rooms: payload.number_of_rooms,
+      //   });
+      // if (payload.protected_space)
+      //   and.push({ protected_space: payload.protected_space });
+
+      // if (payload.operating_hours)
+      //   and.push({
+      //     operating_hours: payload.operating_hours,
+      //   });
 
       if (payload.search) {
         or.push(
-          { organisation_name: { $regex: payload.search, $options: "i" } },
+          { "organisation.name": { $regex: payload.search, $options: "i" } },
           { institution_code: { $regex: payload.search, $options: "i" } }
         );
       }
@@ -134,15 +144,15 @@ export const listOrganisationService = (
 
       const countPipeline = [{ $match: match }, { $count: "total" }];
 
-      const [organisations, countResult] = await Promise.all([
-        mongoose.model("organisations").aggregate(pipeline),
-        mongoose.model("organisations").aggregate(countPipeline),
+      const [departments, countResult] = await Promise.all([
+        mongoose.model("departments").aggregate(pipeline),
+        mongoose.model("departments").aggregate(countPipeline),
       ]);
 
       const totalCount = countResult[0]?.total || 0;
 
       resolve({
-        data: organisations,
+        data: departments,
         count: totalCount,
       });
     } catch (error) {

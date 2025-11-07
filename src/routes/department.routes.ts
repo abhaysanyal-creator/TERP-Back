@@ -12,28 +12,30 @@ import {
   updateOrganisationValidator,
   viewOrganisationValidator,
 } from "../validators/organisation.validator";
+import { createDeptValidator, updateDepartmentValidator } from "../validators/department.validator";
+import { createDeptController, listDeptController, updateDeptController, viewDeptController } from "../controllers/department.controller";
 
 const router = Router();
 
 router.post(
   "/create",
   authorisationMiddleware,
-  createOrganisationValidator,
-  createOrganisationController
+  createDeptValidator,
+  createDeptController
 );
 
 router.get(
   "/view/:id",
   authorisationMiddleware,
   viewOrganisationValidator,
-  viewOrganisationController
+  viewDeptController
 );
 
 router.patch(
   "/update/:id",
   authorisationMiddleware,
-  updateOrganisationValidator,
-  updateOrganisationController
+  updateDepartmentValidator,
+  updateDeptController
 );
 
 // router.delete(
@@ -47,7 +49,7 @@ router.post(
   "/list",
   authorisationMiddleware,
   listOrganisationValidator,
-  listOrganisationController
+  listDeptController
 );
 
 // router.patch(

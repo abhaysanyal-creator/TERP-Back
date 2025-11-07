@@ -12,6 +12,7 @@ import { Country } from "./country.model";
 import { State } from "./state.model";
 import { City } from "./city.model";
 import metaDataModel from "./meta-data.model";
+import { departmentModel } from "./department.model";
 
 export {
   Country,
@@ -28,4 +29,5 @@ export {
   roomModel,
   bookingModel,
   metaDataModel,
+  departmentModel
 };

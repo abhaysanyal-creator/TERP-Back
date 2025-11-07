@@ -11,6 +11,7 @@ import roomRoutes from "./rooms.routes";
 import bookingRoutes from "./booking.routes";
 import referenceRoutes from "./reference.routes";
 import commonRoutes from "./common.routes";
+import departmentRoutes from "./department.routes";
 
 const router = Router();
 
@@ -26,5 +27,6 @@ router.use("/rooms", roomRoutes);
 router.use("/bookings", bookingRoutes);
 router.use("/reference", referenceRoutes);
 router.use("/common", commonRoutes);
+router.use("/departments", departmentRoutes);
 
 export default router;

@@ -9,7 +9,7 @@ import {
 } from "../types/interface.types";
 import enums from "../enums.json";
 
-const addressSchema = new Schema<Address>(
+export const addressSchema = new Schema<Address>(
   {
     city: { type: String, required: true },
     country: { type: String, required: true },
@@ -19,10 +19,10 @@ const addressSchema = new Schema<Address>(
   { _id: false }
 );
 
-const contactSchema = new Schema<Contact>(
+export const contactSchema = new Schema<Contact>(
   {
     name: { type: String, required: true },
-    role: { type: String, required: true, ref: "roles" },
+    role: { type: String },
     phone: { type: String, required: true },
   },
   {
@@ -62,13 +62,13 @@ const workingHourSchema: Schema<WorkingHour> = new Schema(
 
 // const departmentSchema = new Schema({
 
-
 // });
 
 const organisationSchema: Schema<Organisations> = new Schema(
   {
-    org_name: { type: String, required: true, unique: true },
-    org_type: {
+    organisation_id: { type: String, required: true, unique: true },
+    organisation_name: { type: String, required: true, unique: true },
+    organisation_type: {
       type: Schema.Types.String,
       enum: enums.OrganisationType as any,
       required: true,
