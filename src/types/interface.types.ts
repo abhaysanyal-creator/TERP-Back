@@ -273,6 +273,7 @@ export interface TreatmentPriceIndexing {
   };
   organisation_cost: string;
   platform_cost: string;
+  include_patient_cost:boolean;
   patient_cost: string;
 }
 export interface Activity extends Document {

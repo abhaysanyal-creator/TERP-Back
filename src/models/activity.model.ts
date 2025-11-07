@@ -19,6 +19,7 @@ const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema(
     },
     organisation_cost: { type: String },
     platform_cost: { type: String },
+    include_patient_cost: { type: Boolean, default: false },
     patient_cost: { type: String },
   },
   { _id: false }
@@ -49,6 +50,7 @@ const workingHourSchema = new Schema(
   {
     day: { type: Number, required: true },
     slots: [timeSlotSchema],
+    enabled: { type: Boolean, default: true },
   },
   { _id: false }
 );
