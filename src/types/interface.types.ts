@@ -271,9 +271,9 @@ export interface TreatmentPriceIndexing {
     id: Types.ObjectId;
     name: string;
   };
-  organisation_cost: number;
-  platform_cost: number;
-  patient_cost: number;
+  organisation_cost: string;
+  platform_cost: string;
+  patient_cost: string;
 }
 export interface Activity extends Document {
   organisation: {

@@ -17,9 +17,9 @@ const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema(
       id: { type: Schema.Types.ObjectId, required: true },
       name: { type: String, required: true },
     },
-    organisation_cost: { type: Number, default: 0 },
-    platform_cost: { type: Number, default: 0 },
-    patient_cost: { type: Number, default: 0 },
+    organisation_cost: { type: String },
+    platform_cost: { type: String },
+    patient_cost: { type: String },
   },
   { _id: false }
 );

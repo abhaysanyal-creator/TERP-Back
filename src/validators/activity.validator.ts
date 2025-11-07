@@ -101,17 +101,17 @@ export const createActivityValidator: ExpressMiddlewareNext = (
   if (!request.body.treatment || !Array.isArray(request.body.treatment))
     return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
 
-  for (const t of request.body.treatment) {
-    if (
-      !t.specialisation ||
-      typeof t.platform_cost !== "number" ||
-      typeof t.organisation_cost !== "number"
-    )
-      return badRequest(
-        response,
-        Constants.MESSAGES.SPECIALISATION_FIELD_REQ.code
-      );
-  }
+  // for (const t of request.body.treatment) {
+  //   if (
+  //     !t.specialisation ||
+  //     typeof t.platform_cost !== "number" ||
+  //     typeof t.organisation_cost !== "number"
+  //   )
+  //     return badRequest(
+  //       response,
+  //       Constants.MESSAGES.SPECIALISATION_FIELD_REQ.code
+  //     );
+  // }
 
   next();
 };
@@ -154,7 +154,6 @@ export const updateActivityValidator: ExpressMiddlewareNext = (
       Constants.MESSAGES.FORBIDDEN_INTERNAL_FIELDS.FORBIDDEN.code
     );
   }
-  console.log("first")
   next();
 };
 
