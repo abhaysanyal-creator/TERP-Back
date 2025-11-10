@@ -2,7 +2,7 @@ module.exports = {
   async up(db, client) {
     const collection = db.collection("employees");
 
-    const indexesToDrop = ["national_id_1"];
+    const indexesToDrop = ["national_id_1","email_1"];
 
     console.log("🧹 Dropping indexes from 'organisations' collection...");
 

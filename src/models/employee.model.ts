@@ -82,7 +82,6 @@ const employeeSchema = new Schema<Employee>(
     national_id: {
       type: String,
       required: true,
-      unique: true,
     },
     employee_type: {
       //
@@ -107,7 +106,7 @@ const employeeSchema = new Schema<Employee>(
     mobile_phone: { type: String, required: true },
     specialisation: [specialisationSchema],
     home_phone: { type: String },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true },
     notes: { type: String },
     gender: {
       type: Schema.Types.String,
