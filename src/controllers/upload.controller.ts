@@ -86,12 +86,14 @@ export const confirmUploadController: ExpressMiddleware = async (
       return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
     }
 
-    entity.documents.push({
+    const obj = {
       type,
       key,
       file_name: file_name || null,
       category: category,
-    });
+    };
+
+    entity.documents.push(obj);
 
     await entity.save();
 

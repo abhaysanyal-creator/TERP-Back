@@ -12,6 +12,10 @@ export const createOrganisationValidator: ExpressMiddlewareNext = (
     return badRequest(response, Constants.MESSAGES.ORG_NAME_REQUIRED.code);
   }
 
+    if (!request.body.internal_code) {
+    return badRequest(response, Constants.MESSAGES.INTERNAL_CODE_REQUIRED.code);
+  }
+
   if (
     !request.body.organisation_type ||
     !Object.values(enums.OrganisationType).includes(

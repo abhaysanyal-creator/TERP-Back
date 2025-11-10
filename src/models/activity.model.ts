@@ -77,6 +77,7 @@ export const roomSchema: Schema<IRoom> = new Schema(
       default: () => new mongoose.Types.ObjectId(),
     },
     name: { type: String },
+    status: { type: String, default: enums.Room_Status.AVAILABLE },
   },
   { _id: false }
 );

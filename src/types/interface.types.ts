@@ -99,6 +99,7 @@ export interface EmpDocuments {
   signedUrl?: string;
   key: string;
   file_name: string;
+  category:string;
 }
 
 export interface Employee extends Document {
@@ -263,6 +264,7 @@ export interface ClinicPricing {
 export interface IRoom {
   id: Types.ObjectId;
   name: string;
+  status:string;
 }
 
 export interface TreatmentPriceIndexing {

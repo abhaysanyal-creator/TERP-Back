@@ -67,6 +67,7 @@ export const DocSchema: Schema<EmpDocuments> = new Schema(
     type: { type: String },
     key: { type: String },
     file_name: { type: String },
+    category: { type: String },
   },
   {
     _id: false,
