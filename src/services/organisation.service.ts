@@ -7,7 +7,6 @@ export const createOrganisationService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-
       const newOrganisation = await mongoose
         .model("organisations")
         .create(payload);
@@ -165,7 +164,12 @@ export const listOrganisationService = (
 
       resolve({
         data: organisations,
-        count: totalCount,
+        meta: {
+          count: totalCount,
+          page: page,
+          limit: limit,
+          pages: Math.floor(totalCount / limit) + 1,
+        },
       });
     } catch (error) {
       reject(error);

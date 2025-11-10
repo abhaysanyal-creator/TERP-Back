@@ -167,8 +167,12 @@ export const listEmployeeService = (
 
       resolve({
         data: employees,
-
-        total: totalCount,
+        meta: {
+          pages: Math.floor(totalCount / limit) + 1,
+          page: page,
+          limit: limit,
+          total: totalCount,
+        },
       });
     } catch (error) {
       reject(error);

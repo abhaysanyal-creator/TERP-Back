@@ -28,11 +28,21 @@ export const createEmployeeController: ExpressMiddleware = async (
         ],
       })
       .exec();
-
     if (existingEmployee) {
-      return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
-    }
+      if (existingEmployee.email === request.body.email) {
+        return badRequest(
+          response,
+          "An employee with this email already exists."
+        );
+      }
 
+      if (existingEmployee.national_id === request.body.national_id) {
+        return badRequest(
+          response,
+          "An employee with this National ID already exists."
+        );
+      }
+    }
     const result = await createEmployeeService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {

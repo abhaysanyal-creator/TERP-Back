@@ -2,12 +2,12 @@
   "EmployeeType": {
     "FULL_TIME_EMPLOYEE": "full_time_employee",
     "PART_TIME_EMPLOYEE": "part_time_employee",
-    "CONTRACTOR": "Contractor"
+    "CONTRACTOR": "contractor"
   },
   "PositionType": {
     "FULL_TIME_EMPLOYEE": "full_time_employee",
     "PART_TIME_EMPLOYEE": "part_time_employee",
-    "CONTRACTOR": "Contractor"
+    "CONTRACTOR": "contractor"
   },
   "OrganisationType": {
     "HMO": "hmo",

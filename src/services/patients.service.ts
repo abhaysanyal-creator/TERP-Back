@@ -145,7 +145,7 @@ export const listPatientService = (
       if (payload.search) {
         or.push(
           { first_name: { $regex: payload.search, $options: "i" } },
-          { last_name: { $regex: payload.search, $options: "i" } },
+          { last_name: { $regex: payload.search, $options: "i" } }
         );
       }
 
@@ -170,7 +170,12 @@ export const listPatientService = (
 
       resolve({
         data: patients,
-        count: totalCount,
+        meta: {
+          count: totalCount,
+          page: page,
+          limit: limit,
+          pages: Math.floor(totalCount / limit) + 1,
+        },
       });
     } catch (error) {
       reject(error);
