@@ -23,11 +23,12 @@ export const createEmployeeController: ExpressMiddleware = async (
       .model("employees")
       .findOne({
         $or: [
-          { email: request.body.email },
-          { national_id: request.body.national_id },
+          { email: request.body.email, is_deleted: false },
+          { national_id: request.body.national_id, is_deleted: false },
         ],
       })
       .exec();
+
     if (existingEmployee) {
       if (existingEmployee.email === request.body.email) {
         return badRequest(
