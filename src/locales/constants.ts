@@ -173,6 +173,10 @@ export default {
       code: "SPECIALISATION_NAME_REQ",
       message: "Spec. name is required!!",
     },
+    CANT_EDIT_NATIONAL_ID:{
+      code:"CANT_EDIT_NATIONAL_ID",
+      message:"Cannot Edit National ID"
+    },
     SUCCESS: {
       code: "SUCCESS",
       message: "Successfull!!",

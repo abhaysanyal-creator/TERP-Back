@@ -66,17 +66,29 @@ export const updatePatientController: ExpressMiddleware = async (
     const existingPatient = await mongoose
       .model("patients")
       .findOne({
-        $or: [
-          { _id: request.body.id, is_deleted: false },
-          { national_id: request.body.national_id, is_deleted: false },
-        ],
+        _id: ObjectId(request.params.id),
+        is_deleted: false,
       })
       .exec();
 
-    if (existingPatient) {
-      if (existingPatient.national_id === request.body.national_id) {
-        badRequest(response, Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code);
-      }
+    if (!existingPatient) {
+      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    }
+
+    const duplicateNationalId = await mongoose
+      .model("patients")
+      .findOne({
+        _id: { $ne: request.body.id },
+        national_id: request.body.national_id,
+        is_deleted: false,
+      })
+      .exec();
+
+    if (duplicateNationalId) {
+      return badRequest(
+        response,
+        Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code
+      );
     }
 
     const result = await updatePatientService(request);

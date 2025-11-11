@@ -119,8 +119,8 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
   }
 
   if (
-    request.body.national_id === undefined ||
-    request.body.national_id === ""
+    request.body.national_id !== undefined &&
+    request.body.national_id.trim() === ""
   ) {
     return badRequest(response, Constants.MESSAGES.NATIONAL_ID_REQ.code);
   }
@@ -154,6 +154,7 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
       return badRequest(response, Constants.MESSAGES.POSTAL_CODE_REQ.code);
     }
   }
+
 
   next();
 };
