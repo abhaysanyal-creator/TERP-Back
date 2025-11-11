@@ -174,34 +174,25 @@ export const listDepartmentService = (
         { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit },
-
         {
           $lookup: {
             from: "organisations",
-            let: { orgId: "$organisation.id" },
-            pipeline: [
-              { $match: { $expr: { $eq: ["$_id", "$$orgId"] } } },
-              {
-                $project: {
-                  _id: 1,
-                  organisation_type: 1,
-                  organisation_name: 1,
-                },
-              },
-            ],
+            localField: "organisation.id",
+            foreignField: "_id",
             as: "organisation",
           },
         },
         {
-          $unwind: { path: "$organisation", preserveNullAndEmptyArrays: true },
+          $unwind: {
+            path: "$organisation",
+            preserveNullAndEmptyArrays: true,
+          },
         },
         {
           $lookup: {
             from: "activities",
-            let: { depId: "$_id" },
-            pipeline: [
-              { $match: { $expr: { $eq: ["$department.id", "$$depId"] } } },
-            ],
+            localField: "_id",
+            foreignField: "department.id",
             as: "activities",
           },
         },
