@@ -70,7 +70,7 @@
   },
   "ListType": {
     "ALLERGY": "allergy",
-    "DISABIITY": "disability",
+    "DISABILITY": "disability",
     "SPECIALISATIONS": "specialisation"
   },
   "s3Upload": {
@@ -92,7 +92,50 @@
   "ActivityType": {
     "CLINIC": "clinic",
     "KINDERGARTEN": "kindergarten",
-    "HOME_VIIST": "home_visit",
+    "HOME_VISIT": "home_visit",
     "CAMPUS": "campus"
+  },
+  "SessionStatus": {
+    "SCHEDULED": "scheduled",
+    "IN_PROGRESS": "in_progress",
+    "COMPLETED": "completed",
+    "CANCELLED": "cancelled"
+  },
+  "SessionType": {
+    "TREATMENT": "treatment",
+    "DEMONSTRATION": "demonstration",
+    "SUPERVISED_CARE": "supervised_care",
+    "MANAGEMENT_HOURS": "management_hours"
+  },
+  "MeetingType": {
+    "POPPINS_TRAINING": "poppins_training",
+    "SERIES_SUMMARY": "series_summary",
+    "STAFF_MEETING": "staff_meeting"
+  },
+  "CancellationReason": {
+    "PATIENT_DID_NOT_ARRIVE": "patient_did_not_arrive",
+    "PATIENT_CANCELLED": "patient_cancelled",
+    "TECHNICAL_PROBLEM": "technical_problem",
+    "CHANGING_TREATMENT_DATE": "changing_treatment_date",
+    "NO_TECHNICAL_TRAINING_PROVIDED": "no_technical_training_provided",
+    "NO_ADULT_PRESENT": "no_adult_present"
+  },
+  "RecurrenceEnds": {
+    "DATE": "date",
+    "AFTER_OCCURRENCES": "after_occurrences"
+  },
+  "RecurrenceUnits": {
+    "DAY": "day",
+    "WEEK": "week",
+    "MONTH": "month"
+  },
+  "RecurrenceOn": {
+    "SUNDAY": "sun",
+    "MONDAY": "mon",
+    "TUESDAY": "tue",
+    "WEDNESDAY": "wed",
+    "THURSDAY": "thu",
+    "FRIDAY": "fri",
+    "SATURDAY": "sat"
   }
 }

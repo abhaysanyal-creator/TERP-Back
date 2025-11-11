@@ -74,6 +74,22 @@ const organisationSchema: Schema<Organisation> = new Schema(
   }
 );
 
+export const disabilitySchema = new Schema(
+  {
+    id: { type: Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true },
+  },
+  { _id: false }
+);
+
+export const allergySchema = new Schema(
+  {
+    id: { type: Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true },
+  },
+  { _id: false }
+);
+
 const patientSchema: Schema<Patients> = new Schema(
   {
     created_by: {
@@ -95,9 +111,9 @@ const patientSchema: Schema<Patients> = new Schema(
     organisation_assignment: organisationSchema,
     is_active: { type: Boolean, default: true },
     address: addressSchema,
-    disabilities_list: [{ type: String }],
+    disabilities_list: [disabilitySchema],
     companions_list: [companionSchema],
-    allergies_list: [{ type: String }],
+    allergies_list: [allergySchema],
     is_deleted: { type: Boolean, default: false },
   },
   {

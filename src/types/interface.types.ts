@@ -1,10 +1,6 @@
-import {
-  Document,
-  Types,
-  type TypeExpressionOperatorReturningString,
-} from "mongoose";
+import { Document, Types } from "mongoose";
 import type { JwtPayload } from "jsonwebtoken";
-import { stringList } from "aws-sdk/clients/datapipeline";
+import enums from "../enums.json";
 
 export interface Role {
   name: string;
@@ -211,6 +207,10 @@ export interface Companion {
   hmo_docs: CompanionHMO;
 }
 
+export interface metaDataSchema {
+  id: Types.ObjectId;
+  name: string;
+}
 export interface Patients extends Document {
   created_by: Types.ObjectId;
   patient_id: string;
@@ -226,9 +226,9 @@ export interface Patients extends Document {
   is_deleted: boolean;
   organisation_assignment: Organisation;
   address: Address;
-  disabilities_list: string[];
+  disabilities_list: metaDataSchema[];
   companions_list: Companion[];
-  allergies_list: string[];
+  allergies_list: metaDataSchema[];
 }
 
 export interface Therapists {
@@ -377,4 +377,104 @@ export interface IDepartment extends Document {
     name: string;
   };
   department_end_date?: Date;
+}
+
+export interface ISession extends Document {
+  session_id: string;
+  session_type: string;
+  meeting_type: string;
+  therapist: {
+    _id: Types.ObjectId;
+    first_name: string;
+    last_name: string;
+    is_arrived: boolean;
+  };
+  treatment_area: {
+    _id: Types.ObjectId;
+    label: string;
+    value: string;
+  };
+  patients: Array<{
+    _id: Types.ObjectId;
+    organization: {
+      _id: Types.ObjectId;
+      name: string;
+    };
+    department: {
+      _id: Types.ObjectId;
+      name: string;
+    };
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+    status: string;
+    is_arrived: boolean;
+    actual_start: Date;
+    actual_end: Date;
+    summary: string;
+    reason: string;
+  }>;
+  patient_groups: {
+    _id: Types.ObjectId;
+    group_name: string;
+    patients: Array<{
+      _id: Types.ObjectId;
+      organization: {
+        _id: Types.ObjectId;
+        name: string;
+      };
+      department: {
+        _id: Types.ObjectId;
+        name: string;
+      };
+      first_name: string;
+      last_name: string;
+      email: string;
+      phone: string;
+      status?: string;
+      is_arrived?: boolean;
+      actual_start?: Date;
+      actual_end?: Date;
+      summary?: string;
+      reason?: string;
+    }>;
+  }[];
+  session_planning: {
+    practice_name: string;
+    practice_guidelines: string;
+    activities: {
+      order: number;
+      game: {
+        _id: Types.ObjectId;
+        title: string;
+        thumbnail_file: string;
+      };
+    }[];
+  };
+  scheduled_start: Date;
+  scheduled_end: Date;
+  is_recurring: boolean;
+  recurrence?: {
+    repeat_every: {
+      value: { type: Number; default: 1 };
+      unit: String;
+    };
+    repeat_on: string[];
+    ends: {
+      type: String;
+      enum: string;
+    };
+    end_date: { type: Date };
+    occurrences: { type: Number };
+  };
+  compensation_session: {
+    make_up_session_date: Date;
+  };
+  reason: string;
+  note: string;
+  cancellation_info?: {
+    reason: string;
+    note: string;
+  };
 }
