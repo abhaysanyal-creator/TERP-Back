@@ -161,7 +161,12 @@ export const listActivityService = (
 
       resolve({
         data: activities,
-        count: totalCount,
+        meta: {
+          count: totalCount,
+          pages: Math.ceil(totalCount / limit),
+          page: page,
+          limit: limit,
+        },
       });
     } catch (error) {
       reject(error);

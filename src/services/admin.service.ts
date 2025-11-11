@@ -160,7 +160,12 @@ export const listAdminService = (
 
       resolve({
         data: users,
-        count: totalCount,
+        meta: {
+          count: totalCount,
+          pages: Math.ceil(totalCount / limit),
+          page: page,
+          limit: limit,
+        },
       });
     } catch (error) {
       reject(error);

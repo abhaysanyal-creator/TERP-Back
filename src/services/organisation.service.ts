@@ -137,10 +137,9 @@ export const listOrganisationService = (
         and.push({ organisation_type: payload.organisation_type });
 
       if (payload.search) {
-        or.push(
-          { organisation_name: { $regex: payload.search, $options: "i" } },
-          { institution_code: { $regex: payload.search, $options: "i" } }
-        );
+        or.push({
+          organisation_name: { $regex: payload.search, $options: "i" },
+        });
       }
 
       if (or.length) and.push({ $or: or });
@@ -151,6 +150,14 @@ export const listOrganisationService = (
         { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit },
+        {
+          $lookup: {
+            from: "departments",
+            localField: "_id",
+            foreignField: "organisation.id",
+            as: "departments",
+          },
+        },
       ];
 
       const countPipeline = [{ $match: match }, { $count: "total" }];
