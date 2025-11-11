@@ -112,119 +112,6 @@ export const deleteOrganisationService = (
   });
 };
 
-export const listDepartmentService = (
-  payload: Record<string, any>
-): Record<string, any> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const page = Number(payload.page) || 1;
-      const limit = Number(payload.limit) || 10;
-      const skip = (page - 1) * 10;
-
-      const match: Record<string, any> = {
-        is_deleted: false,
-      };
-
-      const or: any[] = [];
-      const and: any[] = [];
-
-      if (payload.department_name)
-        and.push({ department_name: payload.department_name });
-      if (payload.organisation_id)
-        and.push({ "organisation.id": ObjectId(payload.organisation_id) });
-      // if (payload.number_of_rooms)
-      //   and.push({
-      //     number_of_rooms: payload.number_of_rooms,
-      //   });
-      // if (payload.protected_space)
-      //   and.push({ protected_space: payload.protected_space });
-
-      // if (payload.operating_hours)
-      //   and.push({
-      //     operating_hours: payload.operating_hours,
-      //   });
-
-      if (payload.search) {
-        or.push(
-          { "organisation.name": { $regex: payload.search, $options: "i" } },
-          { institution_code: { $regex: payload.search, $options: "i" } }
-        );
-      }
-
-      if (or.length) and.push({ $or: or });
-      if (and.length) match.$and = and;
-
-      const pipeline: any[] = [
-        { $match: match },
-        { $sort: { createdAt: -1 } },
-        { $skip: skip },
-        { $limit: limit },
-        {
-          $lookup: {
-            localField: "organisation.id",
-            from: "organisations",
-            foreignField: "_id",
-            as: "organisation",
-            pipeline: [
-              {
-                $project: {
-                  _id: 1,
-                  organisation_type: 1,
-                  organisation_name: 1,
-                },
-              },
-            ],
-          },
-        },
-        {
-          $unwind: {
-            path: "$organisation",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $lookup: {
-            localField: "_id",
-            from: "activities",
-            foreignField: "department.id",
-            as: "activities",
-            pipeline: [
-              {
-                $project: {
-                  _id: 1,
-                  type: 1,
-                  activity_name: 1,
-                },
-              },
-            ],
-          },
-        },
-      ];
-
-      const countPipeline = [{ $match: match }, { $count: "total" }];
-
-      const [departments, countResult] = await Promise.all([
-        mongoose.model("departments").aggregate(pipeline),
-        mongoose.model("departments").aggregate(countPipeline),
-      ]);
-
-      const totalCount = countResult[0]?.total || 0;
-
-      resolve({
-        data: departments,
-        meta: {
-          count: totalCount,
-          pages: Math.ceil(totalCount / limit),
-          page: page,
-          limit: limit,
-        },
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
 // export const changeOperatingHoursOrganisationService = (
 //   payload: Record<string, any>
 // ): Record<string, any> => {
@@ -252,3 +139,94 @@ export const listDepartmentService = (
 //     }
 //   });
 // };
+
+export const listDepartmentService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const page = Number(payload.page) || 1;
+      const limit = Number(payload.limit) || 10;
+      const skip = (page - 1) * limit;
+
+      const match: Record<string, any> = { is_deleted: false };
+      const and: any[] = [];
+      const or: any[] = [];
+
+      if (payload.department_name)
+        and.push({ department_name: payload.department_name });
+
+      if (payload.organisation_id)
+        and.push({ "organisation.id": ObjectId(payload.organisation_id) });
+
+      if (payload.search) {
+        or.push(
+          { "organisation.name": { $regex: payload.search, $options: "i" } },
+          { institution_code: { $regex: payload.search, $options: "i" } }
+        );
+      }
+
+      if (or.length) and.push({ $or: or });
+      if (and.length) match.$and = and;
+
+      const pipeline: any[] = [
+        { $match: match },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit },
+
+        {
+          $lookup: {
+            from: "organisations",
+            let: { orgId: "$organisation.id" },
+            pipeline: [
+              { $match: { $expr: { $eq: ["$_id", "$$orgId"] } } },
+              {
+                $project: {
+                  _id: 1,
+                  organisation_type: 1,
+                  organisation_name: 1,
+                },
+              },
+            ],
+            as: "organisation",
+          },
+        },
+        {
+          $unwind: { path: "$organisation", preserveNullAndEmptyArrays: true },
+        },
+        {
+          $lookup: {
+            from: "activities",
+            let: { depId: "$_id" },
+            pipeline: [
+              { $match: { $expr: { $eq: ["$department.id", "$$depId"] } } },
+            ],
+            as: "activities",
+          },
+        },
+      ];
+
+      const countPipeline = [{ $match: match }, { $count: "total" }];
+
+      const [departments, countResult] = await Promise.all([
+        mongoose.model("departments").aggregate(pipeline),
+        mongoose.model("departments").aggregate(countPipeline),
+      ]);
+
+      const totalCount = countResult[0]?.total || 0;
+
+      resolve({
+        data: departments,
+        meta: {
+          count: totalCount,
+          page,
+          limit,
+          pages: Math.ceil(totalCount / limit),
+        },
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
