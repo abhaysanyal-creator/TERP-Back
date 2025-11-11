@@ -176,20 +176,6 @@ export const listDepartmentService = (
         { $limit: limit },
         {
           $lookup: {
-            from: "organisations",
-            localField: "organisation.id",
-            foreignField: "_id",
-            as: "organisation",
-          },
-        },
-        {
-          $unwind: {
-            path: "$organisation",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $lookup: {
             from: "activities",
             localField: "_id",
             foreignField: "department.id",

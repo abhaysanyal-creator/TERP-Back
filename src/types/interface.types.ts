@@ -99,7 +99,7 @@ export interface EmpDocuments {
   signedUrl?: string;
   key: string;
   file_name: string;
-  category:string;
+  category: string;
 }
 
 export interface Employee extends Document {
@@ -183,7 +183,7 @@ export interface Organisations extends Document {
   is_active: boolean;
   // department: Department;
   is_deleted: boolean;
-  departments:IDepartment[]
+  departments: IDepartment[];
 }
 export interface PaymentMethod {
   method_type: string;
@@ -264,18 +264,18 @@ export interface ClinicPricing {
 export interface IRoom {
   id: Types.ObjectId;
   name: string;
-  status:string;
+  status: string;
 }
 
 export interface TreatmentPriceIndexing {
-  type:string;
+  type: string;
   specialisation: {
     id: Types.ObjectId;
     name: string;
   };
   organisation_cost: string;
   platform_cost: string;
-  include_patient_cost:boolean;
+  include_patient_cost: boolean;
   patient_cost: string;
 }
 export interface Activity extends Document {
@@ -283,7 +283,7 @@ export interface Activity extends Document {
     _id: Types.ObjectId;
     name: string;
   };
-  activity_name:string;
+  activity_name: string;
   department: {
     _id: Types.ObjectId;
     name: string;
@@ -307,7 +307,7 @@ export interface Activity extends Document {
   address: Address;
   operating_hours: WorkingHour;
   no_of_rooms: number;
-  treatment:TreatmentPriceIndexing[];
+  treatment: TreatmentPriceIndexing[];
 }
 
 export interface Bookings extends Document {
@@ -340,6 +340,7 @@ export interface IDepartment extends Document {
   organisation: {
     _id: Types.ObjectId;
     name: string;
+    type: string;
   };
   is_deleted: boolean;
   is_active: boolean;

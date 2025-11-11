@@ -7,6 +7,7 @@ const DepartmentSchema = new Schema<IDepartment>(
     organisation: {
       id: { type: Schema.Types.ObjectId, ref: "organisations" },
       name: { type: String },
+      type: { type: String },
     },
     department_id: { type: String, required: true, unique: true },
     internal_code: { type: String, required: true, unique: true },
