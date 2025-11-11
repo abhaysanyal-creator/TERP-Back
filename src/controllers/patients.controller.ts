@@ -23,19 +23,10 @@ export const createPatientController: ExpressMiddleware = async (
       .exec();
 
     if (isPatientExists)
-      return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
-
-    // const creator = await mongoose
-    //   .model("employees")
-    //   .findOne({
-    //     _id: ObjectId(request.body.created_by),
-    //     is_deleted: false,
-    //   })
-    //   .exec();
-
-    // if (!creator) {
-    //   return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-    // }
+      return badRequest(
+        response,
+        Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code
+      );
 
     const result = await createPatientService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
@@ -74,13 +65,21 @@ export const updatePatientController: ExpressMiddleware = async (
   try {
     const existingPatient = await mongoose
       .model("patients")
-      .findOne({ _id: request.body.id, is_deleted: false })
+      .findOne({
+        $or: [
+          { _id: request.body.id, is_deleted: false },
+          { national_id: request.body.national_id, is_deleted: false },
+        ],
+      })
       .exec();
 
-    if (!existingPatient)
-      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    if (existingPatient) {
+      if (existingPatient.national_id === request.body.national_id) {
+        badRequest(response, Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code);
+      }
+    }
 
-    const result = await updatePatientService(request.body);
+    const result = await updatePatientService(request);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

@@ -23,6 +23,10 @@ export default {
       code: "DEPARTMENT_NAME_REQUIRED",
       message: "Department Name is required!!",
     },
+    DUPLICATE_CONTACT_NUMBER:{
+      code:"DUPLICATE_CONTACT_NUMBER",
+      message:"Duplicate Contact Number"!!
+    },
     DOCUMENT_REQUIRED: {
       code: "DOCUMENT_REQUIRED",
       message: "Document is required!!",

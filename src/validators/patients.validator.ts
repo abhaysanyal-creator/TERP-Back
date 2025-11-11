@@ -95,12 +95,8 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (!request.body.id) {
+  if (!request.params.id) {
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
-  }
-
-  if (!request.body.created_by) {
-    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
   }
 
   if (request.body.patient_id) {
@@ -123,8 +119,8 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
   }
 
   if (
-    request.body.national_id !== undefined &&
-    request.body.first_name.trim() === ""
+    request.body.national_id === undefined ||
+    request.body.national_id === ""
   ) {
     return badRequest(response, Constants.MESSAGES.NATIONAL_ID_REQ.code);
   }
@@ -158,7 +154,6 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
       return badRequest(response, Constants.MESSAGES.POSTAL_CODE_REQ.code);
     }
   }
-
 
   next();
 };
