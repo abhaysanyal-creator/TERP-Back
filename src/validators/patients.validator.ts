@@ -139,10 +139,10 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
 
   if (request.body.address !== undefined) {
     const addr = request.body.address;
-    if (!addr.city || addr.city.trim() === "") {
+    if (!addr.city || addr.city.name.trim() === "") {
       return badRequest(response, Constants.MESSAGES.CITY_REQ.code);
     }
-    if (!addr.country || addr.country.trim() === "") {
+    if (!addr.country || addr.country.name.trim() === "") {
       return badRequest(response, Constants.MESSAGES.COUNTRY_REQ.code);
     }
     if (!addr.address || addr.address.trim() === "") {
