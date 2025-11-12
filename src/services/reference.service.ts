@@ -142,10 +142,27 @@ export const listSpecialisationService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
+
+const body = payload?.body || {};
+
+      const match: any = { is_deleted: false };
+
+      const or: any[] = [];
+      const and: any[] = [];
+
+      if (body.type) and.push({ type: body.type });
+
+      if (or.length) and.push({ $or: or });
+      if (and.length) match.$and = and;
+
+      const aggregationPipeline: any[] = [
+        { $match: match },
+        { $sort: { created_at: -1 } },
+      ];
+
       const data = await mongoose
         .model("metadatas")
-        .find({ is_deleted: false, type: payload.body.type })
-        .sort({ createdAt: -1 })
+        .aggregate(aggregationPipeline)
         .exec();
 
       if (!data) {
