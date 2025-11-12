@@ -9,7 +9,7 @@ import type {
 } from "../types/interface.types";
 import { roomsSchema } from "./rooms.model";
 import enums from "../enums.json";
-import { contactSchema } from "./organisation.model";
+import { addressSchema, contactSchema } from "./organisation.model";
 
 const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema(
   {
@@ -25,15 +25,15 @@ const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema(
   { _id: false }
 );
 
-const AddressSchema = new Schema<Address>(
-  {
-    city: { type: String, required: true },
-    country: { type: String, required: true },
-    address: { type: String, required: true },
-    postal_code: { type: String, required: true },
-  },
-  { _id: false }
-);
+// const AddressSchema = new Schema<Address>(
+//   {
+//     city: { type: String, required: true },
+//     country: { type: String, required: true },
+//     address: { type: String, required: true },
+//     postal_code: { type: String, required: true },
+//   },
+//   { _id: false }
+// );
 
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {
@@ -97,13 +97,12 @@ const activitySchema: Schema<Activity> = new Schema({
   internal_code: { type: String, required: true, unique: true },
   building_size: { type: Number, required: true },
   area_in: { type: String, enum: enums.AreaIn, default: enums.AreaIn.SQ_MTR },
-  created_by: { type: Schema.Types.ObjectId, required: true, ref: "employees" },
   is_deleted: { type: Boolean, default: false },
   is_active: { type: Boolean, default: true },
   protected_space: { type: Boolean, default: true },
   contacts: [contactSchema],
   therapists: [TherapistSchema],
-  address: AddressSchema,
+  address: addressSchema,
   rooms: [roomSchema],
   operating_hours: [workingHourSchema],
   treatment: [TreatmentPricingSchema],

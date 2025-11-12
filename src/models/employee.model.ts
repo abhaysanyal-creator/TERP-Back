@@ -1,23 +1,14 @@
 import { Specialisation } from "./../types/interface.types";
 import { Schema, model } from "mongoose";
 import type {
-  Address,
   EmpDocuments,
   Employee,
   Organisation,
   TimeSlot,
 } from "../types/interface.types";
 import enums from "../enums.json";
+import { addressSchema } from "./organisation.model";
 
-const addressSchema = new Schema<Address>(
-  {
-    city: { type: String, required: true },
-    country: { type: String, required: true },
-    address: { type: String, required: true },
-    postal_code: { type: String, required: true },
-  },
-  { _id: false }
-);
 
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {

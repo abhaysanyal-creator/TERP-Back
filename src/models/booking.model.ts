@@ -78,7 +78,6 @@ const bookingsSchema: Schema<Bookings> = new Schema(
       default: "booked",
     },
     notes: { type: String },
-    created_by: { type: Schema.Types.ObjectId, ref: "employees" },
   },
   {
     timestamps: true,

@@ -6,16 +6,7 @@ import {
   Organisation,
 } from "../types/interface.types";
 import enums from "../enums.json";
-
-const addressSchema = new Schema<Address>(
-  {
-    city: { type: String, required: true },
-    country: { type: String, required: true },
-    address: { type: String, required: true },
-    postal_code: { type: String, required: true },
-  },
-  { _id: false }
-);
+import { addressSchema } from "./organisation.model";
 
 const paymentMethodSchema = new Schema(
   {
@@ -92,11 +83,6 @@ export const allergySchema = new Schema(
 
 const patientSchema: Schema<Patients> = new Schema(
   {
-    created_by: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "employees",
-    },
     patient_id: { type: String, unique: true, required: true },
     first_name: { type: String, required: true },
     last_name: { type: String, required: true },

@@ -30,11 +30,6 @@ export interface User extends Document {
   contact_number: number;
 }
 
-// export interface Permissions extends Document {
-//   name: string;
-//   created_by: Types.ObjectId;
-// }
-
 export interface IUserPermission extends Document {
   name: string;
   permissions: {
@@ -73,8 +68,18 @@ export interface BookingDetails {
 }
 
 export interface Address {
-  city: string;
-  address: string;
+  address: {
+    id: Types.ObjectId;
+    name: string;
+  };
+  state: {
+    id: Types.ObjectId;
+    name: string;
+  };
+  city: {
+    id: Types.ObjectId;
+    name: string;
+  };
   country: string;
   postal_code: string;
 }
@@ -212,7 +217,6 @@ export interface metaDataSchema {
   name: string;
 }
 export interface Patients extends Document {
-  created_by: Types.ObjectId;
   patient_id: string;
   first_name: string;
   last_name: string;
@@ -248,7 +252,6 @@ export interface Room {
   clinic_id: Types.ObjectId;
   room_type: string;
   room_size: number;
-  created_by: Types.ObjectId;
   bookings: [BookingSlot];
   is_active: Boolean;
   is_deleted: Boolean;
@@ -295,7 +298,6 @@ export interface Activity extends Document {
   contacts: Contact[];
   area_in: string;
   type: string;
-  created_by: Types.ObjectId;
   is_deleted: boolean;
   branch_name: string;
   clinic_id: string;
@@ -315,7 +317,6 @@ export interface Bookings extends Document {
   clinic_id: Types.ObjectId;
   room_id: Types.ObjectId;
   therapist: Therapists;
-  created_by: Types.ObjectId;
   // start_time: Date;
   // end_time: Date;
   is_active: Boolean;

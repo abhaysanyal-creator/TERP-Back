@@ -7,9 +7,6 @@ export const createBookingsValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (!request.body.created_by) {
-    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-  }
 
   if (!request.body.clinic_id) {
     return badRequest(response, Constants.MESSAGES.CLINIC_ID_REQ.code);
@@ -18,9 +15,7 @@ export const createBookingsValidator: ExpressMiddlewareNext = (
     return badRequest(response, Constants.MESSAGES.ROOM_TYPE_REQ.code);
   }
 
-  if (!request.body.created_by) {
-    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-  }
+ 
   if (!request.body.patient_id) {
     return badRequest(response, Constants.MESSAGES.PATIENT_ID_REQ.code);
   }

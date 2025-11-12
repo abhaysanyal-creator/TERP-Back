@@ -8,10 +8,9 @@ import {
   viewEmployeeService,
 } from "../services/employee.service";
 import type { ExpressMiddleware } from "../types/express.types";
-import Lang from "../locales/en.json";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import mongoose from "mongoose";
-import { adminCheck, ObjectId } from "../utils/helpers";
+import { ObjectId } from "../utils/helpers";
 import Constants from "../locales/constants";
 
 export const createEmployeeController: ExpressMiddleware = async (
@@ -33,14 +32,14 @@ export const createEmployeeController: ExpressMiddleware = async (
       if (existingEmployee.email === request.body.email) {
         return badRequest(
           response,
-          "An employee with this email already exists."
+          Constants.MESSAGES.EMAIL_ALREADY_TAKEN.code
         );
       }
 
       if (existingEmployee.national_id === request.body.national_id) {
         return badRequest(
           response,
-          "An employee with this National ID already exists."
+          Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code
         );
       }
     }

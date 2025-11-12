@@ -81,6 +81,10 @@ export default {
       code: "INCLUDE_PERMISSION",
       message: "Include Permission!!",
     },
+    EMAIL_ALREADY_TAKEN:{
+      code:"EMAIL_ALREADY_TAKEN",
+      message:"Email is already taken!!"
+    },
     NO_TOKEN: {
       code: "NO_TOKEN",
       message: "No Token Provided!!",
