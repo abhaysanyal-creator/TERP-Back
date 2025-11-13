@@ -1,7 +1,12 @@
 import { badRequest, errorResponse, success } from "../response/response";
 import type { ExpressMiddleware } from "../types/express.types";
 import { getErrorMessage } from "../middlewares/app.middlewares";
-import { loginService, verifyOtpService } from "../services/auth.service";
+import {
+  getMeService,
+  loginService,
+  verifyOtpService,
+} from "../services/auth.service";
+import Constants from "../locales/constants";
 
 export const loginController: ExpressMiddleware = async (request, response) => {
   try {
@@ -51,5 +56,15 @@ export const verifyOtpController: ExpressMiddleware = async (
       );
     }
     return badRequest(response, getErrorMessage(err));
+  }
+};
+
+export const getMeController: ExpressMiddleware = async (request, response) => {
+  try {
+    const user = (request as any).user;
+    const result = await getMeService(user);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    return badRequest(response, getErrorMessage(error));
   }
 };
