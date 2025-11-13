@@ -1,5 +1,12 @@
 module.exports = {
   async up(db, client) {
+
+      const existingCount = await db.collection("roles").countDocuments({});
+    if (existingCount > 0) {
+      console.log(`⚠️ Skipping seeding. Found ${existingCount} existing roles.`);
+      return;
+    }
+
     const roles = [
       {
         name: "super-admin",
