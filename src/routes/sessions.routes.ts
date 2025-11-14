@@ -22,12 +22,11 @@ router.post(
   createAppointmentController
 );
 
-router.post(
+router.get(
   "/view/:id",
   authorisationMiddleware,
   viewAppointmentValidator,
-  createAppointmentController
+  viewAppointmentController
 );
-
 
 export default router;

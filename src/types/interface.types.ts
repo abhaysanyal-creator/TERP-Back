@@ -418,6 +418,8 @@ export interface ISession extends Document {
     summary: string;
     reason: string;
   }>;
+  is_deleted:boolean;
+  is_active:boolean;
   patient_groups: {
     _id: Types.ObjectId;
     group_name: string;
