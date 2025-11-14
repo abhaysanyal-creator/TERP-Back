@@ -138,16 +138,23 @@ export const listEmployeeService = (
       };
 
       const or: any[] = [];
+      const and: any[] = [];
 
-      if (payload.department) or.push({ department: payload.department });
-      if (payload.status) or.push({ status: payload.status });
+      if (payload.mobile_phone)
+        and.push({ mobile_phone: payload.mobile_phone });
+
+      if (payload.employee_roles)
+        and.push({ employee_roles: ObjectId(payload.employee_roles) });
+
+      if (payload.is_active !==undefined) and.push({ is_active: payload.is_active });
+
       if (payload.search) {
-        or.push(
-          { name: { $regex: payload.search, $options: "i" } },
-          { email: { $regex: payload.search, $options: "i" } }
-        );
+        or.push({ first_name: { $regex: payload.search, $options: "i" } });
+        or.push({ employee_id: { $regex: payload.search, $options: "i" } });
       }
-      if (or.length) match.$or = or;
+
+      if (or.length) and.push({ $or: or });
+      if (and.length) match.$and = and;
 
       const pipeline: any[] = [
         { $match: match },

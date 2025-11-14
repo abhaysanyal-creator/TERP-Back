@@ -56,17 +56,13 @@ export const createAppointmentController: ExpressMiddleware = async (
       );
     }
 
-    const overLappingAppointment = await mongoose
-      .model("sessions")
-      .findOne({
-        "therapist.id": ObjectId(request.body.therapist.id),
-        scheduled_date: request.body.scheduled_date,
-        status: { $ne: enums.SessionStatus.CANCELLED },
-        $or: [
-          { scheduled_start: { $lt: request.body.scheduled_start } },
-          { scheduled_end: { $gt: request.body.scheduled_end } },
-        ],
-      });
+    const overLappingAppointment = await mongoose.model("sessions").findOne({
+      "therapist.id": ObjectId(request.body.therapist.id),
+      scheduled_date: request.body.scheduled_date,
+      status: { $ne: enums.SessionStatus.CANCELLED },
+      scheduled_start: { $lt: request.body.scheduled_end },
+      scheduled_end: { $gt: request.body.scheduled_start },
+    });
 
     if (overLappingAppointment) {
       return badRequest(response, Constants.MESSAGES.THERAPIST_UNAVAIL.code);
@@ -85,10 +81,11 @@ export const viewAppointmentController: ExpressMiddleware = async (
 ) => {
   try {
     const isBookingExist = await mongoose
-      .model("bookings")
+      .model("sessions")
       .findOne({ _id: ObjectId(request.params.id), is_deleted: false })
       .exec();
 
+    console.log(isBookingExist);
     if (!isBookingExist) {
       return badRequest(response, Constants.MESSAGES.ID_REQ.code);
     }

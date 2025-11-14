@@ -85,6 +85,8 @@ const SessionSchema = new Schema<ISession>(
       enum: Object.values(enums.SessionStatus),
       default: null,
     },
+    is_active:{type:Boolean,default:true},
+    is_deleted:{type:Boolean,default:false},
     note: { type: String, default: null },
     cancellation_info: {
       reason: { type: String, enum: Object.values(enums.CancellationReason) },
