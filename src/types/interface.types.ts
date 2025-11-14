@@ -111,7 +111,7 @@ export interface Employee extends Document {
   national_id: string;
   employee_type: string;
   position_types: string;
-  employee_roles: Types.ObjectId;
+  employee_roles: { id: Types.ObjectId; name: string };
   documents: EmpDocuments[];
   team_leader: boolean;
   is_deleted: boolean;
@@ -418,8 +418,8 @@ export interface ISession extends Document {
     summary: string;
     reason: string;
   }>;
-  is_deleted:boolean;
-  is_active:boolean;
+  is_deleted: boolean;
+  is_active: boolean;
   patient_groups: {
     _id: Types.ObjectId;
     group_name: string;

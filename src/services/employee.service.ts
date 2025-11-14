@@ -144,7 +144,7 @@ export const listEmployeeService = (
         and.push({ mobile_phone: payload.mobile_phone });
 
       if (payload.employee_roles)
-        and.push({ employee_roles: ObjectId(payload.employee_roles) });
+        and.push({ "employee_roles.id": ObjectId(payload.employee_roles) });
 
       if (payload.is_active !==undefined) and.push({ is_active: payload.is_active });
 

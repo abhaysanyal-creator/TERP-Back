@@ -82,11 +82,11 @@ const employeeSchema = new Schema<Employee>(
     is_deleted: { type: Boolean, default: false },
     is_active: { type: Boolean, default: true },
     position_types: { type: String, required: true }, // Full_time,Part_time etc
+
     employee_roles: {
-      type: Schema.Types.ObjectId,
-      ref: "roles",
-      required: true,
-    }, //
+      id: { type: Schema.Types.ObjectId },
+      name: { type: String },
+    },
     team_leader: { type: Boolean, required: true },
     hire_date: { type: String, required: true },
     role: { type: Schema.Types.String },
