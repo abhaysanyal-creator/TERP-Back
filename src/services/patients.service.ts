@@ -109,24 +109,18 @@ export const listPatientService = (
       const or: any[] = [];
       const and: any[] = [];
 
-      // if (payload.org_type) and.push({ org_type: payload.org_type });
-      // if (payload.number_of_rooms)
-      //   and.push({
-      //     number_of_rooms: payload.number_of_rooms,
-      //   });
-      // if (payload.protected_space)
-      //   and.push({ protected_space: payload.protected_space });
+      if (payload.contact_number)
+        and.push({ contact_number: payload.contact_number });
 
-      // if (payload.operating_hours)
-      //   and.push({
-      //     operating_hours: payload.operating_hours,
-      //   });
+      if (payload.is_active !== undefined)
+        and.push({ is_active: payload.is_active });
 
       if (payload.search) {
-        or.push(
-          { first_name: { $regex: payload.search, $options: "i" } },
-          { last_name: { $regex: payload.search, $options: "i" } }
-        );
+        or.push({ first_name: { $regex: payload.search, $options: "i" } });
+        or.push({ patient_id: { $regex: payload.search, $options: "i" } });
+        or.push({
+          "organisation_assignment.name": { $regex: payload.search, $options: "i" },
+        });
       }
 
       if (or.length) and.push({ $or: or });
@@ -151,7 +145,7 @@ export const listPatientService = (
       resolve({
         data: patients,
         meta: {
-          count: totalCount,
+          total: totalCount,
           page: page,
           limit: limit,
           pages: Math.floor(totalCount / limit) + 1,
