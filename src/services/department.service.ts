@@ -174,45 +174,12 @@ export const listDepartmentService = (
         { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit },
-
-        {
-          $lookup: {
-            localField: "organisation.id",
-            from: "organisations",
-            foreignField: "_id",
-            as: "organisation",
-            pipeline: [
-              {
-                $project: {
-                  _id: 1,
-                  organisation_type: 1,
-                  organisation_name: 1,
-                },
-              },
-            ],
-          },
-        },
-        {
-          $unwind: {
-            path: "$organisation",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
         {
           $lookup: {
             localField: "_id",
             from: "activities",
             foreignField: "department.id",
             as: "activities",
-            pipeline: [
-              {
-                $project: {
-                  _id: 1,
-                  type: 1,
-                  activity_name: 1,
-                },
-              },
-            ],
           },
         },
       ];
