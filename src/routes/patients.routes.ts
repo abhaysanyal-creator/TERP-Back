@@ -32,7 +32,7 @@ router.get(
 );
 
 router.patch(
-  "/update",
+  "/update/:id",
   authorisationMiddleware,
   updatePatientValidator,
   updatePatientController

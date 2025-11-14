@@ -7,12 +7,12 @@ import patientModel from "./patients.model";
 import otpModel from "./otp.model";
 import activityModel from "./activity.model";
 import roomModel from "./rooms.model";
-import bookingModel from "./booking.model";
 import { Country } from "./country.model";
 import { State } from "./state.model";
 import { City } from "./city.model";
 import metaDataModel from "./meta-data.model";
 import { departmentModel } from "./department.model";
+import { sessionModel } from "./sessions.model";
 
 export {
   Country,
@@ -27,7 +27,7 @@ export {
   otpModel,
   activityModel,
   roomModel,
-  bookingModel,
   metaDataModel,
-  departmentModel
+  departmentModel,
+  sessionModel
 };

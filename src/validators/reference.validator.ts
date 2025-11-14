@@ -115,7 +115,7 @@ export const confirmUploadValidator: ExpressMiddlewareNext = (
   }
   if (request.body.module) {
     if (!Object.values(enums.s3Upload).includes(request.body.module)) {
-      return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
+      return badRequest(response, Constants.MESSAGES.INVALID_MODULE_FORMAT.code);
     }
   }
   next();

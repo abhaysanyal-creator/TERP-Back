@@ -9,9 +9,7 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (!request.body.created_by) {
-    return badRequest(response, Lang.CREATED_BY_REQ || "Created By Required");
-  }
+ 
   if (!request.body.first_name || request.body.first_name.trim() === "") {
     return badRequest(
       response,
@@ -182,9 +180,6 @@ export const updateEmployeeValidator: ExpressMiddlewareNext = (
 ) => {
   if (!request.body.id) {
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
-  }
-  if (!request.body.created_by) {
-    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
   }
   if (!request.body.first_name || request.body.first_name.trim() === "") {
     return badRequest(

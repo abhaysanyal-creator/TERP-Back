@@ -33,7 +33,7 @@ export const generateEmployeeId = () => {
   return prefix + randomPart;
 };
 
-export const generateCode = (prefix: string,length:number) => {
+export const generateCode = (prefix: string, length: number) => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let randomPart = "";
   for (let i = 0; i < length; i++) {
@@ -132,4 +132,45 @@ export const isRoomAvailable = (
   }
 
   return true; // No overlaps, room is available
+};
+
+export const validateCompanionDuplicates = (companionsList = []) => {
+  const nationalIds = new Set();
+  const mobilePhones = new Set();
+  const relations = new Set();
+  const combos = new Set();
+
+  for (const c of companionsList) {
+    const { national_id, mobile_phone, relation } = c;
+
+    if (national_id) {
+      if (nationalIds.has(national_id)) {
+        return "DUPLICATE_NATIONAL_ID";
+      }
+      nationalIds.add(national_id);
+    }
+
+    if (mobile_phone) {
+      if (mobilePhones.has(mobile_phone)) {
+        return "DUPLICATE_MOBILE_PHONE";
+      }
+      mobilePhones.add(mobile_phone);
+    }
+
+    if (relation) {
+      if (relations.has(relation)) {
+        return "DUPLICATE_RELATION";
+      }
+      relations.add(relation);
+    }
+    const comboKey = `${national_id || ""}-${mobile_phone || ""}-${
+      relation || ""
+    }`;
+    if (combos.has(comboKey)) {
+      return "DUPLICATE_COMPANION_COMBINATION";
+    }
+    combos.add(comboKey);
+  }
+
+  return null; // No duplicates
 };

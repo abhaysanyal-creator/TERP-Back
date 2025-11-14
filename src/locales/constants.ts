@@ -15,6 +15,14 @@ export default {
     TEAM_LEAD_REQ_TRUE_FALSE: {
       code: "TEAM_LEAD_REQ_TRUE_FALSE",
     },
+    THERAPIST_DOESNT_EXIST: {
+      code: "THERAPIST_DOESNT_EXIST",
+      message: "Therapist doesnt exist!!",
+    },
+    COMPANION_REPEATED: {
+      code: "COMPANION_ADDITION_REPEATED",
+      message: "Companion addition repeated!!",
+    },
     DEPARTMENT_ID_REQ: {
       code: "DEPARTMENT_ID_REQUIRED",
       message: "Department ID is required!!",
@@ -22,6 +30,10 @@ export default {
     DEPARTMENT_NAME_REQUIRED: {
       code: "DEPARTMENT_NAME_REQUIRED",
       message: "Department Name is required!!",
+    },
+    DUPLICATE_CONTACT_NUMBER: {
+      code: "DUPLICATE_CONTACT_NUMBER",
+      message: "Duplicate Contact Number"!!,
     },
     DOCUMENT_REQUIRED: {
       code: "DOCUMENT_REQUIRED",
@@ -48,6 +60,10 @@ export default {
       code: "TYPE_REQUIRED",
       message: "Type is required!!",
     },
+    SESSION_DATE_REQ: {
+      code: "SESSION_DATE_REQUIRED",
+      message: "Session Date is required!!",
+    },
     S3_KEY_REQUIRED: {
       code: "S3_KEY_REQUIRED",
       message: "S3 Key Required!!",
@@ -63,8 +79,15 @@ export default {
     INVALID_WORKING_HOURS: {
       code: "INVALID_WORKING_HOURS",
     },
+    INVALID_MODULE: {
+      code: "INVALID_WORKING_HOURS",
+    },
     HIRE_DATE_REQUIRED: {
       code: "HIRE_DATE_REQUIRED",
+    },
+    INVALID_MODULE_FORMAT: {
+      code: "INVALID_MODULE_FORMAT",
+      message: "Invalid Module Format!!",
     },
     JOB_PERCENTAGE_INVALID: {
       code: "JOB_PERCENTAGE_INVALID",
@@ -76,6 +99,10 @@ export default {
     INCLUDE_PERMISSION: {
       code: "INCLUDE_PERMISSION",
       message: "Include Permission!!",
+    },
+    EMAIL_ALREADY_TAKEN: {
+      code: "EMAIL_ALREADY_TAKEN",
+      message: "Email is already taken!!",
     },
     NO_TOKEN: {
       code: "NO_TOKEN",
@@ -168,6 +195,10 @@ export default {
     SPECIALISATION_NAME: {
       code: "SPECIALISATION_NAME_REQ",
       message: "Spec. name is required!!",
+    },
+    CANT_EDIT_NATIONAL_ID: {
+      code: "CANT_EDIT_NATIONAL_ID",
+      message: "Cannot Edit National ID",
     },
     SUCCESS: {
       code: "SUCCESS",
@@ -275,6 +306,10 @@ export default {
       code: "PATIENT_ID_REQ",
       message: "Patient ID is required!!",
     },
+    SESSION_ID_REQ: {
+      code: "SESSION_ID_REQ",
+      message: "Session ID is required!!",
+    },
     FIRST_NAME_REQ: {
       code: "FIRST_NAME_REQ",
       message: "First name is required!!",
@@ -356,6 +391,10 @@ export default {
       message: "Room type is required!!",
     },
 
+    ROOM_ID_REQ: {
+      code: "ROOM_ID_REQ",
+      message: "Room ID is required!!",
+    },
     ROOM_SIZE_REQ: {
       code: "ROOM_SIZE_REQ",
       message: "Room size is required!!",
@@ -403,6 +442,10 @@ export default {
     ERROR_FETCHING_AUDIT_LOG: {
       code: "ERROR_FETCHING_AUDIT_LOG",
       message: "Error fetching audit logs!!",
+    },
+    TREATMENT_TYPE_REQ: {
+      code: "TREATMENT_TYPE_REQ",
+      message: "Treatment type is required!!",
     },
   },
 };

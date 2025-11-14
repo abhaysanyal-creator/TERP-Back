@@ -8,10 +8,10 @@ import organisationRoutes from "./organisation.routes";
 import patientRoutes from "./patients.routes";
 import activityRoutes from "./activity.routes";
 import roomRoutes from "./rooms.routes";
-import bookingRoutes from "./booking.routes";
 import referenceRoutes from "./reference.routes";
 import commonRoutes from "./common.routes";
 import departmentRoutes from "./department.routes";
+import sessionsRoutes from "./sessions.routes";
 
 const router = Router();
 
@@ -24,9 +24,9 @@ router.use("/organisations", organisationRoutes);
 router.use("/patients", patientRoutes);
 router.use("/activity", activityRoutes);
 router.use("/rooms", roomRoutes);
-router.use("/bookings", bookingRoutes);
 router.use("/reference", referenceRoutes);
 router.use("/common", commonRoutes);
 router.use("/departments", departmentRoutes);
+router.use("/sessions", sessionsRoutes);
 
 export default router;

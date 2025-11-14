@@ -8,9 +8,6 @@ export const createActivityValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (!request.body.created_by) {
-    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-  }
   if (
     !request.body.type ||
     !Object.values(enums.ActivityType).includes(request.body.type)

@@ -112,6 +112,34 @@ export const deleteOrganisationService = (
   });
 };
 
+// export const changeOperatingHoursOrganisationService = (
+//   payload: Record<string, any>
+// ): Record<string, any> => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       const operatingHours = payload.operating_hours;
+//       const id = payload.id;
+
+//       const changedOperatingHours = await mongoose
+//         .model("organisations")
+//         .findOneAndUpdate(
+//           { _id: ObjectId(id), is_deleted: { $ne: true } },
+//           { $set: { working_hours: operatingHours } },
+//           { returnDocument: "after" }
+//         )
+//         .exec();
+
+//       if (!changedOperatingHours) {
+//         throw new Error("Problem Changing the working hours!!");
+//       }
+//       resolve(changedOperatingHours);
+//     } catch (error) {
+//       console.error(error);
+//       reject(error);
+//     }
+//   });
+// };
+
 export const listDepartmentService = (
   payload: Record<string, any>
 ): Record<string, any> => {
@@ -149,10 +177,11 @@ export const listDepartmentService = (
 
         {
           $lookup: {
+            localField: "organisation.id",
             from: "organisations",
-            let: { orgId: "$organisation.id" },
+            foreignField: "_id",
+            as: "organisation",
             pipeline: [
-              { $match: { $expr: { $eq: ["$_id", "$$orgId"] } } },
               {
                 $project: {
                   _id: 1,
@@ -161,21 +190,29 @@ export const listDepartmentService = (
                 },
               },
             ],
-            as: "organisation",
           },
         },
         {
-          $unwind: { path: "$organisation", preserveNullAndEmptyArrays: true },
+          $unwind: {
+            path: "$organisation",
+            preserveNullAndEmptyArrays: true,
+          },
         },
-
         {
           $lookup: {
+            localField: "_id",
             from: "activities",
-            let: { depId: "$_id" },
-            pipeline: [
-              { $match: { $expr: { $eq: ["$department.id", "$$depId"] } } },
-            ],
+            foreignField: "department.id",
             as: "activities",
+            pipeline: [
+              {
+                $project: {
+                  _id: 1,
+                  type: 1,
+                  activity_name: 1,
+                },
+              },
+            ],
           },
         },
       ];
@@ -203,31 +240,3 @@ export const listDepartmentService = (
     }
   });
 };
-
-// export const changeOperatingHoursOrganisationService = (
-//   payload: Record<string, any>
-// ): Record<string, any> => {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       const operatingHours = payload.operating_hours;
-//       const id = payload.id;
-
-//       const changedOperatingHours = await mongoose
-//         .model("organisations")
-//         .findOneAndUpdate(
-//           { _id: ObjectId(id), is_deleted: { $ne: true } },
-//           { $set: { working_hours: operatingHours } },
-//           { returnDocument: "after" }
-//         )
-//         .exec();
-
-//       if (!changedOperatingHours) {
-//         throw new Error("Problem Changing the working hours!!");
-//       }
-//       resolve(changedOperatingHours);
-//     } catch (error) {
-//       console.error(error);
-//       reject(error);
-//     }
-//   });
-// };

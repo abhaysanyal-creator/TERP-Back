@@ -7,9 +7,7 @@ export const createRoomValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (!request.body.created_by) {
-    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-  }
+  
 
   if (!request.body.clinic_id) {
     return badRequest(response, Constants.MESSAGES.CLINIC_ID_REQ.code);
@@ -42,10 +40,6 @@ export const updateRoomValidator: ExpressMiddlewareNext = (
 ) => {
   if (!request.body.id) {
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
-  }
-
-  if (!request.body.created_by) {
-    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
   }
 
   if (!request.body.clinic_id) {

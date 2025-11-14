@@ -8,10 +8,9 @@ import {
   viewEmployeeService,
 } from "../services/employee.service";
 import type { ExpressMiddleware } from "../types/express.types";
-import Lang from "../locales/en.json";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import mongoose from "mongoose";
-import { adminCheck, ObjectId } from "../utils/helpers";
+import { ObjectId } from "../utils/helpers";
 import Constants from "../locales/constants";
 
 export const createEmployeeController: ExpressMiddleware = async (
@@ -25,6 +24,7 @@ export const createEmployeeController: ExpressMiddleware = async (
         $or: [
           { email: request.body.email, is_deleted: false },
           { national_id: request.body.national_id, is_deleted: false },
+          { mobile_phone: request.body.mobile_phone, is_deleted: false },
         ],
       })
       .exec();
@@ -33,14 +33,21 @@ export const createEmployeeController: ExpressMiddleware = async (
       if (existingEmployee.email === request.body.email) {
         return badRequest(
           response,
-          "An employee with this email already exists."
+          Constants.MESSAGES.EMAIL_ALREADY_TAKEN.code
         );
       }
 
       if (existingEmployee.national_id === request.body.national_id) {
         return badRequest(
           response,
-          "An employee with this National ID already exists."
+          Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code
+        );
+      }
+
+      if (existingEmployee.mobile_phone === request.body.mobile_phone) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_CONTACT_NUMBER.code
         );
       }
     }
@@ -70,14 +77,40 @@ export const updateEmployeeController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const employeeExists = await mongoose
+    const existingEmployee = await mongoose
       .model("employees")
-      .findById(ObjectId(request.body.id))
+      .findOne({
+        _id: { $ne: ObjectId(request.body.id) },
+        $or: [
+          { email: request.body.email, is_deleted: false },
+          { national_id: request.body.national_id, is_deleted: false },
+          { mobile_phone: request.body.mobile_phone, is_deleted: false },
+        ],
+      })
       .exec();
 
-    if (!employeeExists)
-      return badRequest(response, Constants.MESSAGES.EMP_NOT_FOUND.code);
+    if (existingEmployee) {
+      if (existingEmployee.email === request.body.email) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.EMAIL_ALREADY_TAKEN.code
+        );
+      }
 
+      if (existingEmployee.national_id === request.body.national_id) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code
+        );
+      }
+
+      if (existingEmployee.mobile_phone === request.body.mobile_phone) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_CONTACT_NUMBER.code
+        );
+      }
+    }
     const result = await updateEmployeeService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {

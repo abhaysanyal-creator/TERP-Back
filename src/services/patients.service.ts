@@ -49,29 +49,10 @@ export const updatePatientService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (payload.patient_id) {
-        delete payload.patient_id;
-      }
-
-      if (payload.national_id) {
-        const existing = await mongoose.model("patients").findOne({
-          national_id: payload.national_id,
-          _id: { $ne: payload.id },
-        });
-
-        if (existing) {
-          const error: any = new Error(
-            Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code
-          );
-          error.code = "DUPLICATE_NATIONAL_ID";
-          throw error;
-        }
-      }
-
       const updatedPatient = await mongoose.model("patients").findOneAndUpdate(
-        { _id: ObjectId(payload.id) },
+        { _id: ObjectId(payload.params.id) },
         {
-          $set: payload,
+          $set: payload.body,
         },
         {
           new: true,
@@ -80,8 +61,7 @@ export const updatePatientService = (
       );
 
       if (!updatedPatient) {
-        const error = new Error("Patient not found");
-        throw error;
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
       }
 
       resolve(updatedPatient);

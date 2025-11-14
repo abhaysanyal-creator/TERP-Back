@@ -19,23 +19,36 @@ export const createPatientController: ExpressMiddleware = async (
   try {
     const isPatientExists = await mongoose
       .model("patients")
-      .findOne({ national_id: request.body.national_id })
+      .findOne({
+        $or: [
+          { national_id: request.body.national_id },
+          { contact_number: request.body.contact_number },
+        ],
+      })
       .exec();
 
-    if (isPatientExists)
-      return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
+    if (isPatientExists) {
+      if (isPatientExists.contact_number === request.body.contact_number) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_CONTACT_NUMBER.code
+        );
+      }
+      if (isPatientExists.national_id === request.body.national_id) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code
+        );
+      }
+    }
 
-    // const creator = await mongoose
-    //   .model("employees")
-    //   .findOne({
-    //     _id: ObjectId(request.body.created_by),
-    //     is_deleted: false,
-    //   })
-    //   .exec();
+    const companionsIList = request.body.companions_list;
+    const ids = companionsIList.map((companion: any) => companion.national_id);
+    const duplicateCompanion = ids.length !== new Set(ids).size;
 
-    // if (!creator) {
-    //   return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-    // }
+    if (duplicateCompanion) {
+      return badRequest(response, Constants.MESSAGES.COMPANION_REPEATED.code);
+    }
 
     const result = await createPatientService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
@@ -74,13 +87,62 @@ export const updatePatientController: ExpressMiddleware = async (
   try {
     const existingPatient = await mongoose
       .model("patients")
-      .findOne({ _id: request.body.id, is_deleted: false })
+      .findOne({
+        _id: { $ne: ObjectId(request.params.id) },
+        $or: [
+          { national_id: request.body.national_id },
+          { contact_number: request.body.contact_number },
+        ],
+        is_deleted: false,
+      })
       .exec();
 
-    if (!existingPatient)
-      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    if (existingPatient) {
+      if (existingPatient) {
+        if (existingPatient.contact_number === request.body.contact_number) {
+          return badRequest(
+            response,
+            Constants.MESSAGES.DUPLICATE_CONTACT_NUMBER.code
+          );
+        }
+        if (existingPatient.national_id === request.body.national_id) {
+          return badRequest(
+            response,
+            Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code
+          );
+        }
+      }
+    }
 
-    const result = await updatePatientService(request.body);
+    const duplicateNationalId = await mongoose
+      .model("patients")
+      .findOne({
+        _id: { $ne: ObjectId(request.params.id) },
+        $or: [
+          { national_id: request.body.national_id },
+          { contact_number: request.body.contact_number },
+        ],
+        is_deleted: false,
+      })
+      .exec();
+
+    if (duplicateNationalId) {
+      if (request.body.national_id === existingPatient.national_id) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_NATIONAL_ID.code
+        );
+      }
+
+      if (duplicateNationalId.contact_number === request.body.contact_number) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_CONTACT_NUMBER.code
+        );
+      }
+    }
+
+    const result = await updatePatientService(request);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

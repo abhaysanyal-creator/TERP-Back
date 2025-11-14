@@ -17,14 +17,6 @@ export const createActivityController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    // const creator = await mongoose
-    //   .model("employees")
-    //   .findOne({ _id: request.body.created_by })
-    //   .exec();
-
-    // if (!creator)
-    //   return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-
     const isActivityExist = await mongoose
       .model("activities")
       .findOne({

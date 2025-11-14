@@ -1,10 +1,6 @@
-import {
-  Document,
-  Types,
-  type TypeExpressionOperatorReturningString,
-} from "mongoose";
+import { Document, Types } from "mongoose";
 import type { JwtPayload } from "jsonwebtoken";
-import { stringList } from "aws-sdk/clients/datapipeline";
+import enums from "../enums.json";
 
 export interface Role {
   name: string;
@@ -33,11 +29,6 @@ export interface User extends Document {
   otp_expires: Date;
   contact_number: number;
 }
-
-// export interface Permissions extends Document {
-//   name: string;
-//   created_by: Types.ObjectId;
-// }
 
 export interface IUserPermission extends Document {
   name: string;
@@ -77,8 +68,18 @@ export interface BookingDetails {
 }
 
 export interface Address {
-  city: string;
-  address: string;
+  address: {
+    id: Types.ObjectId;
+    name: string;
+  };
+  state: {
+    id: Types.ObjectId;
+    name: string;
+  };
+  city: {
+    id: Types.ObjectId;
+    name: string;
+  };
   country: string;
   postal_code: string;
 }
@@ -99,7 +100,7 @@ export interface EmpDocuments {
   signedUrl?: string;
   key: string;
   file_name: string;
-  category:string;
+  category: string;
 }
 
 export interface Employee extends Document {
@@ -110,15 +111,15 @@ export interface Employee extends Document {
   national_id: string;
   employee_type: string;
   position_types: string;
-  employee_roles: string;
+  employee_roles: Types.ObjectId;
   documents: EmpDocuments[];
   team_leader: boolean;
   is_deleted: boolean;
   time_zone: string;
-  hire_date: Date;
+  hire_date: string;
   role?: string;
   job_percentage: number;
-  dob: Date;
+  dob: string;
   organization_assignments: Organisation[];
   location_assignments: string[];
   address: Address;
@@ -183,7 +184,7 @@ export interface Organisations extends Document {
   is_active: boolean;
   // department: Department;
   is_deleted: boolean;
-  departments:IDepartment[]
+  departments: IDepartment[];
 }
 export interface PaymentMethod {
   method_type: string;
@@ -211,8 +212,11 @@ export interface Companion {
   hmo_docs: CompanionHMO;
 }
 
+export interface metaDataSchema {
+  id: Types.ObjectId;
+  name: string;
+}
 export interface Patients extends Document {
-  created_by: Types.ObjectId;
   patient_id: string;
   first_name: string;
   last_name: string;
@@ -226,9 +230,9 @@ export interface Patients extends Document {
   is_deleted: boolean;
   organisation_assignment: Organisation;
   address: Address;
-  disabilities_list: string[];
+  disabilities_list: metaDataSchema[];
   companions_list: Companion[];
-  allergies_list: string[];
+  allergies_list: metaDataSchema[];
 }
 
 export interface Therapists {
@@ -248,7 +252,6 @@ export interface Room {
   clinic_id: Types.ObjectId;
   room_type: string;
   room_size: number;
-  created_by: Types.ObjectId;
   bookings: [BookingSlot];
   is_active: Boolean;
   is_deleted: Boolean;
@@ -264,18 +267,18 @@ export interface ClinicPricing {
 export interface IRoom {
   id: Types.ObjectId;
   name: string;
-  status:string;
+  status: string;
 }
 
 export interface TreatmentPriceIndexing {
-  type:string;
+  type: string;
   specialisation: {
     id: Types.ObjectId;
     name: string;
   };
   organisation_cost: string;
   platform_cost: string;
-  include_patient_cost:boolean;
+  include_patient_cost: boolean;
   patient_cost: string;
 }
 export interface Activity extends Document {
@@ -283,7 +286,7 @@ export interface Activity extends Document {
     _id: Types.ObjectId;
     name: string;
   };
-  activity_name:string;
+  activity_name: string;
   department: {
     _id: Types.ObjectId;
     name: string;
@@ -295,7 +298,6 @@ export interface Activity extends Document {
   contacts: Contact[];
   area_in: string;
   type: string;
-  created_by: Types.ObjectId;
   is_deleted: boolean;
   branch_name: string;
   clinic_id: string;
@@ -307,7 +309,7 @@ export interface Activity extends Document {
   address: Address;
   operating_hours: WorkingHour;
   no_of_rooms: number;
-  treatment:TreatmentPriceIndexing[];
+  treatment: TreatmentPriceIndexing[];
 }
 
 export interface Bookings extends Document {
@@ -315,7 +317,6 @@ export interface Bookings extends Document {
   clinic_id: Types.ObjectId;
   room_id: Types.ObjectId;
   therapist: Therapists;
-  created_by: Types.ObjectId;
   // start_time: Date;
   // end_time: Date;
   is_active: Boolean;
@@ -340,6 +341,7 @@ export interface IDepartment extends Document {
   organisation: {
     _id: Types.ObjectId;
     name: string;
+    type: string;
   };
   is_deleted: boolean;
   is_active: boolean;
@@ -376,4 +378,109 @@ export interface IDepartment extends Document {
     name: string;
   };
   department_end_date?: Date;
+}
+
+export interface ISession extends Document {
+  patient: Types.ObjectId;
+  session_id: string;
+  clinic_id: Types.ObjectId;
+  treatment: Types.ObjectId;
+  session_type: string;
+  meeting_type: string;
+  therapist: {
+    _id: Types.ObjectId;
+    name: string;
+    is_arrived: boolean;
+  };
+  treatment_area: {
+    _id: Types.ObjectId;
+    label: string;
+    value: string;
+  };
+  patients: Array<{
+    _id: Types.ObjectId;
+    organization: {
+      _id: Types.ObjectId;
+      name: string;
+    };
+    department: {
+      _id: Types.ObjectId;
+      name: string;
+    };
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+    status: string;
+    is_arrived: boolean;
+    actual_start: Date;
+    actual_end: Date;
+    summary: string;
+    reason: string;
+  }>;
+  patient_groups: {
+    _id: Types.ObjectId;
+    group_name: string;
+    patients: Array<{
+      _id: Types.ObjectId;
+      organization: {
+        _id: Types.ObjectId;
+        name: string;
+      };
+      department: {
+        _id: Types.ObjectId;
+        name: string;
+      };
+      first_name: string;
+      last_name: string;
+      email: string;
+      phone: string;
+      status?: string;
+      is_arrived?: boolean;
+      actual_start?: Date;
+      actual_end?: Date;
+      summary?: string;
+      reason?: string;
+    }>;
+  }[];
+  session_planning: {
+    practice_name: string;
+    practice_guidelines: string;
+    activities: {
+      order: number;
+      game: {
+        _id: Types.ObjectId;
+        title: string;
+        thumbnail_file: string;
+      };
+    }[];
+  };
+  scheduled_start: string;
+  scheduled_date: string;
+  scheduled_end: string;
+  is_recurring: boolean;
+  recurrence?: {
+    repeat_every: {
+      value: { type: Number; default: 1 };
+      unit: String;
+    };
+    repeat_on: string[];
+    ends: {
+      type: String;
+      enum: string;
+    };
+    end_date: { type: Date };
+    occurrences: { type: Number };
+  };
+  compensation_session: {
+    make_up_session_date: Date;
+    start_time: Date;
+    end_time: Date;
+  };
+  status: string;
+  note: string;
+  cancellation_info?: {
+    reason: string;
+    note: string;
+  };
 }

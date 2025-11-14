@@ -165,22 +165,22 @@ export const listEmployeeService = (
 
       const totalCount = countResult[0]?.total || 0;
 
-      const employeesWithSignedUrls = await Promise.all(
-        employees.map(async (employee: any) => {
-          if (employee.documents && employee.documents.length > 0) {
-            employee.documents = await Promise.all(
-              employee.documents.map(async (doc: any) => ({
-                ...doc,
-                signedUrl: await getSignedUrlForView(doc.key),
-              }))
-            );
-          }
-          return employee;
-        })
-      );
+      // const employeesWithSignedUrls = await Promise.all(
+      //   employees.map(async (employee: any) => {
+      //     if (employee.documents && employee.documents.length > 0) {
+      //       employee.documents = await Promise.all(
+      //         employee.documents.map(async (doc: any) => ({
+      //           ...doc,
+      //           signedUrl: await getSignedUrlForView(doc.key),
+      //         }))
+      //       );
+      //     }
+      //     return employee;
+      //   })
+      // );
 
       resolve({
-        data: employeesWithSignedUrls,
+        data: employees,
         meta: {
           pages: Math.ceil(totalCount / limit),
           page,

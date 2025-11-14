@@ -106,3 +106,22 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
     throw error;
   }
 };
+
+export const getMeService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await mongoose
+        .model("users")
+        .findOne({ _id: ObjectId(payload.id) })
+        .select("-password")
+        .populate("role")
+        .exec();
+
+      resolve(user);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

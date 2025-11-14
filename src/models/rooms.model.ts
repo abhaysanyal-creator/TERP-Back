@@ -26,7 +26,6 @@ const bookingSlotSchema = new Schema(
 export const roomsSchema: Schema<Room> = new Schema(
   {
     clinic_id: { type: Schema.Types.ObjectId, ref: "clinics", required: true },
-    created_by: { type: Schema.Types.ObjectId, ref: "employees", required: true },
     room_type: { type: String, required: true },
     room_size: { type: Number, required: true },
     bookings: [bookingSlotSchema],

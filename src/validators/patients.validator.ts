@@ -8,9 +8,7 @@ export const createPatientValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (!request.body.created_by) {
-    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-  }
+ 
 
   if (!request.body.first_name) {
     return badRequest(response, Constants.MESSAGES.FIRST_NAME_REQ.code);
@@ -95,12 +93,8 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (!request.body.id) {
+  if (!request.params.id) {
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
-  }
-
-  if (!request.body.created_by) {
-    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
   }
 
   if (request.body.patient_id) {
@@ -124,7 +118,7 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
 
   if (
     request.body.national_id !== undefined &&
-    request.body.first_name.trim() === ""
+    request.body.national_id.trim() === ""
   ) {
     return badRequest(response, Constants.MESSAGES.NATIONAL_ID_REQ.code);
   }
@@ -145,10 +139,10 @@ export const updatePatientValidator: ExpressMiddlewareNext = (
 
   if (request.body.address !== undefined) {
     const addr = request.body.address;
-    if (!addr.city || addr.city.trim() === "") {
+    if (!addr.city || addr.city.name.trim() === "") {
       return badRequest(response, Constants.MESSAGES.CITY_REQ.code);
     }
-    if (!addr.country || addr.country.trim() === "") {
+    if (!addr.country || addr.country.name.trim() === "") {
       return badRequest(response, Constants.MESSAGES.COUNTRY_REQ.code);
     }
     if (!addr.address || addr.address.trim() === "") {

@@ -11,8 +11,18 @@ import enums from "../enums.json";
 
 export const addressSchema = new Schema<Address>(
   {
-    city: { type: String, required: true },
-    country: { type: String, required: true },
+    country: {
+      id: { type: Schema.Types.ObjectId, required: true, ref: "countries" },
+      name: { type: String, required: true },
+    },
+    state: {
+      id: { type: Schema.Types.ObjectId, required: true, ref: "states" },
+      name: { type: String, required: true },
+    },
+    city: {
+      id: { type: Schema.Types.ObjectId, required: true, ref: "cities" },
+      name: { type: String, required: true },
+    },
     address: { type: String, required: true },
     postal_code: { type: String, required: true },
   },
@@ -64,7 +74,7 @@ const organisationSchema: Schema<Organisations> = new Schema(
     address: addressSchema,
     contacts: [contactSchema],
     is_active: { type: Boolean, default: true },
-    is_deleted: { type: Boolean, default: false }
+    is_deleted: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

@@ -8,11 +8,6 @@ export const assignPermissionsValidator: ExpressMiddlewareNext = (
   next
 ) => {
   // ✅ Basic required fieldsclg
-
-  console.log("first")
-  if (!request.body.created_by) {
-    return badRequest(response, Lang.CREATED_BY_REQ);
-  }
   // ✅ Validate optional `permissions` array if provided
   if (request.body.permissions && !Array.isArray(request.body.permissions)) {
     return badRequest(response, "Permissions must be an array");
