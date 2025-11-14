@@ -111,15 +111,15 @@ export interface Employee extends Document {
   national_id: string;
   employee_type: string;
   position_types: string;
-  employee_roles: string;
+  employee_roles: Types.ObjectId;
   documents: EmpDocuments[];
   team_leader: boolean;
   is_deleted: boolean;
   time_zone: string;
-  hire_date: Date;
+  hire_date: string;
   role?: string;
   job_percentage: number;
-  dob: Date;
+  dob: string;
   organization_assignments: Organisation[];
   location_assignments: string[];
   address: Address;
@@ -381,13 +381,15 @@ export interface IDepartment extends Document {
 }
 
 export interface ISession extends Document {
+  patient: Types.ObjectId;
   session_id: string;
+  clinic_id: Types.ObjectId;
+  treatment: Types.ObjectId;
   session_type: string;
   meeting_type: string;
   therapist: {
     _id: Types.ObjectId;
-    first_name: string;
-    last_name: string;
+    name: string;
     is_arrived: boolean;
   };
   treatment_area: {
@@ -453,8 +455,9 @@ export interface ISession extends Document {
       };
     }[];
   };
-  scheduled_start: Date;
-  scheduled_end: Date;
+  scheduled_start: string;
+  scheduled_date: string;
+  scheduled_end: string;
   is_recurring: boolean;
   recurrence?: {
     repeat_every: {
@@ -471,8 +474,10 @@ export interface ISession extends Document {
   };
   compensation_session: {
     make_up_session_date: Date;
+    start_time: Date;
+    end_time: Date;
   };
-  reason: string;
+  status: string;
   note: string;
   cancellation_info?: {
     reason: string;

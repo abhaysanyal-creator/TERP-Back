@@ -1,31 +1,39 @@
 import mongoose from "mongoose";
 import { generateCode, ObjectId } from "../utils/helpers";
 import Constants from "../locales/constants";
+import enums from "../enums.json";
 
-export const createBookingService = (
+export const createAppointmentService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const booking_code = generateCode("B",10);
-      payload.booking_id = booking_code;
-
-      const newBooking = await mongoose.model("bookings").create(payload);
+      const newBooking = await mongoose.model("sessions").create(payload);
 
       if (!newBooking) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
       }
 
-      //Update the status of the rooms as booked
-      await mongoose.model("rooms").findByIdAndUpdate(payload.room_id, {
-        $push: {
-          bookings: {
-            day: payload.booking_details.day,
-            slots: payload.booking_details.slots,
-            booking_id: newBooking._id,
-          },
+      const pushed = await mongoose.model("activities").updateOne(
+        {
+          _id: ObjectId(payload.clinic_id),
+          "rooms.id": ObjectId(payload.treatment_area.id),
         },
-      });
+        {
+          $push: {
+            "rooms.$.bookings": {
+              session_id: newBooking.session_id,
+              therapist_id: newBooking.therapist.id,
+              patient_id: newBooking.patient,
+              scheduled_date: newBooking.scheduled_date,
+              scheduled_start: newBooking.scheduled_start,
+              scheduled_end: newBooking.scheduled_end,
+              status: enums.Room_Status.BOOKED,
+            },
+          },
+        }
+      );
+
       resolve(newBooking);
     } catch (error) {
       reject(error);
@@ -33,13 +41,13 @@ export const createBookingService = (
   });
 };
 
-export const viewBookingService = (
+export const viewAppointmentService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
       const existingBooking = await mongoose
-        .model("bookings")
+        .model("sessions")
         .findById(ObjectId(payload.id))
         .exec();
 
@@ -64,7 +72,7 @@ export const updateBookingService = (
       const id = payload.params.id;
 
       const updatedBooking = await mongoose
-        .model("employees")
+        .model("sessions")
         .findOneAndUpdate(
           { _id: ObjectId(id) },
           {

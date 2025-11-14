@@ -7,7 +7,6 @@ import patientModel from "./patients.model";
 import otpModel from "./otp.model";
 import activityModel from "./activity.model";
 import roomModel from "./rooms.model";
-import bookingModel from "./booking.model";
 import { Country } from "./country.model";
 import { State } from "./state.model";
 import { City } from "./city.model";
@@ -28,7 +27,6 @@ export {
   otpModel,
   activityModel,
   roomModel,
-  bookingModel,
   metaDataModel,
   departmentModel,
   sessionModel

@@ -9,7 +9,6 @@ import type {
 import enums from "../enums.json";
 import { addressSchema } from "./organisation.model";
 
-
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {
     id: { type: String },
@@ -83,13 +82,17 @@ const employeeSchema = new Schema<Employee>(
     is_deleted: { type: Boolean, default: false },
     is_active: { type: Boolean, default: true },
     position_types: { type: String, required: true }, // Full_time,Part_time etc
-    employee_roles: { type: String, required: true }, //
+    employee_roles: {
+      type: Schema.Types.ObjectId,
+      ref: "roles",
+      required: true,
+    }, //
     team_leader: { type: Boolean, required: true },
-    hire_date: { type: Date, required: true },
+    hire_date: { type: String, required: true },
     role: { type: Schema.Types.String },
     job_percentage: { type: Number, min: 0, max: 100, required: true },
     documents: [DocSchema],
-    dob: { type: Date, required: true },
+    dob: { type: String, required: true },
     organization_assignments: [organisationSchema],
     location_assignments: [{ type: String, required: true }],
     address: { type: addressSchema, required: true },

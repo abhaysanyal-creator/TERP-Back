@@ -4,86 +4,74 @@ import { ExpressMiddleware } from "../types/express.types";
 import Constants from "../locales/constants";
 import {
   changeBookingStatusService,
-  createBookingService,
+  createAppointmentService,
   deleteBookingService,
   updateBookingService,
-  viewBookingService,
-} from "../services/booking.service";
+  viewAppointmentService,
+} from "../services/sessions.service";
 import mongoose from "mongoose";
-import { isRoomAvailable, ObjectId } from "../utils/helpers";
+import { generateCode, ObjectId } from "../utils/helpers";
 import isEqual from "lodash/isEqual";
+import enums from "../enums.json";
 
-export const createBookingController: ExpressMiddleware = async (
+export const createAppointmentController: ExpressMiddleware = async (
   request,
   response
 ) => {
   try {
-    const isClinicExist = await mongoose
-      .model("clinics")
-      .findById(request.body.clinic_id)
-      .exec();
+    const session_id = await generateCode("TH", 10);
+    request.body.session_id = session_id;
 
-    if (!isClinicExist) {
-      return badRequest(response, Constants.MESSAGES.CLINIC_ID_REQ.code);
-    }
-
-    // Therpist Availability Check
-
-    const therapist = await mongoose
-      .model("employees")
-      .findById(ObjectId(request.body.therapist.id))
-      .exec();
-
-    if (!therapist) {
-      return badRequest(response, Constants.MESSAGES.THERAPIST_FIELD_REQ.code);
-    }
-
-    const therapistBusy = therapist.bookings?.some(
-      (b: any) =>
-        b.day === request.body.day &&
-        b.slots.some(
-          (slot: any) =>
-            request.body.start_time < slot.end_time &&
-            request.body.end_time > slot.start_time
-        )
-    );
-
-    if (therapistBusy) {
-      return badRequest(response, Constants.MESSAGES.THERAPIST_UNAVAIL.code);
-    }
-
-    // Room Availability Check
-
-    const room = await mongoose.model("rooms").find({
-      clinic_id: request.body.clinic_id,
-      $nor: [
-        {
-          booked_slots: {
-            $elemMatch: {
-              start_time: { $lt: request.body.end_time },
-              end_time: { $gt: request.body.start_time },
+    const overlappingBooking = await mongoose.model("activities").findOne({
+      _id: ObjectId(request.body.clinic_id),
+      "rooms.id": ObjectId(request.body.treatment_area.id),
+      "rooms.bookings": {
+        $elemMatch: {
+          scheduled_date: request.body.scheduled_date,
+          $or: [
+            {
+              scheduled_start: { $lt: request.body.scheduled_end },
+              scheduled_end: { $gt: request.body.scheduled_start },
             },
-          },
+          ],
+          status: "booked",
         },
-      ],
+      },
     });
 
-    if (!room) {
-      return badRequest(response, Constants.MESSAGES.INVALID_ROOMS_FORMAT.code);
-    }
-
-    if (
-      !isRoomAvailable(
-        room,
-        request.body.day,
-        request.body.start_time,
-        request.body.end_time
-      )
-    ) {
+    if (overlappingBooking) {
       return badRequest(response, Constants.MESSAGES.ROOM_UNAVAIL.code);
     }
 
-    const result = await createBookingService(request.body);
+    const therapist = await mongoose
+      .model("employees")
+      .findOne({ _id: ObjectId(request.body.therapist.id) })
+      .lean()
+      .exec();
+
+    if (!therapist) {
+      return badRequest(
+        response,
+        Constants.MESSAGES.THERAPIST_DOESNT_EXIST.code
+      );
+    }
+
+    const overLappingAppointment = await mongoose
+      .model("sessions")
+      .findOne({
+        "therapist.id": ObjectId(request.body.therapist.id),
+        scheduled_date: request.body.scheduled_date,
+        status: { $ne: enums.SessionStatus.CANCELLED },
+        $or: [
+          { scheduled_start: { $lt: request.body.scheduled_start } },
+          { scheduled_end: { $gt: request.body.scheduled_end } },
+        ],
+      });
+
+    if (overLappingAppointment) {
+      return badRequest(response, Constants.MESSAGES.THERAPIST_UNAVAIL.code);
+    }
+    const result = await createAppointmentService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
@@ -91,7 +79,7 @@ export const createBookingController: ExpressMiddleware = async (
   }
 };
 
-export const viewBookingController: ExpressMiddleware = async (
+export const viewAppointmentController: ExpressMiddleware = async (
   request,
   response
 ) => {
@@ -105,7 +93,7 @@ export const viewBookingController: ExpressMiddleware = async (
       return badRequest(response, Constants.MESSAGES.ID_REQ.code);
     }
 
-    const result = await viewBookingService(request.params);
+    const result = await viewAppointmentService(request.params);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

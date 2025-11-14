@@ -7,33 +7,19 @@ import type {
   TimeSlot,
   TreatmentPriceIndexing,
 } from "../types/interface.types";
-import { roomsSchema } from "./rooms.model";
 import enums from "../enums.json";
 import { addressSchema, contactSchema } from "./organisation.model";
 
-const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema(
-  {
-    specialisation: {
-      id: { type: Schema.Types.ObjectId, required: true },
-      name: { type: String, required: true },
-    },
-    organisation_cost: { type: String },
-    platform_cost: { type: String },
-    include_patient_cost: { type: Boolean, default: false },
-    patient_cost: { type: String },
+const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema({
+  specialisation: {
+    id: { type: Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true },
   },
-  { _id: false }
-);
-
-// const AddressSchema = new Schema<Address>(
-//   {
-//     city: { type: String, required: true },
-//     country: { type: String, required: true },
-//     address: { type: String, required: true },
-//     postal_code: { type: String, required: true },
-//   },
-//   { _id: false }
-// );
+  organisation_cost: { type: String },
+  platform_cost: { type: String },
+  include_patient_cost: { type: Boolean, default: false },
+  patient_cost: { type: String },
+});
 
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {
@@ -55,6 +41,40 @@ const workingHourSchema = new Schema(
   { _id: false }
 );
 
+export const roomSchema = new Schema(
+  {
+    id: {
+      type: Schema.Types.ObjectId,
+      default: () => new mongoose.Types.ObjectId(),
+    },
+    name: { type: String, required: true },
+
+    status: {
+      type: String,
+      enum: Object.values(enums.Room_Status),
+      default: enums.Room_Status.AVAILABLE,
+    },
+    bookings: [
+      {
+        session_id: { type: String },
+        therapist_id: { type: Schema.Types.ObjectId, ref: "employees" },
+        patient_id: { type: Schema.Types.ObjectId, ref: "patients" },
+        scheduled_date: { type: String, required: true },
+        scheduled_start: { type: String, required: true },
+        scheduled_end: { type: String, required: true },
+        status: {
+          type: String,
+          enum: enums.Room_Status,
+          default: "booked",
+        },
+      },
+    ],
+    is_active: { type: Boolean, default: true },
+    is_deleted: { type: Boolean, default: false },
+  },
+  { _id: false }
+);
+
 const TherapistSchema: Schema<Therapists> = new Schema(
   {
     id: {
@@ -66,18 +86,6 @@ const TherapistSchema: Schema<Therapists> = new Schema(
     specialisation: { type: String },
     working_hours: [workingHourSchema],
     organisation: { type: Schema.Types.ObjectId, ref: "organisations" },
-  },
-  { _id: false }
-);
-
-export const roomSchema: Schema<IRoom> = new Schema(
-  {
-    id: {
-      type: Schema.Types.ObjectId,
-      default: () => new mongoose.Types.ObjectId(),
-    },
-    name: { type: String },
-    status: { type: String, default: enums.Room_Status.AVAILABLE },
   },
   { _id: false }
 );
