@@ -16,7 +16,10 @@ import { ISession } from "../types/interface.types";
 
 const SessionSchema = new Schema<ISession>(
   {
-    patient: { type: Schema.Types.ObjectId, required: true, ref: "patients" },
+    patient: {
+      id: { type: Schema.Types.ObjectId, required: true, ref: "patients" },
+      name: { type: String },
+    },
     session_id: { type: String },
     clinic_id: {
       type: Schema.Types.ObjectId,
@@ -33,12 +36,12 @@ const SessionSchema = new Schema<ISession>(
       enum: Object.values(enums.MeetingType),
     },
     therapist: {
-      id: { type: Schema.Types.ObjectId, ref: "employees", required: true },
+      id: { type: Schema.Types.ObjectId, ref: "employees" },
       name: { type: String },
       is_arrived: { type: Boolean, default: false },
     },
     treatment_area: {
-      id: { type: Schema.Types.ObjectId, required: true },
+      id: { type: Schema.Types.ObjectId },
       name: { type: String },
       value: { type: String },
     },
@@ -85,8 +88,8 @@ const SessionSchema = new Schema<ISession>(
       enum: Object.values(enums.SessionStatus),
       default: null,
     },
-    is_active:{type:Boolean,default:true},
-    is_deleted:{type:Boolean,default:false},
+    is_active: { type: Boolean, default: true },
+    is_deleted: { type: Boolean, default: false },
     note: { type: String, default: null },
     cancellation_info: {
       reason: { type: String, enum: Object.values(enums.CancellationReason) },

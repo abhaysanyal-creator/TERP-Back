@@ -159,6 +159,9 @@ export const listDepartmentService = (
       if (payload.organisation_id)
         and.push({ "organisation.id": ObjectId(payload.organisation_id) });
 
+      if (payload.organisation_type)
+        and.push({ "organisation.type": ObjectId(payload.organisation_type) });
+
       if (payload.search) {
         or.push(
           { "organisation.name": { $regex: payload.search, $options: "i" } },

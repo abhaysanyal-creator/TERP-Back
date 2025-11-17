@@ -141,3 +141,67 @@ export const changeBookingStatusService = (
     }
   });
 };
+
+export const listAppointmentService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const page = Number(payload.page) || 1;
+      const limit = Number(payload.limit) || 10;
+      const skip = (page - 1) * limit;
+
+      const match: Record<string, any> = {
+        is_deleted: false,
+      };
+
+      const or: any[] = [];
+      const and: any[] = [];
+
+      if (payload.mobile_phone)
+        and.push({ mobile_phone: payload.mobile_phone });
+
+      if (payload.employee_roles)
+        and.push({ employee_roles: ObjectId(payload.employee_roles) });
+
+      if (payload.is_active !== undefined)
+        and.push({ is_active: payload.is_active });
+
+      if (payload.search) {
+        or.push({ first_name: { $regex: payload.search, $options: "i" } });
+        or.push({ employee_id: { $regex: payload.search, $options: "i" } });
+      }
+
+      if (or.length) and.push({ $or: or });
+      if (and.length) match.$and = and;
+
+      const pipeline: any[] = [
+        { $match: match },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit },
+      ];
+
+      const countPipeline = [{ $match: match }, { $count: "total" }];
+
+      const [sessions, countResult] = await Promise.all([
+        mongoose.model("sessions").aggregate(pipeline),
+        mongoose.model("sessions").aggregate(countPipeline),
+      ]);
+
+      const totalCount = countResult[0]?.total || 0;
+
+      resolve({
+        data: sessions,
+        meta: {
+          pages: Math.ceil(totalCount / limit),
+          page,
+          limit,
+          total: totalCount,
+        },
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

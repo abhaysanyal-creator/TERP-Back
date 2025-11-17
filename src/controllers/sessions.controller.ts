@@ -6,6 +6,7 @@ import {
   changeBookingStatusService,
   createAppointmentService,
   deleteBookingService,
+  listAppointmentService,
   updateBookingService,
   viewAppointmentService,
 } from "../services/sessions.service";
@@ -183,6 +184,19 @@ export const changeBookingStatusController: ExpressMiddleware = async (
 
     const result = await changeBookingStatusService(request.body);
 
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const listAppointmentController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const result = await listAppointmentService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

@@ -4,11 +4,13 @@ import {
   changeBookingStatusValidator,
   createAppointmentValidator,
   deleteBookingValidator,
+  listAppointmentsValidator,
   updateBookingValidator,
   viewAppointmentValidator,
 } from "../validators/sessions.validator";
 import {
   createAppointmentController,
+  listAppointmentController,
   updateBookingsController,
   viewAppointmentController,
 } from "../controllers/sessions.controller";
@@ -27,6 +29,13 @@ router.get(
   authorisationMiddleware,
   viewAppointmentValidator,
   viewAppointmentController
+);
+
+router.post(
+  "/list",
+  authorisationMiddleware,
+  listAppointmentsValidator,
+  listAppointmentController
 );
 
 export default router;
