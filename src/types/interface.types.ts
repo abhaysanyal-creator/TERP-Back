@@ -381,7 +381,7 @@ export interface IDepartment extends Document {
 }
 
 export interface ISession extends Document {
-  patient: Types.ObjectId;
+  patient: {id:Types.ObjectId,name:string};
   session_id: string;
   clinic_id: Types.ObjectId;
   treatment: Types.ObjectId;

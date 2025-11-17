@@ -25,7 +25,7 @@ export const createAppointmentValidator: ExpressMiddlewareNext = (
     if (therapist.name === "") {
       return badRequest(response, Constants.MESSAGES.THERAPIST.NAME_REQ.code);
     }
-    if (therapist.id==="") {
+    if (therapist.id === "") {
       return badRequest(response, Constants.MESSAGES.THERAPIST.ID_REQ.code);
     }
   }
@@ -124,6 +124,20 @@ export const changeBookingStatusValidator: ExpressMiddlewareNext = (
 ) => {
   if (!request.params.id) {
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  next();
+};
+
+export const listAppointmentsValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.page) {
+    return badRequest(response, Constants.MESSAGES.PAGE.code);
+  }
+  if (!request.body.limit) {
+    return badRequest(response, Constants.MESSAGES.LIMIT.code);
   }
   next();
 };

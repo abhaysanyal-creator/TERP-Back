@@ -19,6 +19,14 @@ export default {
       code: "THERAPIST_DOESNT_EXIST",
       message: "Therapist doesnt exist!!",
     },
+    COMPANION_NATIONAL_ID_REPEATED:{
+      code:"COMPANION_NATIONAL_ID_REPEATED",
+      message:"Companion national ID repeated!!",
+    },
+     COMPANION_NUMBER_REPEATED:{
+      code:"COMPANION_CONTACT_NUMBER_REPEATED",
+      message:"Companion Contact Number repeated!!",
+    },
     COMPANION_REPEATED: {
       code: "COMPANION_ADDITION_REPEATED",
       message: "Companion addition repeated!!",

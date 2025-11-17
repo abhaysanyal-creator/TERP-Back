@@ -4,7 +4,12 @@ import { badRequest, success } from "../response/response";
 import Constants from "../locales/constants";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import { ObjectId } from "../utils/helpers";
-import { createDepartmentService, listDepartmentService, updateDepartmentService, viewDepartmentService } from "../services/department.service";
+import {
+  createDepartmentService,
+  listDepartmentService,
+  updateDepartmentService,
+  viewDepartmentService,
+} from "../services/department.service";
 
 export const createDeptController: ExpressMiddleware = async (
   request,
@@ -30,6 +35,27 @@ export const createDeptController: ExpressMiddleware = async (
     ) {
       return badRequest(response, Constants.MESSAGES.ORG_ID_REQUIRED.code);
     }
+
+    // Duplicate companions check
+
+    const companions = request.body.contacts || [];
+
+    const phoneSet = new Set();
+
+    let duplicatePhone = false;
+
+    for (const c of companions) {
+
+      if (phoneSet.has(c.phone)) duplicatePhone = true;
+      else phoneSet.add(c.phone);
+    }
+    if (duplicatePhone) {
+      return badRequest(
+        response,
+        Constants.MESSAGES.COMPANION_NUMBER_REPEATED.code
+      );
+    }
+
     const result = await createDepartmentService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
