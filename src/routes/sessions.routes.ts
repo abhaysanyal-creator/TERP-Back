@@ -1,17 +1,17 @@
 import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
-  changeBookingStatusValidator,
   createAppointmentValidator,
-  deleteBookingValidator,
   listAppointmentsValidator,
-  updateBookingValidator,
+  updateAppointmentsValidator,
+  updateSessionsStatusValidator,
   viewAppointmentValidator,
 } from "../validators/sessions.validator";
 import {
   createAppointmentController,
   listAppointmentController,
-  updateBookingsController,
+  updateAppointmentsController,
+  updateSessionStatusController,
   viewAppointmentController,
 } from "../controllers/sessions.controller";
 
@@ -29,6 +29,21 @@ router.get(
   authorisationMiddleware,
   viewAppointmentValidator,
   viewAppointmentController
+);
+
+router.patch(
+  "/update/:id",
+  authorisationMiddleware,
+  updateAppointmentsValidator,
+  updateAppointmentsController
+);
+
+
+router.patch(
+  "/change-status/:id",
+  authorisationMiddleware,
+  updateSessionsStatusValidator,
+  updateSessionStatusController
 );
 
 router.post(

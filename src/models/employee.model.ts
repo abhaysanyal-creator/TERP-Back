@@ -12,8 +12,8 @@ import { addressSchema } from "./organisation.model";
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {
     id: { type: String },
-    start_time: { type: Date, required: true },
-    end_time: { type: Date, required: true },
+    start_time: { type: String, required: true },
+    end_time: { type: String, required: true },
   },
   {
     _id: false,
@@ -64,6 +64,36 @@ export const DocSchema: Schema<EmpDocuments> = new Schema(
   }
 );
 
+export const blockTimeSchema = new Schema(
+  {
+    id: { type: String, required: true },
+    date: { type: String, required: true },
+    start_time: { type: String, required: true },
+    end_time: { type: String, required: true },
+    created_by: {
+      type: Schema.Types.ObjectId,
+      ref: "employees",
+      required: true,
+    },
+    patient: { type: Schema.Types.ObjectId, ref: "patients" },
+    department: { type: Schema.Types.ObjectId, ref: "departments" },
+    activity: { type: Schema.Types.ObjectId, ref: "activities" },
+    created_by_type: {
+      type: String,
+      enum: ["therapist", "clinic", "reception"],
+      default: null,
+    },
+    reason: { type: String, enum: enums.BlockType },
+    description: { type: String, maxlength: 50 },
+    organisation_id: { type: Schema.Types.ObjectId, ref: "organisations" },
+    is_recurring: { type: Boolean, default: false },
+  },
+  {
+    _id: false,
+    timestamps: true,
+  }
+);
+
 const employeeSchema = new Schema<Employee>(
   {
     employee_id: { type: String, required: true, unique: true },
@@ -95,6 +125,7 @@ const employeeSchema = new Schema<Employee>(
     dob: { type: String, required: true },
     organization_assignments: [organisationSchema],
     location_assignments: [{ type: String, required: true }],
+    blocked_times: [blockTimeSchema],
     address: { type: addressSchema, required: true },
     time_zone: { type: String, required: true },
     mobile_phone: { type: String, required: true },

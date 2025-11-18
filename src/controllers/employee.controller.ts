@@ -1,5 +1,6 @@
 import { badRequest, success } from "../response/response";
 import {
+  blockTimeEmployeeService,
   changeWorkingHoursEmployeeService,
   createEmployeeService,
   deleteEmployeeService,
@@ -9,8 +10,8 @@ import {
 } from "../services/employee.service";
 import type { ExpressMiddleware } from "../types/express.types";
 import { getErrorMessage } from "../middlewares/app.middlewares";
-import mongoose from "mongoose";
-import { ObjectId } from "../utils/helpers";
+import mongoose, { mongo } from "mongoose";
+import { isBlockWithinWorkingHours, ObjectId } from "../utils/helpers";
 import Constants from "../locales/constants";
 
 export const createEmployeeController: ExpressMiddleware = async (
@@ -162,6 +163,35 @@ export const changeWorkingHoursEmployeeController: ExpressMiddleware = async (
     }
     const result = await changeWorkingHoursEmployeeService(request.body);
 
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const blockTimeEmployeeController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const existingEmployee = await mongoose.model("employees").findOne({
+      _id: ObjectId(request.body.id),
+      is_deleted: false,
+    });
+
+    if (!existingEmployee) {
+      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    }
+
+    if (!(await isBlockWithinWorkingHours(existingEmployee, request.body))) {
+      return badRequest(
+        response,
+        Constants.MESSAGES.REQUEST_NOT_WITHIN_WORKING_HOURS.code
+      );
+    }
+
+    const result = await blockTimeEmployeeService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

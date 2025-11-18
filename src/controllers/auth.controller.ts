@@ -4,6 +4,7 @@ import { getErrorMessage } from "../middlewares/app.middlewares";
 import {
   getMeService,
   loginService,
+  resendOtpService,
   verifyOtpService,
 } from "../services/auth.service";
 import Constants from "../locales/constants";
@@ -63,6 +64,18 @@ export const getMeController: ExpressMiddleware = async (request, response) => {
   try {
     const user = (request as any).user;
     const result = await getMeService(user);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const resendOtpController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const result = await resendOtpService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     return badRequest(response, getErrorMessage(error));

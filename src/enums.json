@@ -96,6 +96,7 @@
     "CAMPUS": "campus"
   },
   "SessionStatus": {
+    "APPROVAL_PENDING": "approval_pending",
     "SCHEDULED": "scheduled",
     "IN_PROGRESS": "in_progress",
     "COMPLETED": "completed",
@@ -137,5 +138,11 @@
     "THURSDAY": "thu",
     "FRIDAY": "fri",
     "SATURDAY": "sat"
+  },
+  "BlockType": {
+    "PATIENT_MEET": "patient_meet",
+    "VACATION": "vacation",
+    "UN_AVAILABLE": "un_available",
+    "TEAM_MEETING": "team_meeting"
   }
 }

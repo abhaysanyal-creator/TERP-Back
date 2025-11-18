@@ -8,6 +8,10 @@ export default {
       code: "EMP_ID_REQ",
       message: "Employee Id Required!!",
     },
+    OTP_TOO_EARLY: {
+      code: "OTP_RESEND_TOO_EARLY",
+      message: "Otp resend too early!!",
+    },
     DOC_TYPE_REQ: {
       code: "DOC_TYPE_REQ",
       message: "Document type is required!!",
@@ -19,13 +23,13 @@ export default {
       code: "THERAPIST_DOESNT_EXIST",
       message: "Therapist doesnt exist!!",
     },
-    COMPANION_NATIONAL_ID_REPEATED:{
-      code:"COMPANION_NATIONAL_ID_REPEATED",
-      message:"Companion national ID repeated!!",
+    COMPANION_NATIONAL_ID_REPEATED: {
+      code: "COMPANION_NATIONAL_ID_REPEATED",
+      message: "Companion national ID repeated!!",
     },
-     COMPANION_NUMBER_REPEATED:{
-      code:"COMPANION_CONTACT_NUMBER_REPEATED",
-      message:"Companion Contact Number repeated!!",
+    COMPANION_NUMBER_REPEATED: {
+      code: "COMPANION_CONTACT_NUMBER_REPEATED",
+      message: "Companion Contact Number repeated!!",
     },
     COMPANION_REPEATED: {
       code: "COMPANION_ADDITION_REPEATED",
@@ -51,6 +55,10 @@ export default {
       code: "INCOMPLETE_ORGANISATION_DETAILS",
       message: "Module name is required!!",
     },
+    MAX_50_CHAR: {
+      code: "MAXIMUM_50_CHARACTERS",
+      message: "Maximum 50 characters allowed!!",
+    },
     MODULE_REQUIRED: {
       code: "MODULE_NAME_REQUIRED",
       message: "Module name is required!!",
@@ -64,8 +72,20 @@ export default {
       code: "FILE_TYPE_REQUIRED_IMAGE/VIDEO",
       message: "File Type is required!!",
     },
+    REQUEST_NOT_WITHIN_WORKING_HOURS: {
+      code: "REQUESTED_HOURS_NOT_WITHIN_WORKING_HOURS",
+      message: "Requeusted Hours not within the Working Hours!!",
+    },
     TYPE_REQUIRED: {
       code: "TYPE_REQUIRED",
+      message: "Type is required!!",
+    },
+    INVALID_BLOCK_TYPE_REQUIRED: {
+      code: "INVALID_BLOCK_TYPE",
+      message: "Invalid block type!!",
+    },
+    BLOCK_TYPE_REQUIRED: {
+      code: "BLOCK_TYPE_REQUIRED",
       message: "Type is required!!",
     },
     SESSION_DATE_REQ: {

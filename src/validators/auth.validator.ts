@@ -12,3 +12,9 @@ export const loginValidator: ExpressMiddlewareNext = (request, response, next) =
   next();
 };
 
+export const resendCodeValidator: ExpressMiddlewareNext = (request, response, next) => {
+  if (!request.body.email) {
+    return badRequest(response, Lang.EMAIL_IS_REQUIRED);
+  }
+  next();
+};

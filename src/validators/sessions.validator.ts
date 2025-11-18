@@ -1,6 +1,7 @@
 import { badRequest } from "../response/response";
 import { ExpressMiddlewareNext } from "../types/express.types";
 import Constants from "../locales/constants";
+import enums from "../enums.json";
 
 export const createAppointmentValidator: ExpressMiddlewareNext = (
   request,
@@ -124,6 +125,34 @@ export const changeBookingStatusValidator: ExpressMiddlewareNext = (
 ) => {
   if (!request.params.id) {
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  next();
+};
+
+export const updateAppointmentsValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  next();
+};
+
+export const updateSessionsStatusValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.status) {
+    return badRequest(response, Constants.MESSAGES.STATUS_REQ.code);
+  }
+  if (
+    request.body.status &&
+    !Object.values(enums.SessionStatus).includes(request.body.status)
+  ) {
+    return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
   }
   next();
 };

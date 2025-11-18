@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
+  blockTimeValidator,
   changeWorkingHoursEmployeeValidator,
   createEmployeeValidator,
   deleteEmployeeValidator,
@@ -9,6 +10,7 @@ import {
   viewEmployeeValidator,
 } from "../validators/employee.validator";
 import {
+  blockTimeEmployeeController,
   changeWorkingHoursEmployeeController,
   createEmployeeController,
   deleteEmployeeController,
@@ -54,13 +56,18 @@ router.patch(
   changeWorkingHoursEmployeeController
 );
 
+router.patch(
+  "/block-time",
+  authorisationMiddleware,
+  blockTimeValidator,
+  blockTimeEmployeeController
+);
+
 router.post(
   "/list",
   authorisationMiddleware,
   listEmployeeValidator,
   listEmployeeController
 );
-
-
 
 export default router;

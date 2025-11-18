@@ -68,7 +68,7 @@ export const generateOTP = () => {
 export const otps = new Map();
 
 export const saveOtp = async (userId: mongoose.Types.ObjectId, otp: string) => {
-  const expiresAt = Date.now() + 5 * 60 * 1000;
+  const expiresAt = Date.now() + 3 * 60 * 1000;
   // otps.set(userId, { otp, expiresAt });
 
   await mongoose
@@ -173,4 +173,87 @@ export const validateCompanionDuplicates = (companionsList = []) => {
   }
 
   return null; // No duplicates
+};
+
+export const combineTimeDate = (dateStr: string, timeStr: string): Date => {
+  return new Date(`${dateStr}T${timeStr}:00`);
+};
+
+// export const isBlockWithinWorkingHours = (
+//   employee: any,
+//   block: any
+// ): boolean => {
+//   const blockStart = new Date(block.start_time);
+//   const blockEnd = new Date(block.end_time);
+
+//   const day = blockStart.getDay();
+
+//   // Checks blocking hours vs working hours
+//   const workingDay = employee.working_hours.find(
+//     (workinghour: any) => workinghour.day === day
+//   );
+
+//   if (!workingDay || !workingDay.enabled) return false;
+
+//   for (const slot of workingDay.slots) {
+//     const slotStart = new Date(slot.start_time).getTime();
+//     const slotEnd = new Date(slot.end_time).getTime();
+
+//     const blockStartMs = blockStart.getTime();
+//     const blockEndMs = blockEnd.getTime();
+//     console.log("====================", blockEndMs, slotEnd);
+
+//     if (blockStartMs >= slotStart && blockEndMs <= slotEnd) {
+//       return true;
+//     }
+//   }
+
+//   return false;
+// };
+
+
+export const isBlockWithinWorkingHours = (employee: any, block: any): boolean => {
+  const blockStart = new Date(block.start_time);
+  const blockEnd = new Date(block.end_time);
+
+  const day = blockStart.getDay();
+
+  const workingDay = employee.working_hours.find(
+    (wh: any) => wh.day === day
+  );
+
+  if (!workingDay || !workingDay.enabled) return false;
+
+  // Extract date from block (yyyy-mm-dd)
+  const dateStr = blockStart.toISOString().split("T")[0];
+
+  for (const slot of workingDay.slots) {
+    const slotStartDate = new Date(slot.start_time);
+    const slotEndDate = new Date(slot.end_time);
+
+    // Extract HH:mm from these ISO dates
+    const slotStartHHMM = slotStartDate.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    const slotEndHHMM = slotEndDate.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    // Combine block date with slot time
+    const slotStart = new Date(`${dateStr}T${slotStartHHMM}:00`);
+    const slotEnd = new Date(`${dateStr}T${slotEndHHMM}:00`);
+
+    // Convert to ms for comparison
+    const blockStartMs = blockStart.getTime();
+    const blockEndMs = blockEnd.getTime();
+
+    if (blockStartMs >= slotStart.getTime() && blockEndMs <= slotEnd.getTime()) {
+      return true;
+    }
+  }
+
+  return false;
 };

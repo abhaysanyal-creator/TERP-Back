@@ -96,6 +96,32 @@ export const deleteEmployeeService = (
   });
 };
 
+export const blockTimeEmployeeService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const updatedUser = await mongoose
+        .model("employees")
+        .findOneAndUpdate(
+          { _id: ObjectId(payload.id), is_deleted: { $ne: true } },
+          { $set: { blocked_times: payload } },
+          { returnDocument: "after" }
+        )
+        .exec();
+
+      if (!updatedUser) {
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
+      }
+
+      console.log(updatedUser)
+      resolve(updatedUser);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 export const changeWorkingHoursEmployeeService = (
   payload: Record<string, any>
 ): Record<string, any> => {
@@ -146,7 +172,8 @@ export const listEmployeeService = (
       if (payload.employee_roles)
         and.push({ "employee_roles.id": ObjectId(payload.employee_roles) });
 
-      if (payload.is_active !==undefined) and.push({ is_active: payload.is_active });
+      if (payload.is_active !== undefined)
+        and.push({ is_active: payload.is_active });
 
       if (payload.search) {
         or.push({ first_name: { $regex: payload.search, $options: "i" } });

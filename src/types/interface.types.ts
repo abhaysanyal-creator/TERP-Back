@@ -53,8 +53,8 @@ export interface OTP {
 
 export interface TimeSlot {
   id: String;
-  start_time: Date;
-  end_time: Date;
+  start_time: string;
+  end_time: string;
 }
 
 export interface WorkingHour {
@@ -102,6 +102,20 @@ export interface EmpDocuments {
   file_name: string;
   category: string;
 }
+export interface BlockTime {
+  id?: string;
+  start_time: Date;
+  end_time: Date;
+  created_by: string;
+  created_by_type: string;
+  department:Types.ObjectId;
+  activity:Types.ObjectId;
+  patient: Types.ObjectId;
+  reason?: string;
+  description?: string;
+  organisation_id?: string;
+  is_recurring?: boolean;
+}
 
 export interface Employee extends Document {
   employee_id: string;
@@ -117,6 +131,7 @@ export interface Employee extends Document {
   is_deleted: boolean;
   time_zone: string;
   hire_date: string;
+  blocked_times?: BlockTime[];
   role?: string;
   job_percentage: number;
   dob: string;
@@ -381,10 +396,10 @@ export interface IDepartment extends Document {
 }
 
 export interface ISession extends Document {
-  patient: {id:Types.ObjectId,name:string};
+  patient: { id: Types.ObjectId; name: string };
   session_id: string;
   clinic_id: Types.ObjectId;
-  treatment: Types.ObjectId;
+  treatment: { id: Types.ObjectId; name: string };
   session_type: string;
   meeting_type: string;
   therapist: {
