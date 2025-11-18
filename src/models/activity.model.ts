@@ -24,8 +24,8 @@ const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema({
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {
     id: { type: String },
-    start_time: { type: Date, required: true },
-    end_time: { type: Date, required: true },
+    start_time: { type: String, required: true },
+    end_time: { type: String, required: true },
   },
   {
     _id: false,

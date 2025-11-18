@@ -42,8 +42,8 @@ export const contactSchema = new Schema<Contact>(
 
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {
-    start_time: { type: Date, required: true },
-    end_time: { type: Date, required: true },
+    start_time: { type: String, required: true },
+    end_time: { type: String, required: true },
   },
   { _id: false }
 );
