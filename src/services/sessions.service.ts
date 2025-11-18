@@ -63,7 +63,7 @@ export const viewAppointmentService = (
   });
 };
 
-export const updateBookingService = (
+export const updateAppointmentsService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
@@ -77,6 +77,40 @@ export const updateBookingService = (
           { _id: ObjectId(id) },
           {
             $set: requestBody,
+          },
+          { new: true, runValidators: true }
+        )
+        .exec();
+
+      if (!updatedBooking) {
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
+      }
+
+      resolve(updatedBooking);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const updateSessionsStatusService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const requestBody = payload.body;
+      const id = payload.params.id;
+
+      const updatedBooking = await mongoose
+        .model("sessions")
+        .findOneAndUpdate(
+          { _id: ObjectId(id) },
+          {
+            $set: {
+              status: {
+                requestBody,
+              },
+            },
           },
           { new: true, runValidators: true }
         )
@@ -158,18 +192,25 @@ export const listAppointmentService = (
       const or: any[] = [];
       const and: any[] = [];
 
-      if (payload.mobile_phone)
-        and.push({ mobile_phone: payload.mobile_phone });
+      if (payload.patient_id) and.push({ "patient.id": payload.patient_id });
 
-      if (payload.employee_roles)
-        and.push({ employee_roles: ObjectId(payload.employee_roles) });
+      if (payload.clinic_id)
+        and.push({ clinic_id: ObjectId(payload.clinic_id) });
+
+      if (payload.therapist_id)
+        and.push({ "therapist.id": payload.therapist_id });
+
+      if (payload.treatment_id)
+        and.push({ "treatment.id": payload.therapist_id });
 
       if (payload.is_active !== undefined)
         and.push({ is_active: payload.is_active });
 
+      if (payload.status) and.push({ status: payload.status });
+
       if (payload.search) {
-        or.push({ first_name: { $regex: payload.search, $options: "i" } });
-        or.push({ employee_id: { $regex: payload.search, $options: "i" } });
+        or.push({ "patient.name": { $regex: payload.search, $options: "i" } });
+        or.push({ session_id: { $regex: payload.search, $options: "i" } });
       }
 
       if (or.length) and.push({ $or: or });

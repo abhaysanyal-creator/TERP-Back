@@ -9,6 +9,8 @@ import {
 } from "../utils/helpers";
 import Constants from "../locales/constants";
 import { sendOtpEmail } from "../utils/email.ses";
+import { CostExplorer } from "aws-sdk";
+import { badRequest } from "../response/response";
 
 interface LoginPaylaod {
   email: string;
@@ -23,25 +25,13 @@ export const loginService = async (payload: LoginPaylaod) => {
   const user = await mongoose.model("users").findOne({ email: email }).exec();
 
   if (!user) {
-    throw {
-      status: 401,
-      error: {
-        code: Constants.MESSAGES.NOT_FOUND.code,
-        message: Constants.MESSAGES.NOT_FOUND.message,
-      },
-    };
+    throw new Error(Constants.MESSAGES.NOT_FOUND.code);
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
 
   if (!passwordCompare) {
-    throw {
-      status: 401,
-      error: {
-        code: Constants.MESSAGES.INVALID_PASSWORD.code,
-        message: Constants.MESSAGES.INVALID_PASSWORD.message,
-      },
-    };
+    throw new Error(Constants.MESSAGES.INVALID_PASSWORD.code);
   }
 
   const otp = generateOTP();
@@ -120,6 +110,45 @@ export const getMeService = (
         .exec();
 
       resolve(user);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const resendOtpService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const user = await mongoose.model("users").findOne({
+        email: payload.email,
+      });
+
+      if (!user) {
+        throw new Error(Constants.MESSAGES.NOT_FOUND.code);
+      }
+
+      const otpData = await mongoose
+        .model("otps")
+        .findOne({ userId: ObjectId(user._id) })
+        .exec();
+
+      if (!otpData || otpData.expiresAt < Date.now()) {
+        const otp = generateOTP();
+        saveOtp(user._id.toString(), otp);
+
+        await sendOtpEmail(user.email, otp);
+        console.log(`OTP resent for ${user.email}: ${otp}`);
+
+        return resolve({
+          message: "OTP sent. Please verify to complete login.",
+          userId: user._id,
+          otp,
+        });
+      }
+
+      return reject(Constants.MESSAGES.OTP_TOO_EARLY.code);
     } catch (error) {
       reject(error);
     }

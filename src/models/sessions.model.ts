@@ -26,7 +26,10 @@ const SessionSchema = new Schema<ISession>(
       required: true,
       ref: "activities",
     },
-    treatment: { type: Schema.Types.ObjectId, required: true },
+    treatment: {
+      id: { type: Schema.Types.ObjectId, required: true },
+      name: { type: String, required: true },
+    },
     session_type: {
       type: String,
       enum: Object.values(enums.SessionType),
@@ -86,7 +89,7 @@ const SessionSchema = new Schema<ISession>(
     status: {
       type: String,
       enum: Object.values(enums.SessionStatus),
-      default: null,
+      default: enums.SessionStatus.APPROVAL_PENDING,
     },
     is_active: { type: Boolean, default: true },
     is_deleted: { type: Boolean, default: false },
