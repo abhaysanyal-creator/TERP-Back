@@ -88,13 +88,9 @@ export const verifyOtp = async (userId: string, otpInp: string) => {
   });
 
   if (!record) {
-    throw {
-      status: 401,
-      error: {
-        code: Constants.MESSAGES.NOT_FOUND.code,
-        message: Constants.MESSAGES.NOT_FOUND.message,
-      },
-    };
+    throw new Error(
+        Constants.MESSAGES.NOT_FOUND.code,
+       )
   }
 
   if (record.otp !== otpInput) {
