@@ -22,27 +22,32 @@ const JWT_SECRET = process.env.JWT_SECRET as string;
 export const loginService = async (payload: LoginPaylaod) => {
   const { email, password } = payload;
 
-  const user = await mongoose.model("users").findOne({ email: email }).exec();
+  const [user, employee] = await Promise.all([
+    mongoose.model("users").findOne({ email }).exec(),
+    mongoose.model("employees").findOne({ email }).exec(),
+  ]);
 
-  if (!user) {
+  if (!user && !employee) {
     throw new Error(Constants.MESSAGES.NOT_FOUND.code);
   }
 
-  const passwordCompare = await bcrypt.compare(password, user.password);
+  const result = user || employee;
+
+  const passwordCompare = await bcrypt.compare(password, result.password);
 
   if (!passwordCompare) {
     throw new Error(Constants.MESSAGES.INVALID_PASSWORD.code);
   }
 
   const otp = generateOTP();
-  saveOtp(user._id.toString(), otp);
+  saveOtp(result._id.toString(), otp);
 
   console.log(`OTP for user ${email}: ${otp}`);
-  await sendOtpEmail(user.email, otp);
+  await sendOtpEmail(result.email, otp);
 
   return {
     message: "OTP sent. Please verify to complete login.",
-    userId: user._id,
+    userId: result._id,
     otp,
   };
 };
@@ -50,7 +55,8 @@ export const loginService = async (payload: LoginPaylaod) => {
 export const verifyOtpService = async (userId: string, otpInput: string) => {
   try {
     const isValid = await verifyOtp(userId, otpInput);
-
+    
+    console.log("========result==========");
     if (!isValid) {
       throw {
         status: 401,
@@ -61,14 +67,43 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
       };
     }
 
-    const user = await mongoose
-      .model("users")
-      .findOne({ _id: ObjectId(userId) })
-      .select("-password")
-      .populate("role")
-      .exec();
+    console.log(userId);
+    const [user, employee] = await Promise.all([
+      mongoose
+        .model("users")
+        .findOne({ _id: ObjectId(userId) })
+        .exec(),
+      mongoose
+        .model("employees")
+        .findOne({ _id: ObjectId(userId) })
+        .exec(),
+    ]);
 
-    if (!user) {
+    if (!user && !employee) {
+      throw new Error(Constants.MESSAGES.MANAGER_REQ.code);
+    }
+
+    const result = user || employee;
+
+    // const [user, employee] = await Promise.all([
+    //   mongoose
+    //     .model("users")
+    //     .findOne({ _id: ObjectId(userId) })
+    //     .select("-password")
+    //     .populate("role")
+    //     .exec(),
+    //   mongoose
+    //     .model("employees")
+    //     .findOne({ _id: ObjectId(userId) })
+    //     .select("-password")
+    //     .populate("role")
+    //     .exec(),
+    // ]);
+
+    // const result = employee || user;
+
+
+    if (!result) {
       throw {
         status: 401,
         error: {
@@ -79,7 +114,7 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
     }
 
     const token = generateToken(
-      { id: user._id.toString(), role: user.role, origin_service: "ERP" },
+      { id: result._id.toString(), role: result.role, origin_service: "ERP" },
       JWT_SECRET,
       1296000
     );
@@ -90,7 +125,7 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
         message: Constants.MESSAGES.LOGIN_SUCCESS.message,
       },
       token,
-      user,
+      result,
     };
   } catch (error) {
     throw error;

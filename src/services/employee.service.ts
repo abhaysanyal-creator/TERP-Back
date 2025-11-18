@@ -4,6 +4,8 @@ import { success } from "../response/response";
 import { getSignedUrlForView } from "../controllers/upload.controller";
 import { Employee } from "../types/interface.types";
 import Constants from "../locales/constants";
+import bcrypt from "bcrypt";
+import { sendEmail } from "../utils/email.ses";
 
 export const createEmployeeService = (
   payload: Record<string, any>
@@ -11,7 +13,18 @@ export const createEmployeeService = (
   return new Promise(async (resolve, reject) => {
     try {
       payload.employee_id = generateCode("EMP", 6);
+
+      const plainPassword = Math.random().toString(36).slice(-10);
+
+      const hashedPassword = await bcrypt.hash(plainPassword, 10);
+
+      payload.password = hashedPassword;
+      
+      payload.is_first_login = true;
+      
       const newEmployee = await mongoose.model("employees").create(payload);
+
+      await sendEmail(newEmployee.email, plainPassword, "Password for Login");
       resolve(newEmployee);
     } catch (error) {
       reject(error);
@@ -114,7 +127,7 @@ export const blockTimeEmployeeService = (
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
       }
 
-      console.log(updatedUser)
+      console.log(updatedUser);
       resolve(updatedUser);
     } catch (error) {
       reject(error);

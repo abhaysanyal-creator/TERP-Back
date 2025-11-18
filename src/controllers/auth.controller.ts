@@ -44,7 +44,7 @@ export const verifyOtpController: ExpressMiddleware = async (
     return success(response, result.response.code, {
       message: result.response.message,
       token: result.token,
-      user: result.user,
+      user: result.result,
     });
   } catch (error) {
     const err = error as any;

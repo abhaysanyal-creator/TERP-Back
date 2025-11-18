@@ -120,6 +120,7 @@ const employeeSchema = new Schema<Employee>(
     team_leader: { type: Boolean, required: true },
     hire_date: { type: String, required: true },
     role: { type: Schema.Types.String },
+    password:{type:String,required:true},
     job_percentage: { type: Number, min: 0, max: 100, required: true },
     documents: [DocSchema],
     dob: { type: String, required: true },
