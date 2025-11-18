@@ -130,6 +130,7 @@ export interface Employee extends Document {
   team_leader: boolean;
   is_deleted: boolean;
   time_zone: string;
+  password:string;
   hire_date: string;
   blocked_times?: BlockTime[];
   role?: string;

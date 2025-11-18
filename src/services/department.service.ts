@@ -153,21 +153,86 @@ export const listDepartmentService = (
       const and: any[] = [];
       const or: any[] = [];
 
-      if (payload.department_name)
-        and.push({ department_name: payload.department_name });
+      // if (payload.department_name)
+      //   and.push({ department_name: payload.department_name });
 
-      if (payload.organisation_id)
-        and.push({ "organisation.id": ObjectId(payload.organisation_id) });
+      // if (payload.organisation_id)
+      //   and.push({ "organisation.id": ObjectId(payload.organisation_id) });
 
-      if (payload.organisation_type)
-        and.push({ "organisation.type": ObjectId(payload.organisation_type) });
+      // if (payload.organisation_type)
+      //   and.push({ "organisation.type": ObjectId(payload.organisation_type) });
 
-      if (payload.search) {
-        or.push(
-          { "organisation.name": { $regex: payload.search, $options: "i" } },
-          { institution_code: { $regex: payload.search, $options: "i" } }
-        );
-      }
+      // if (payload.search) {
+      //   or.push(
+      //     { "organisation.name": { $regex: payload.search, $options: "i" } },
+      //     { institution_code: { $regex: payload.search, $options: "i" } }
+      //   );
+      // }
+
+      Object.keys(payload).forEach((key) => {
+        switch (key) {
+          case "department_name": {
+            or.push({
+              department_name: {
+                $regex: payload.department_name,
+                $options: "i",
+              },
+            });
+            break;
+          }
+
+          case "department_id": {
+            or.push({
+              department_id: { $regex: payload.department_id, $options: "i" },
+            });
+            break;
+          }
+
+          case "organisation_id": {
+            and.push({ "organisation.id": ObjectId(payload.organisation_id) });
+            break;
+          }
+
+          case "contact_name": {
+            and.push({
+              contacts: {
+                $elemMatch: {
+                  name: { $regex: payload.contact_name, $options: "i" },
+                },
+              },
+            });
+            break;
+          }
+
+          case "contact_phone": {
+            and.push({
+              contacts: {
+                $elemMatch: { phone: { $regex: payload.phone, $options: "i" } },
+              },
+            });
+            break;
+          }
+
+          case "organisation_type": {
+            and.push({
+              "organisation.type": ObjectId(payload.organisation_type),
+            });
+            break;
+          }
+
+          case "search": {
+            or.push(
+              {
+                "organisation.name": { $regex: payload.search, $options: "i" },
+              },
+              { institution_code: { $regex: payload.search, $options: "i" } }
+            );
+          }
+
+          default:
+            break;
+        }
+      });
 
       if (or.length) and.push({ $or: or });
       if (and.length) match.$and = and;
