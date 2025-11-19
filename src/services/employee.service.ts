@@ -19,9 +19,9 @@ export const createEmployeeService = (
       const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
       payload.password = hashedPassword;
-      
+
       payload.is_first_login = true;
-      
+
       const newEmployee = await mongoose.model("employees").create(payload);
 
       await sendEmail(newEmployee.email, plainPassword, "Password for Login");
@@ -189,9 +189,18 @@ export const listEmployeeService = (
         and.push({ is_active: payload.is_active });
 
       if (payload.search) {
-        or.push({ first_name: { $regex: payload.search, $options: "i" } });
-         or.push({ last_name: { $regex: payload.search, $options: "i" } });
-        or.push({ employee_id: { $regex: payload.search, $options: "i" } });
+        or.push({
+          $expr: {
+            $regexMatch: {
+              input: { $concat: ["$first_name", " ", "$last_name"] },
+              regex: payload.search.trim(),
+              options: "i",
+            },
+          },
+        });
+        or.push({
+          employee_id: { $regex: payload.search.trim(), $options: "i" },
+        });
       }
 
       if (or.length) and.push({ $or: or });

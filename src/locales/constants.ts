@@ -39,6 +39,10 @@ export default {
       code: "DEPARTMENT_ID_REQUIRED",
       message: "Department ID is required!!",
     },
+    WAITING_LIST_PREFERENCE: {
+      code: "WAITING_LIST_PREFERENCES_REQUIRED",
+      message: "Preferences for waiting list required!!",
+    },
     DEPARTMENT_NAME_REQUIRED: {
       code: "DEPARTMENT_NAME_REQUIRED",
       message: "Department Name is required!!",
@@ -62,6 +66,10 @@ export default {
     MODULE_REQUIRED: {
       code: "MODULE_NAME_REQUIRED",
       message: "Module name is required!!",
+    },
+    FUNDING_TYPE_REQUIRED: {
+      code: "FUNDING_TYPE_REQUIRED",
+      message: "Funding type is required!!",
     },
     FILE_NAME_REQUIRED: {
       code: "FILE_NAME_REQUIRED",
@@ -91,6 +99,14 @@ export default {
     SESSION_DATE_REQ: {
       code: "SESSION_DATE_REQUIRED",
       message: "Session Date is required!!",
+    },
+    DUPLICATE_DEPARTMENT_NAME:{
+      code: "DUPLICATE_DEPARTMENT_NAME",
+      message: "Duplicate Department Name!!",
+    },
+    DUPLICATE_INTERNAL_CODE:{
+      code: "DUPLICATE_INTERNAL_CODE",
+      message: "Duplicate Internal Code!!",
     },
     S3_KEY_REQUIRED: {
       code: "S3_KEY_REQUIRED",
