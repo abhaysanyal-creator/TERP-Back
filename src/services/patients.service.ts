@@ -117,6 +117,7 @@ export const listPatientService = (
 
       if (payload.search) {
         or.push({ first_name: { $regex: payload.search, $options: "i" } });
+        or.push({ last_name: { $regex: payload.search, $options: "i" } });
         or.push({ patient_id: { $regex: payload.search, $options: "i" } });
         or.push({
           "organisation_assignment.name": { $regex: payload.search, $options: "i" },
