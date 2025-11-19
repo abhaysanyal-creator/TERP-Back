@@ -190,6 +190,7 @@ export const listEmployeeService = (
 
       if (payload.search) {
         or.push({ first_name: { $regex: payload.search, $options: "i" } });
+         or.push({ last_name: { $regex: payload.search, $options: "i" } });
         or.push({ employee_id: { $regex: payload.search, $options: "i" } });
       }
 

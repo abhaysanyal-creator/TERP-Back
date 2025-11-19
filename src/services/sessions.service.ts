@@ -24,7 +24,7 @@ export const createAppointmentService = (
             "rooms.$.bookings": {
               session_id: newBooking.session_id,
               therapist_id: newBooking.therapist.id,
-              patient_id: newBooking.patient,
+              patient_id: newBooking.patient.id,
               scheduled_date: newBooking.scheduled_date,
               scheduled_start: newBooking.scheduled_start,
               scheduled_end: newBooking.scheduled_end,
