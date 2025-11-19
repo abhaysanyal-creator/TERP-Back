@@ -116,11 +116,23 @@ export const listPatientService = (
         and.push({ is_active: payload.is_active });
 
       if (payload.search) {
-        or.push({ first_name: { $regex: payload.search, $options: "i" } });
-        or.push({ last_name: { $regex: payload.search, $options: "i" } });
-        or.push({ patient_id: { $regex: payload.search, $options: "i" } });
         or.push({
-          "organisation_assignment.name": { $regex: payload.search, $options: "i" },
+          $expr: {
+            $regexMatch: {
+              input: { $concat: ["$first_name", " ", "$last_name"] },
+              regex: payload.search.trim(),
+              options: "i",
+            },
+          },
+        });
+        or.push({
+          patient_id: { $regex: payload.search.trim(), $options: "i" },
+        });
+        or.push({
+          "organisation_assignment.name": {
+            $regex: payload.search,
+            $options: "i",
+          },
         });
       }
 

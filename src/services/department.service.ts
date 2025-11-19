@@ -174,7 +174,7 @@ export const listDepartmentService = (
           case "department_name": {
             or.push({
               department_name: {
-                $regex: payload.department_name,
+                $regex: payload.department_name.trim(),
                 $options: "i",
               },
             });
@@ -183,7 +183,10 @@ export const listDepartmentService = (
 
           case "department_id": {
             or.push({
-              department_id: { $regex: payload.department_id, $options: "i" },
+              department_id: {
+                $regex: payload.department_id.trim(),
+                $options: "i",
+              },
             });
             break;
           }
@@ -215,7 +218,7 @@ export const listDepartmentService = (
 
           case "organisation_type": {
             and.push({
-              "organisation.type": ObjectId(payload.organisation_type),
+              "organisation.type": payload.organisation_type,
             });
             break;
           }
@@ -223,9 +226,17 @@ export const listDepartmentService = (
           case "search": {
             or.push(
               {
-                "organisation.name": { $regex: payload.search, $options: "i" },
+                "organisation.name": {
+                  $regex: payload.search.trim(),
+                  $options: "i",
+                },
               },
-              { institution_code: { $regex: payload.search, $options: "i" } }
+              {
+                institution_code: {
+                  $regex: payload.search.trim(),
+                  $options: "i",
+                },
+              }
             );
           }
 

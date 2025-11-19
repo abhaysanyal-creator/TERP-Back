@@ -19,13 +19,29 @@ export const createDeptController: ExpressMiddleware = async (
     const existingOrg = await mongoose
       .model("departments")
       .findOne({
-        department_name: request.body.department_name,
+        $or: [
+          { department_name: request.body.department_name },
+          {
+            internal_code: request.body.internal_code,
+          },
+        ],
         is_deleted: false,
       })
       .exec();
 
     if (existingOrg) {
-      return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
+      if (existingOrg.department_name === request.body.department_name) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_DEPARTMENT_NAME.code
+        );
+      }
+      if (existingOrg.internal_code === request.body.internal_code) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_INTERNAL_CODE.code
+        );
+      }
     }
 
     if (
@@ -45,7 +61,6 @@ export const createDeptController: ExpressMiddleware = async (
     let duplicatePhone = false;
 
     for (const c of companions) {
-
       if (phoneSet.has(c.phone)) duplicatePhone = true;
       else phoneSet.add(c.phone);
     }
@@ -91,14 +106,32 @@ export const updateDeptController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const existingOrganisation = await mongoose
+    const existingDept = await mongoose
       .model("departments")
-      .findOne({ _id: ObjectId(request.params.id) })
+      .findOne({
+        _id: { $ne: ObjectId(request.params.id) },
+        $or: [
+          { department_name: request.body.department_name, is_deleted: false },
+          { internal_code: request.body.internal_code, is_deleted: false },
+        ],
+      })
       .exec();
 
-    if (!existingOrganisation)
-      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    if (existingDept) {
+      if (existingDept.department_name === request.body.department_name) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_DEPARTMENT_NAME.code
+        );
+      }
 
+      if (existingDept.internal_code === request.body.internal_code) {
+        return badRequest(
+          response,
+          Constants.MESSAGES.DUPLICATE_INTERNAL_CODE.code
+        );
+      }
+    }
     const result = await updateDepartmentService(request);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {

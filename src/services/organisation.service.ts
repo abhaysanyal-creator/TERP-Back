@@ -138,10 +138,10 @@ export const listOrganisationService = (
 
       if (payload.search) {
         or.push({
-          organisation_name: { $regex: payload.search, $options: "i" },
+          organisation_name: { $regex: payload.search.trim(), $options: "i" },
         });
         or.push({
-          organisation_id: { $regex: payload.search, $options: "i" },
+          organisation_id: { $regex: payload.search.trim(), $options: "i" },
         });
       }
 
