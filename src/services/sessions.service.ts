@@ -117,7 +117,6 @@ export const updateSessionsStatusService = (
       if (!updatedBooking) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
       }
-      console.log("====================", updatedBooking);
 
       resolve(updatedBooking);
     } catch (error) {
@@ -197,10 +196,10 @@ export const listAppointmentService = (
         and.push({ clinic_id: ObjectId(payload.clinic_id) });
 
       if (payload.therapist_id)
-        and.push({ "therapist.id": payload.therapist_id });
+        and.push({ "therapist.id": ObjectId(payload.therapist_id) });
 
       if (payload.treatment_id)
-        and.push({ "treatment.id": payload.therapist_id });
+        and.push({ "treatment.id": payload.treatment_id });
 
       if (payload.is_active !== undefined)
         and.push({ is_active: payload.is_active });
