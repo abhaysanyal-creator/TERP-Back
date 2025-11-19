@@ -98,7 +98,7 @@ export const updateSessionsStatusService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const requestBody = payload.body;
+      const requestBody = payload.body.status;
       const id = payload.params.id;
 
       const updatedBooking = await mongoose
@@ -107,9 +107,7 @@ export const updateSessionsStatusService = (
           { _id: ObjectId(id) },
           {
             $set: {
-              status: {
-                requestBody,
-              },
+              status: requestBody,
             },
           },
           { new: true, runValidators: true }
@@ -119,6 +117,7 @@ export const updateSessionsStatusService = (
       if (!updatedBooking) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
       }
+      console.log("====================", updatedBooking);
 
       resolve(updatedBooking);
     } catch (error) {
