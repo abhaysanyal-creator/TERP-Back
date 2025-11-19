@@ -98,6 +98,7 @@
   "SessionStatus": {
     "APPROVAL_PENDING": "approval_pending",
     "SCHEDULED": "scheduled",
+    "REJECTED": "rejected",
     "IN_PROGRESS": "in_progress",
     "COMPLETED": "completed",
     "CANCELLED": "cancelled"
@@ -144,5 +145,15 @@
     "VACATION": "vacation",
     "UN_AVAILABLE": "un_available",
     "TEAM_MEETING": "team_meeting"
+  },
+  "WaitingListStatus": {
+    "WAITING": "waiting",
+    "ASSIGNED": "assigned",
+    "CANCELLED": "cancelled"
+  },
+  "FundingTypes": {
+    "PRIVATE": "private",
+    "HMO": "hmo",
+    "GOVERNMENT_AID": "government_aid"
   }
 }
