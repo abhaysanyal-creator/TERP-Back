@@ -4,6 +4,7 @@ import enums from "../enums.json";
 
 export interface Role {
   name: string;
+  value?: string;
   permissions: {
     name: string;
     permission: string;
@@ -108,8 +109,8 @@ export interface BlockTime {
   end_time: Date;
   created_by: string;
   created_by_type: string;
-  department:Types.ObjectId;
-  activity:Types.ObjectId;
+  department: Types.ObjectId;
+  activity: Types.ObjectId;
   patient: Types.ObjectId;
   reason?: string;
   description?: string;
@@ -130,10 +131,10 @@ export interface Employee extends Document {
   team_leader: boolean;
   is_deleted: boolean;
   time_zone: string;
-  password:string;
+  password: string;
   hire_date: string;
   blocked_times?: BlockTime[];
-  role?: string;
+  role?: Types.ObjectId;
   job_percentage: number;
   dob: string;
   organization_assignments: Organisation[];
