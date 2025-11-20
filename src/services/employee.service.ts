@@ -14,13 +14,13 @@ export const createEmployeeService = (
     try {
       payload.employee_id = generateCode("EMP", 6);
 
-      const plainPassword = Math.random().toString(36).slice(-10);
+      const plainPassword = generateCode("Pass", 6);
 
       const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
       payload.password = hashedPassword;
-
       payload.is_first_login = true;
+      payload.role = ObjectId(payload.employee_roles.id);
 
       const newEmployee = await mongoose.model("employees").create(payload);
 
