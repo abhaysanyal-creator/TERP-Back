@@ -18,29 +18,6 @@ export const addRolesValidator: ExpressMiddlewareNext = (
   next();
 };
 
-export const updateRolesValidator: ExpressMiddlewareNext = (
-  request,
-  response,
-  next
-) => {
-  if (!request.params.id) {
-    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
-  }
-  if (!request.body.name) {
-    return badRequest(response, Constants.MESSAGES.FIRST_NAME_REQ.code);
-  }
-
-  if (request.body.name) {
-    if (!Object.values(enums.RoleEnum).includes(request.body.name)) {
-      return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
-    }
-  }
-  if (!request.body.permissions) {
-    return badRequest(response, Constants.MESSAGES.INCLUDE_PERMISSION.code);
-  }
-  next();
-};
-
 export const listRolesValidator: ExpressMiddlewareNext = (
   request,
   response,
@@ -51,6 +28,23 @@ export const listRolesValidator: ExpressMiddlewareNext = (
   }
   if (!request.body.limit) {
     return badRequest(response, Constants.MESSAGES.LIMIT.code);
+  }
+  next();
+};
+
+export const updateRolesValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  if (request.body.id) {
+    return badRequest(
+      response,
+      Constants.MESSAGES.FORBIDDEN_INTERNAL_FIELDS.FORBIDDEN.code
+    );
   }
   next();
 };
