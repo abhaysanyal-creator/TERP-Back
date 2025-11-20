@@ -46,16 +46,9 @@ export const updateRolesService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const existingRole = await mongoose
-        .model("roles")
-        .findOne({ _id: payload.params.id })
-        .exec();
-      if (!existingRole) {
-        return reject(new Error("Role Doesnt Exist!!"));
-      }
       const newRole = await mongoose
         .model("roles")
-        .findOneAndReplace({ _id: payload.params.id }, payload.body, {
+        .findOneAndUpdate({ _id: payload.params.id }, payload.body, {
           returnDocument: "after",
         });
       return resolve(newRole);
@@ -83,7 +76,6 @@ export const listRolesService = (
 
       if (or.length > 0) and.push({ $or: or });
       if (and.length > 0) match.$and = and;
-
 
       const pipeline: any[] = [
         { $match: match },

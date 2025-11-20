@@ -4,6 +4,7 @@ import type { Role } from "../types/interface.types";
 const roleSchema: Schema<Role> = new Schema(
   {
     name: { type: String, required: true, unique: true },
+    value:{type:String},
     permissions: [
       {
         _id: false,
