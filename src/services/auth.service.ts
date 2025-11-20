@@ -55,8 +55,7 @@ export const loginService = async (payload: LoginPaylaod) => {
 export const verifyOtpService = async (userId: string, otpInput: string) => {
   try {
     const isValid = await verifyOtp(userId, otpInput);
-    
-    console.log("========result==========");
+
     if (!isValid) {
       throw {
         status: 401,
@@ -67,7 +66,6 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
       };
     }
 
-    console.log(userId);
     const [user, employee] = await Promise.all([
       mongoose
         .model("users")
@@ -80,7 +78,7 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
     ]);
 
     if (!user && !employee) {
-      throw new Error(Constants.MESSAGES.MANAGER_REQ.code);
+      throw new Error(Constants.MESSAGES.NOT_FOUND.code);
     }
 
     const result = user || employee;
@@ -101,7 +99,6 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
     // ]);
 
     // const result = employee || user;
-
 
     if (!result) {
       throw {
@@ -137,14 +134,23 @@ export const getMeService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const user = await mongoose
-        .model("users")
-        .findOne({ _id: ObjectId(payload.id) })
-        .select("-password")
-        .populate("role")
-        .exec();
+      const [user, employee] = await Promise.all([
+        mongoose
+          .model("users")
+          .findOne({ _id: ObjectId(payload.id) })
+          .exec(),
+        mongoose
+          .model("employees")
+          .findOne({ _id: ObjectId(payload.id) })
+          .exec(),
+      ]);
 
-      resolve(user);
+      if (!user && !employee) {
+        throw new Error(Constants.MESSAGES.NOT_FOUND.code);
+      }
+
+      const result = user || employee;
+      resolve(result);
     } catch (error) {
       reject(error);
     }
