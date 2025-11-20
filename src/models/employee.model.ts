@@ -112,15 +112,14 @@ const employeeSchema = new Schema<Employee>(
     is_deleted: { type: Boolean, default: false },
     is_active: { type: Boolean, default: true },
     position_types: { type: String, required: true }, // Full_time,Part_time etc
-
     employee_roles: {
-      id: { type: Schema.Types.ObjectId },
+      id: { type: Schema.Types.ObjectId, ref: "roles" },
       name: { type: String },
     },
     team_leader: { type: Boolean, required: true },
     hire_date: { type: String, required: true },
-    role: { type: Schema.Types.String },
-    password:{type:String,required:true},
+    role: { type: Schema.Types.ObjectId, ref: "roles" },
+    password: { type: String, required: true },
     job_percentage: { type: Number, min: 0, max: 100, required: true },
     documents: [DocSchema],
     dob: { type: String, required: true },

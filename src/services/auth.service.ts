@@ -70,10 +70,14 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
       mongoose
         .model("users")
         .findOne({ _id: ObjectId(userId) })
+        .select("-password")
+        .populate("role")
         .exec(),
       mongoose
         .model("employees")
         .findOne({ _id: ObjectId(userId) })
+        .select("-password")
+        .populate("role")
         .exec(),
     ]);
 
@@ -138,10 +142,14 @@ export const getMeService = (
         mongoose
           .model("users")
           .findOne({ _id: ObjectId(payload.id) })
+          .select("-password")
+          .populate("role")
           .exec(),
         mongoose
           .model("employees")
           .findOne({ _id: ObjectId(payload.id) })
+          .select("-password")
+          .populate("role")
           .exec(),
       ]);
 
