@@ -88,7 +88,7 @@ const SessionSchema = new Schema<ISession>(
     },
     status: {
       type: String,
-      enum: Object.values(enums.SessionStatus),
+      enum: enums.SessionStatus,
       default: enums.SessionStatus.APPROVAL_PENDING,
     },
     is_active: { type: Boolean, default: true },

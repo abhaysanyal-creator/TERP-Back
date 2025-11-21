@@ -64,7 +64,14 @@ export const createAppointmentController: ExpressMiddleware = async (
     });
 
     if (overLappingAppointment) {
-      return badRequest(response, Constants.MESSAGES.THERAPIST_UNAVAIL.code);
+      await mongoose.model("waiting_list").create({
+        therapist_id: request.body.therapist.id,
+        patient_id: request.body.patient.id,
+        preferred_date: request.body.scheduled_date,
+        preferred_start: request.body.scheduled_start,
+        preferred_end: request.body.scheduled_end,
+      });
+      return badRequest(response, Constants.MESSAGES.THERAPIST_UNAVAIL_ADDING_TO_WAIT_LIST.code);
     }
     const result = await createAppointmentService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
@@ -226,9 +233,14 @@ export const updateSessionStatusController: ExpressMiddleware = async (
     if (request.body.status === existingSession.status) {
       return badRequest(response, Constants.MESSAGES.NO_CHANGES.code);
     }
-    
+
     const result = await updateSessionsStatusService(request);
 
+    if (
+      (result && request.body.status === enums.SessionStatus.CANCELLED) ||
+      request.body.status === enums.SessionStatus.COMPLETED
+    ) {
+    }
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

@@ -113,7 +113,7 @@ const employeeSchema = new Schema<Employee>(
     is_active: { type: Boolean, default: true },
     position_types: { type: String, required: true }, // Full_time,Part_time etc
     employee_roles: {
-      id: { type: Schema.Types.ObjectId, ref: "roles" },
+      id: { type: Schema.Types.ObjectId },
       name: { type: String },
     },
     team_leader: { type: Boolean, required: true },
