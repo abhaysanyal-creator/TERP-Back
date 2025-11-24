@@ -219,7 +219,7 @@ module.exports = {
           updated_at: new Date(),
         });
 
-        console.log(`✔️ Inserted role: ${role.name}`);
+        console.log(`✔️ Inserted role:- ${role.name}`);
       } else {
         console.log(`ℹ️ Role '${role.name}' already exists, skipping.`);
       }
