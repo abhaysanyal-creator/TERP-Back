@@ -228,3 +228,14 @@ module.exports = {
 
   async down(db, client) {},
 };
+
+
+module.exports = {
+  async up() {
+    console.log("Skipping corrupted migration");
+  },
+
+  async down() {
+    console.log("Skipping down migration");
+  }
+};

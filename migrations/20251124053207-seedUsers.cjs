@@ -1,7 +1,9 @@
-export const up = async () => {
-  console.log("Skipping bad migration 20251124053207-seedUsers.cjs");
-};
+module.exports = {
+  async up() {
+    console.log("Skipping corrupted migration");
+  },
 
-export const down = async () => {
-  console.log("Skipping down migration.");
+  async down() {
+    console.log("Skipping down migration");
+  },
 };
