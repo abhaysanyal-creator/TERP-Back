@@ -206,7 +206,9 @@ module.exports = {
     ];
 
     for (const role of userPermissions) {
-      const exists = await db.collection("roles").findOne({ name: role.name });
+      const rolesCollection = db.collection("roles");
+
+      const exists = await rolesCollection.findOne({ name: role.name });
 
       if (!exists) {
         await rolesCollection.insertOne({
