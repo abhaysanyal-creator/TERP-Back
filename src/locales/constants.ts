@@ -453,6 +453,10 @@ export default {
       code: "THERAPIST_UNAVAIL",
       message: "Therapist Un-Available!!",
     },
+        THERAPIST_UNAVAIL_ADDING_TO_WAIT_LIST: {
+      code: "THERAPIST_UNAVAIL_ADDING_TO_WAIT_LIST",
+      message: "Therapist Un-Available!!",
+    },
     SPECIALISATION_FIELD_REQ: {
       code: "SPECIALISATION_FIELD_REQ",
       message: "Specialisation fields missing!!",

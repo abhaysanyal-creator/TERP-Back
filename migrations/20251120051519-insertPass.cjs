@@ -2,7 +2,7 @@ const { ObjectId } = require("mongodb");
 
 module.exports = {
   async up(db, client) {
-    const employee = "691c54f8ac15646158c0f18a"; // <-- change if needed
+    const employee = "691c54f8ac15646158c0f18a";
 
     console.log("🚀 Starting user role migration (string → ObjectId)...");
 

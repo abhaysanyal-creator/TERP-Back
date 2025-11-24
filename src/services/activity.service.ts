@@ -135,8 +135,15 @@ export const listActivityService = (
 
       if (payload.search) {
         or.push(
-          { "organisation.name": { $regex: payload.search, $options: "i" } },
-          { "department.name": { $regex: payload.search, $options: "i" } }
+          {
+            "organisation.name": {
+              $regex: payload.search.trim(),
+              $options: "i",
+            },
+          },
+          {
+            "department.name": { $regex: payload.search.trim(), $options: "i" },
+          }
         );
       }
 

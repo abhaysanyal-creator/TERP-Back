@@ -9,7 +9,6 @@ export const listPermissionService = (): Record<string, any> => {
       const userPermissions = await roleModel.find({
         role: { $ne: enums.RoleEnum.SUPER_ADMIN },
       });
-      console.log(userPermissions);
       resolve({
         permissions,
         user_permissions: userPermissions,

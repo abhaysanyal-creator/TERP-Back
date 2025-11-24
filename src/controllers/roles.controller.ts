@@ -9,6 +9,7 @@ import type { ExpressMiddleware } from "../types/express.types.ts";
 import Lang from "../locales/en.json";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import Constants from "../locales/constants";
+import mongoose from "mongoose";
 
 export const addRolesController: ExpressMiddleware = async (
   request,
@@ -16,10 +17,9 @@ export const addRolesController: ExpressMiddleware = async (
 ) => {
   try {
     const payload = request.body;
-if(payload.name==="super-admin"||payload.name==="super_admin") {
-return badRequest(response,Constants.MESSAGES.NO_SUPER_ADMIN.code)
-
-}
+    if (payload.name === "super-admin" || payload.name === "super_admin") {
+      return badRequest(response, Constants.MESSAGES.NO_SUPER_ADMIN.code);
+    }
     const result = await addRolesService(payload);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
@@ -46,6 +46,13 @@ export const updateRolesController: ExpressMiddleware = async (
   response
 ) => {
   try {
+    const isRoleExist = await mongoose
+      .model("roles")
+      .findById(request.params.id);
+
+    if (!isRoleExist)
+      return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+    
     const payload = request;
 
     const result = await updateRolesService(payload);
