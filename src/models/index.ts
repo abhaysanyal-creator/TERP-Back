@@ -13,7 +13,7 @@ import { City } from "./city.model";
 import metaDataModel from "./meta-data.model";
 import { departmentModel } from "./department.model";
 import { sessionModel } from "./sessions.model";
-import waitingListModel from "./waiting_list.model";
+import WaitingListModel from "./waiting_list.model";
 
 export {
   Country,
@@ -31,5 +31,5 @@ export {
   metaDataModel,
   departmentModel,
   sessionModel,
-  waitingListModel,
+  WaitingListModel,
 };
