@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan";
 
 export const applicationMiddlewares = (app: express.Application) => {
-  console.log("✅ Middlewares loaded");
+  console.log("✅ App Middlewares loaded");
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
