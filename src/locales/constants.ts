@@ -23,6 +23,22 @@ export default {
       code: "THERAPIST_DOESNT_EXIST",
       message: "Therapist doesnt exist!!",
     },
+    EXPENSE_NAME_REQ: {
+      code: "EXPENSE_NAME_REQUIRED",
+      message: "Expense name is required!!",
+    },
+    AMOUNT_REQUIRED: {
+      code: "EXPENSE_AMOUNT_REQUIRED",
+      message: "Expense amount is required!!",
+    },
+    EXPENSE_CATEGORY_REQUIRED: {
+      code: "EXPENSE_CATEGORY_REQUIRED",
+      message: "Expense category is required!!",
+    },
+    EXPENSE_CATEGORY_REQUIRED_FORMAT: {
+      code: "INCORRECT_EXPENSE_CATEGORY",
+      message: "Incorrect Expense Category!!",
+    },
     COMPANION_NATIONAL_ID_REPEATED: {
       code: "COMPANION_NATIONAL_ID_REPEATED",
       message: "Companion national ID repeated!!",
@@ -100,11 +116,11 @@ export default {
       code: "SESSION_DATE_REQUIRED",
       message: "Session Date is required!!",
     },
-    DUPLICATE_DEPARTMENT_NAME:{
+    DUPLICATE_DEPARTMENT_NAME: {
       code: "DUPLICATE_DEPARTMENT_NAME",
       message: "Duplicate Department Name!!",
     },
-    DUPLICATE_INTERNAL_CODE:{
+    DUPLICATE_INTERNAL_CODE: {
       code: "DUPLICATE_INTERNAL_CODE",
       message: "Duplicate Internal Code!!",
     },
@@ -453,7 +469,7 @@ export default {
       code: "THERAPIST_UNAVAIL",
       message: "Therapist Un-Available!!",
     },
-        THERAPIST_UNAVAIL_ADDING_TO_WAIT_LIST: {
+    THERAPIST_UNAVAIL_ADDING_TO_WAIT_LIST: {
       code: "THERAPIST_UNAVAIL_ADDING_TO_WAIT_LIST",
       message: "Therapist Un-Available!!",
     },

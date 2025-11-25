@@ -318,6 +318,13 @@ export interface Activity extends Document {
   is_deleted: boolean;
   branch_name: string;
   clinic_id: string;
+  expenses: {
+    name: string;
+    category: string;
+    amount: number;
+    is_deleted: boolean;
+    is_active: boolean;
+  };
   owner: string;
   is_active: boolean;
   manager: Types.ObjectId;
@@ -403,6 +410,7 @@ export interface ISession extends Document {
   clinic_id: Types.ObjectId;
   treatment: { id: Types.ObjectId; name: string };
   session_type: string;
+  documents: EmpDocuments[];
   meeting_type: string;
   therapist: {
     _id: Types.ObjectId;
@@ -414,6 +422,7 @@ export interface ISession extends Document {
     label: string;
     value: string;
   };
+  total_cost: number;
   patients: Array<{
     _id: Types.ObjectId;
     organization: {

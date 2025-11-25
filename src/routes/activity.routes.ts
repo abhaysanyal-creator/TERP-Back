@@ -2,16 +2,22 @@ import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
   createActivityController,
+  createExpenseController,
   deleteActivityController,
+  deleteExpenseController,
   listActivityController,
   updateActivityController,
+  updateExpenseController,
   viewActivityController,
 } from "../controllers/activity.controller";
 import {
   createActivityValidator,
+  createExpenseValidator,
   deleteClinicValidator,
+  deleteExpenseValidator,
   listClinicValidator,
   updateActivityValidator,
+  updateExpenseValidator,
   viewActivityValidator,
 } from "../validators/activity.validator";
 
@@ -50,6 +56,27 @@ router.post(
   authorisationMiddleware,
   listClinicValidator,
   listActivityController
+);
+
+router.post(
+  "/add-expense/:id",
+  authorisationMiddleware,
+  createExpenseValidator,
+  createExpenseController
+);
+
+router.patch(
+  "/update-expense/:id/:exp_id",
+  authorisationMiddleware,
+  updateExpenseValidator,
+  updateExpenseController
+);
+
+router.delete(
+  "/delete-expense/:id/:exp_id",
+  authorisationMiddleware,
+  deleteExpenseValidator,
+  deleteExpenseController
 );
 
 export default router;

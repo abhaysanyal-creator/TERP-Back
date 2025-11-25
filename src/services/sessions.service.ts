@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { generateCode, ObjectId } from "../utils/helpers";
 import Constants from "../locales/constants";
 import enums from "../enums.json";
+import { getSignedUrlForView } from "../controllers/upload.controller";
 
 export const createAppointmentService = (
   payload: Record<string, any>
@@ -55,6 +56,12 @@ export const viewAppointmentService = (
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.FIND.code);
       }
 
+     existingBooking.documents = await Promise.all(
+        (existingBooking.documents || []).map(async (doc: any) => ({
+          ...doc,
+          signedUrl: await getSignedUrlForView(doc.key),
+        }))
+      );
       resolve(existingBooking);
     } catch (error) {
       console.error(error);

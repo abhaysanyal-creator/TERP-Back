@@ -178,3 +178,85 @@ export const listClinicValidator: ExpressMiddlewareNext = (
   }
   next();
 };
+
+export const createExpenseValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
+  }
+  if (!request.body.name) {
+    return badRequest(response, Constants.MESSAGES.EXPENSE_NAME_REQ.code);
+  }
+  if (!request.body.amount) {
+    return badRequest(response, Constants.MESSAGES.AMOUNT_REQUIRED.code);
+  }
+  if (!request.body.category) {
+    return badRequest(
+      response,
+      Constants.MESSAGES.EXPENSE_CATEGORY_REQUIRED.code
+    );
+  }
+  if (
+    request.body.category &&
+    !Object.values(enums.CostRecurrence).includes(request.body.category)
+  ) {
+    return badRequest(
+      response,
+      Constants.MESSAGES.EXPENSE_CATEGORY_REQUIRED_FORMAT.code
+    );
+  }
+  next();
+};
+
+export const updateExpenseValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
+  }
+  if (!request.params.exp_id) {
+    return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
+  }
+  if ("name" in request.body) {
+    if (!request.body.name || request.body.name.trim() === "") {
+      return badRequest(response, Constants.MESSAGES.EXPENSE_NAME_REQ.code);
+    }
+  }
+  if ("amount" in request.body) {
+    if (typeof request.body.amount !== "number") {
+      return badRequest(response, Constants.MESSAGES.AMOUNT_REQUIRED.code);
+    }
+  }
+  if ("category" in request.body) {
+    if (!Object.values(enums.CostRecurrence).includes(request.body.category)) {
+      return badRequest(
+        response,
+        Constants.MESSAGES.EXPENSE_CATEGORY_REQUIRED_FORMAT.code
+      );
+    }
+    return badRequest(
+      response,
+      Constants.MESSAGES.EXPENSE_CATEGORY_REQUIRED.code
+    );
+  }
+  next();
+};
+
+export const deleteExpenseValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
+  }
+  if (!request.params.exp_id) {
+    return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
+  }
+  next();
+};

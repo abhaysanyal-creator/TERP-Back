@@ -4,6 +4,7 @@ import enums from "../enums.json";
 import Constants from "../locales/constants";
 import { badRequest, success } from "../response/response";
 import { getErrorMessage } from "../middlewares/app.middlewares";
+import { assigningWaitingListService } from "../services/assignWaitingListService";
 
 export const createEntryController: ExpressMiddleware = async (
   request,
@@ -22,6 +23,7 @@ export const createEntryController: ExpressMiddleware = async (
       priorityRating,
     });
 
+    assigningWaitingListService();
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     return badRequest(response, getErrorMessage(error));

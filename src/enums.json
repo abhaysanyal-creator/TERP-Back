@@ -96,6 +96,7 @@
     "CAMPUS": "campus"
   },
   "SessionStatus": {
+    "AVAILABLE":"available",
     "APPROVAL_PENDING": "approval_pending",
     "SCHEDULED": "scheduled",
     "REJECTED": "rejected",
