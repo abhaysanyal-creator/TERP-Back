@@ -197,6 +197,28 @@ export const listAppointmentService = (
       const or: any[] = [];
       const and: any[] = [];
 
+      if (payload.date) {
+        const start = new Date(payload.date);
+        const end = new Date(payload.date);
+        end.setDate(end.getDate() + 1);
+
+        and.push({
+          scheduled_date: {
+            $gte: start,
+            $lt: end,
+          },
+        });
+      }
+      if (payload.time) {
+        const time = new Date(payload.time).toISOString().substring(11, 16);
+
+        and.push({
+          $expr: {
+            $eq: [{ $substr: ["$scheduled_start", 11, 5] }, time],
+          },
+        });
+      }
+
       if (payload.patient_id) and.push({ "patient.id": payload.patient_id });
 
       if (payload.clinic_id)
@@ -205,8 +227,14 @@ export const listAppointmentService = (
       if (payload.therapist_id)
         and.push({ "therapist.id": ObjectId(payload.therapist_id) });
 
+      if (payload.therapist)
+        and.push({ "therapist.name": payload.therapist });
+
       if (payload.treatment_id)
         and.push({ "treatment.id": payload.treatment_id });
+      
+      if (payload.treatment)
+        and.push({ "treatment.name": payload.treatment });
 
       if (payload.is_active !== undefined)
         and.push({ is_active: payload.is_active });
