@@ -12,6 +12,8 @@ import {
 import mongoose from "mongoose";
 import { generateCode, ObjectId } from "../utils/helpers";
 import enums from "../enums.json";
+import { assigningWaitingListService } from "../services/assignWaitingListService";
+import { getSignedUrlForView } from "./upload.controller";
 
 export const createAppointmentController: ExpressMiddleware = async (
   request,
@@ -71,7 +73,10 @@ export const createAppointmentController: ExpressMiddleware = async (
         preferred_start: request.body.scheduled_start,
         preferred_end: request.body.scheduled_end,
       });
-      return badRequest(response, Constants.MESSAGES.THERAPIST_UNAVAIL_ADDING_TO_WAIT_LIST.code);
+      return badRequest(
+        response,
+        Constants.MESSAGES.THERAPIST_UNAVAIL_ADDING_TO_WAIT_LIST.code
+      );
     }
     const result = await createAppointmentService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
@@ -96,6 +101,8 @@ export const viewAppointmentController: ExpressMiddleware = async (
       return badRequest(response, Constants.MESSAGES.ID_REQ.code);
     }
 
+    
+
     const result = await viewAppointmentService(request.params);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
@@ -103,98 +110,6 @@ export const viewAppointmentController: ExpressMiddleware = async (
     return badRequest(response, getErrorMessage(Error));
   }
 };
-
-// export const updateBookingsController: ExpressMiddleware = async (
-//   request,
-//   response
-// ) => {
-//   try {
-//     const existingBooking = await mongoose
-//       .model("bookings")
-//       .findById(request.body.id)
-//       .exec();
-
-//     if (!existingBooking) {
-//       return badRequest(response, Constants.MESSAGES.ID_REQ.code);
-//     }
-
-//     const { start_time, end_time, therapist } = request.body;
-
-//     let hasChanges = false;
-
-//     if (
-//       isEqual(start_time, existingBooking.start_time) ||
-//       isEqual(end_time, existingBooking.end_time)
-//     ) {
-//       hasChanges = true;
-//     }
-
-//     if (therapist && existingBooking.therapist) {
-//       const therapistChanged = isEqual(therapist, existingBooking.therapist);
-//       if (therapistChanged) hasChanges = true;
-//     }
-
-//     if (!hasChanges) {
-//       return badRequest(response, Constants.MESSAGES.NO_CHANGES.code);
-//     }
-
-//     const result = await updateBookingService(request.body);
-
-//     return success(response, Constants.MESSAGES.SUCCESS.code, result);
-//   } catch (error) {
-//     console.error(error);
-//     return badRequest(response, getErrorMessage(error));
-//   }
-// };
-
-// export const deleteBookingsController: ExpressMiddleware = async (
-//   request,
-//   response
-// ) => {
-//   try {
-//     const id = request.params.id as string;
-
-//     const existingBooking = await mongoose
-//       .model("bookings")
-//       .findById(ObjectId(id))
-//       .exec();
-
-//     if (!existingBooking) {
-//       return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
-//     }
-//     const result = await deleteBookingService(request.params);
-//     return success(response, Constants.MESSAGES.SUCCESS.code, result);
-//   } catch (error) {
-//     return badRequest(response, getErrorMessage(error));
-//   }
-// };
-
-// export const changeBookingStatusController: ExpressMiddleware = async (
-//   request,
-//   response
-// ) => {
-//   try {
-//     const existingBooking = await mongoose
-//       .model("bookings")
-//       .findById(request.body.id)
-//       .exec();
-
-//     if (!existingBooking) {
-//       return badRequest(response, Constants.MESSAGES.ID_REQ.code);
-//     }
-
-//     if (existingBooking.status === request.body.status) {
-//       return badRequest(response, Constants.MESSAGES.NO_CHANGES.code);
-//     }
-
-//     const result = await changeBookingStatusService(request.body);
-
-//     return success(response, Constants.MESSAGES.SUCCESS.code, result);
-//   } catch (error) {
-//     console.error(error);
-//     return badRequest(response, getErrorMessage(error));
-//   }
-// };
 
 export const updateAppointmentsController: ExpressMiddleware = async (
   request,
@@ -240,6 +155,7 @@ export const updateSessionStatusController: ExpressMiddleware = async (
       (result && request.body.status === enums.SessionStatus.CANCELLED) ||
       request.body.status === enums.SessionStatus.COMPLETED
     ) {
+      assigningWaitingListService();
     }
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {

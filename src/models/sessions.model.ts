@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import enums from "../enums.json";
 import { ISession } from "../types/interface.types";
+import { DocSchema } from "./employee.model";
 
 // const ActivitySchema = new Schema(
 //   {
@@ -48,10 +49,14 @@ const SessionSchema = new Schema<ISession>(
       name: { type: String },
       value: { type: String },
     },
+    total_cost: {
+      type: Number,
+    },
     scheduled_start: { type: String, required: true },
     scheduled_date: { type: String, required: true },
     scheduled_end: { type: String, required: true },
     is_recurring: { type: Boolean, default: false },
+    documents:[DocSchema],
     recurrence: {
       type: {
         _id: false,

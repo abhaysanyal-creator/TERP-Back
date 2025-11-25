@@ -180,3 +180,95 @@ export const listActivityService = (
     }
   });
 };
+
+export const createExpenseService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const newExpense = await mongoose.model("activities").findOneAndUpdate(
+        {
+          _id: ObjectId(payload.params.id),
+          is_active: true,
+        },
+        {
+          $push: {
+            expenses: { $each: payload.body },
+          },
+        },
+        { new: true, returnDocument: "after" }
+      );
+
+      if (!newExpense)
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
+
+      resolve(newExpense);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const updateExpenseService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const newExpense = await mongoose.model("activities").findOneAndUpdate(
+        {
+          _id: ObjectId(payload.params.id),
+          is_active: true,
+        },
+        {
+          $set: {
+            "expenses.$[elem]": payload.body,
+          },
+        },
+        {
+          new: true,
+          returnDocument: "after",
+          arrayFilters: [{ "elem._id": ObjectId(payload.params.exp_id) }],
+        }
+      );
+
+      if (!newExpense)
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
+
+      resolve(newExpense);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const deleteExpenseService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const newExpense = await mongoose.model("activities").findOneAndUpdate(
+        {
+          _id: ObjectId(payload.params.id),
+          is_active: true,
+        },
+        {
+          $pull: {
+            expenses: { _id: ObjectId(payload.params.exp_id) },
+          },
+        },
+        {
+          new: true,
+          returnDocument: "after",
+          arrayFilters: [{ "elem._id": ObjectId(payload.params.exp_id) }],
+        }
+      );
+
+      if (!newExpense)
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
+
+      resolve(newExpense);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

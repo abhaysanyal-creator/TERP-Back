@@ -13,6 +13,7 @@ export interface WaitingListDoc extends Document {
   guardian: Types.ObjectId;
   treatment: Types.ObjectId;
   preferences: Preference[];
+  preferred_therapist: Types.ObjectId;
   priority_score: number;
   joinedAt: Date;
   priorityOverride?: number;
@@ -46,6 +47,7 @@ const waitingListSchema = new Schema<WaitingListDoc>(
       required: true,
       index: true,
     },
+    preferred_therapist: { type: Schema.Types.ObjectId, ref: "employees" },
     preferences: { type: [preferenceSchema], required: true },
     joinedAt: { type: Date, default: Date.now, index: true },
     priority_score: { type: Number },
@@ -59,7 +61,7 @@ const waitingListSchema = new Schema<WaitingListDoc>(
     status: {
       type: String,
       enum: enums.WaitingListStatus,
-      default: enums.WaitingListStatus.ASSIGNED,
+      default: enums.WaitingListStatus.WAITING,
       index: true,
     },
     notifiedAt: Date,

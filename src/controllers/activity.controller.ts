@@ -4,9 +4,12 @@ import { badRequest, success } from "../response/response";
 import Constants from "../locales/constants";
 import {
   createActivityService,
+  createExpenseService,
   deleteActivityService,
+  deleteExpenseService,
   listActivityService,
   updateActivityService,
+  updateExpenseService,
   viewActivityService,
 } from "../services/activity.service";
 import { getErrorMessage } from "../middlewares/app.middlewares";
@@ -115,6 +118,98 @@ export const listActivityController: ExpressMiddleware = async (
 ) => {
   try {
     const result = await listActivityService(request.body);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const createExpenseController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const existingActivity = await mongoose
+      .model("activities")
+      .findOne({
+        _id: ObjectId(request.params.id),
+        is_deleted: false,
+        is_active: true,
+      })
+      .exec();
+
+    if (!existingActivity) {
+      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    }
+
+    if (
+      existingActivity?.expense?.find(
+        (exp: any) => exp.name === request.body.name
+      )
+    ) {
+      return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
+    }
+    const result = await createExpenseService(request);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const updateExpenseController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const existingActivity = await mongoose
+      .model("activities")
+      .findOne({
+        _id: ObjectId(request.params.id),
+        is_deleted: false,
+        is_active: true,
+      })
+      .exec();
+
+    if (!existingActivity) {
+      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    }
+
+    if (
+      existingActivity?.expense?.find(
+        (exp: any) => exp.name === request.body.name
+      )
+    ) {
+      return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
+    }
+    const result = await updateExpenseService(request);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const deleteExpenseController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const existingActivity = await mongoose
+      .model("activities")
+      .findOne({
+        _id: ObjectId(request.params.id),
+        is_deleted: false,
+        is_active: true,
+      })
+      .exec();
+
+    if (!existingActivity) {
+      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    }
+
+    const result = await deleteExpenseService(request);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);

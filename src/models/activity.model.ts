@@ -75,6 +75,14 @@ export const roomSchema = new Schema(
   { _id: false }
 );
 
+export const expenseSchema = new Schema({
+  expense_name: { type: String },
+  category: { type: String, enum: enums.CostRecurrence },
+  amount: { type: Number },
+  is_deleted: { type: Boolean, default: false },
+  is_active: { type: Boolean, default: true },
+});
+
 const TherapistSchema: Schema<Therapists> = new Schema(
   {
     id: {
@@ -105,6 +113,7 @@ const activitySchema: Schema<Activity> = new Schema({
   internal_code: { type: String, required: true, unique: true },
   building_size: { type: Number, required: true },
   area_in: { type: String, enum: enums.AreaIn, default: enums.AreaIn.SQ_MTR },
+  expenses: [expenseSchema],
   is_deleted: { type: Boolean, default: false },
   is_active: { type: Boolean, default: true },
   protected_space: { type: Boolean, default: true },
