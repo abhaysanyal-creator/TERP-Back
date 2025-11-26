@@ -56,7 +56,7 @@ const SessionSchema = new Schema<ISession>(
     scheduled_date: { type: String, required: true },
     scheduled_end: { type: String, required: true },
     is_recurring: { type: Boolean, default: false },
-    documents:[DocSchema],
+    documents: [DocSchema],
     recurrence: {
       type: {
         _id: false,
@@ -94,7 +94,12 @@ const SessionSchema = new Schema<ISession>(
     status: {
       type: String,
       enum: enums.SessionStatus,
-      default: enums.SessionStatus.APPROVAL_PENDING,
+      default: enums.SessionStatus.SCHEDULED,
+    },
+    therapist_approval: {
+      type: String,
+      enum: enums.SessionStatus,
+      default: enums.Approval_Status.APPROVAL_PENDING,
     },
     is_active: { type: Boolean, default: true },
     is_deleted: { type: Boolean, default: false },

@@ -54,3 +54,14 @@ export const viewEntryValidator: ExpressMiddlewareNext = (
   }
   next();
 };
+
+export const deleteEntryValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.ID_REQ.code);
+  }
+  next();
+};

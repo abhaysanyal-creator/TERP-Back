@@ -506,6 +506,7 @@ export interface ISession extends Document {
     end_time: Date;
   };
   status: string;
+  therapist_approval:string;
   note: string;
   cancellation_info?: {
     reason: string;
