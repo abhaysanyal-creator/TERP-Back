@@ -29,3 +29,17 @@ export const createEntryValidator: ExpressMiddlewareNext = (
   }
   next();
 };
+
+export const listEntryValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.page) {
+    return badRequest(response, Constants.MESSAGES.PAGE.code);
+  }
+  if (!request.body.limit) {
+    return badRequest(response, Constants.MESSAGES.LIMIT.code);
+  }
+  next();
+};

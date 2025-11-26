@@ -14,6 +14,11 @@ export interface WaitingListDoc extends Document {
   treatment: Types.ObjectId;
   preferences: Preference[];
   preferred_therapist: Types.ObjectId;
+  preferred_time: {
+    scheduled_date: string;
+    scheduled_start: string;
+    scheduled_end: string;
+  };
   priority_score: number;
   joinedAt: Date;
   priorityOverride?: number;
@@ -52,6 +57,11 @@ const waitingListSchema = new Schema<WaitingListDoc>(
     joinedAt: { type: Date, default: Date.now, index: true },
     priority_score: { type: Number },
     priorityOverride: { type: Number },
+    preferred_time: {
+      scheduled_date: { type: Number },
+      scheduled_start: { type: String },
+      scheduled_end: { type: String },
+    },
     funding: {
       type: String,
       enum: enums.FundingTypes,

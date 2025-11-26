@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import { generateCode, ObjectId } from "../utils/helpers";
-import { success } from "../response/response";
+import { generateCode, getDateRange, ObjectId } from "../utils/helpers";
 import { getSignedUrlForView } from "../controllers/upload.controller";
 import { Employee } from "../types/interface.types";
 import Constants from "../locales/constants";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../utils/email.ses";
+import enums from "../enums.json";
 
 export const createEmployeeService = (
   payload: Record<string, any>
@@ -38,6 +38,7 @@ export const viewEmployeeService = async (payload: Record<string, any>) => {
 
     const employee = await EmployeeModel.findOne({ _id: ObjectId(payload.id) })
       .lean()
+      .select("-password")
       .exec();
 
     if (!employee) {
@@ -127,7 +128,6 @@ export const blockTimeEmployeeService = (
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
       }
 
-      console.log(updatedUser);
       resolve(updatedUser);
     } catch (error) {
       reject(error);
@@ -250,3 +250,103 @@ export const listEmployeeService = (
     }
   });
 };
+
+export const getAllAvailabilityService = async (
+  startDate: string,
+  endDate: string
+) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  // Generate list of dates
+  const dates: string[] = getDateRange(start, end);
+
+  const therapists = await mongoose
+    .model("employees")
+    .find({ is_active: true, "employee_roles.name": "Therapist" });
+
+  if (!therapists || therapists.length === 0) {
+    throw new Error(Constants.MESSAGES.NOT_FOUND.code);
+  }
+
+  const finalResponse: any[] = [];
+
+  for (const therapist of therapists) {
+    const therapistData: any = {
+      therapist_id: therapist._id,
+      therapist_name: therapist.first_name,
+      availability: {},
+    };
+
+    for (const d of dates) {
+      const jsDay = new Date(d).getDay(); // 0-6 (Sun=0)
+      const mongoDay = jsDay === 0 ? 7 : jsDay; // Convert to 1-7
+
+      // Find working day and enabled
+      const daySchedule = therapist.working_hours.find(
+        (x: any) => x.day === mongoDay && x.enabled
+      );
+
+      if (!daySchedule || daySchedule.slots.length === 0) {
+        therapistData.availability[d] = [];
+        continue;
+      }
+
+      // Fetch all sessions for that therapist on this date
+      const dayStart = new Date(d);
+      const dayEnd = new Date(d);
+      dayEnd.setHours(23, 59, 59, 999);
+
+      const bookings = await mongoose.model("sessions").find({
+        "therapist.id": therapist._id,
+        scheduled_start: { $gte: dayStart, $lte: dayEnd },
+        status: {
+          $in: [enums.SessionStatus.IN_PROGRESS, enums.SessionStatus.SCHEDULED],
+        },
+      });
+
+      const bookedBlocks = bookings.map((b: any) => ({
+        start: new Date(b.scheduled_start),
+        end: new Date(b.scheduled_end),
+      }));
+
+      const freeSlots: any[] = [];
+
+      // Loop through each working slot for that day
+      for (const slot of daySchedule.slots) {
+        // Combine date with slot times
+        const workStart = new Date(`${d}T${slot.start_time.slice(11)}`);
+        const workEnd = new Date(`${d}T${slot.end_time.slice(11)}`);
+
+        let current = new Date(workStart);
+        const slotDuration = 30; // minutes
+
+        while (current < workEnd) {
+          const slotStart = new Date(current);
+          const slotEnd = new Date(current.getTime() + slotDuration * 60000);
+          if (slotEnd > workEnd) break;
+
+          const isBooked = bookedBlocks.some(
+            (b) => slotStart < b.end && slotEnd > b.start
+          );
+
+          if (!isBooked) {
+            freeSlots.push({
+              start: slotStart.toISOString(),
+              end: slotEnd.toISOString(),
+            });
+          }
+
+          current = slotEnd;
+        }
+      }
+
+      therapistData.availability[d] = freeSlots;
+    }
+
+    finalResponse.push(therapistData);
+  }
+
+  return finalResponse;
+};
+

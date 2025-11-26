@@ -4,6 +4,7 @@ import {
   changeWorkingHoursEmployeeService,
   createEmployeeService,
   deleteEmployeeService,
+  getAllAvailabilityService,
   listEmployeeService,
   updateEmployeeService,
   viewEmployeeService,
@@ -208,6 +209,20 @@ export const listEmployeeController: ExpressMiddleware = async (
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const therapistAvailabilityController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const { start_date, end_date } = request.body;
+
+    const result = await getAllAvailabilityService(start_date, end_date);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
     return badRequest(response, getErrorMessage(error));
   }
 };
