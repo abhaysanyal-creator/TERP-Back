@@ -17,6 +17,7 @@ import {
   listEmployeeController,
   updateEmployeeController,
   viewEmployeeController,
+  therapistAvailabilityController,
 } from "../controllers/employee.controller";
 
 const router = Router();
@@ -68,6 +69,12 @@ router.post(
   authorisationMiddleware,
   listEmployeeValidator,
   listEmployeeController
+);
+
+router.post(
+  "/therapist/availability",
+  authorisationMiddleware,
+  therapistAvailabilityController
 );
 
 export default router;

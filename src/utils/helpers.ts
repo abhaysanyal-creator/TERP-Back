@@ -174,37 +174,17 @@ export const combineTimeDate = (dateStr: string, timeStr: string): Date => {
   return new Date(`${dateStr}T${timeStr}:00`);
 };
 
-// export const isBlockWithinWorkingHours = (
-//   employee: any,
-//   block: any
-// ): boolean => {
-//   const blockStart = new Date(block.start_time);
-//   const blockEnd = new Date(block.end_time);
+export const getDateRange = (start: Date, end: Date) => {
+  const dates = [];
+  const current = new Date(start);
 
-//   const day = blockStart.getDay();
+  while (current <= end) {
+    dates.push(current.toISOString().split("T")[0]);
+    current.setDate(current.getDate() + 1);
+  }
 
-//   // Checks blocking hours vs working hours
-//   const workingDay = employee.working_hours.find(
-//     (workinghour: any) => workinghour.day === day
-//   );
-
-//   if (!workingDay || !workingDay.enabled) return false;
-
-//   for (const slot of workingDay.slots) {
-//     const slotStart = new Date(slot.start_time).getTime();
-//     const slotEnd = new Date(slot.end_time).getTime();
-
-//     const blockStartMs = blockStart.getTime();
-//     const blockEndMs = blockEnd.getTime();
-//     console.log("====================", blockEndMs, slotEnd);
-
-//     if (blockStartMs >= slotStart && blockEndMs <= slotEnd) {
-//       return true;
-//     }
-//   }
-
-//   return false;
-// };
+  return dates;
+};
 
 export const isBlockWithinWorkingHours = (
   employee: any,
