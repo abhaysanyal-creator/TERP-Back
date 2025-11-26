@@ -408,7 +408,7 @@ export interface ISession extends Document {
   patient: { id: Types.ObjectId; name: string };
   organisation: { id: Types.ObjectId; name: string };
   authorisation_serial_number: string;
-  co_payment_amount: number;
+  co_payment_amount: string;
   session_id: string;
   clinic_id: Types.ObjectId;
   treatment: { id: Types.ObjectId; name: string };
@@ -425,7 +425,7 @@ export interface ISession extends Document {
     label: string;
     value: string;
   };
-  total_cost: number;
+  total_cost: string;
   patients: Array<{
     _id: Types.ObjectId;
     organization: {

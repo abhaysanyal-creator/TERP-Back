@@ -43,7 +43,7 @@ const SessionSchema = new Schema<ISession>(
       type: String,
     },
     co_payment_amount: {
-      type: Number,
+      type: String,
     },
     meeting_type: {
       type: String,
@@ -60,7 +60,7 @@ const SessionSchema = new Schema<ISession>(
       value: { type: String },
     },
     total_cost: {
-      type: Number,
+      type: String,
     },
     scheduled_start: { type: String, required: true },
     scheduled_date: { type: String, required: true },
