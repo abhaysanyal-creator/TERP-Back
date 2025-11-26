@@ -124,3 +124,23 @@ export const listEntryController: ExpressMiddleware = async (
     return error;
   }
 };
+
+export const viewEntryController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const entryExist = await mongoose
+      .model("waiting_list")
+      .findOne({ _id: request.params.id, is_deleted: false })
+      .exec();
+
+    if (!entryExist) {
+      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    }
+
+    return success(response, Constants.MESSAGES.SUCCESS.code, entryExist);
+  } catch (error) {
+    return badRequest(response, getErrorMessage(error));
+  }
+};
