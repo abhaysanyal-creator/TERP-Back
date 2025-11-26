@@ -30,9 +30,9 @@ export const createAppointmentValidator: ExpressMiddlewareNext = (
       return badRequest(response, Constants.MESSAGES.THERAPIST.ID_REQ.code);
     }
   }
-  if (!request.body.treatment_area) {
-    return badRequest(response, Constants.MESSAGES.ROOM_ID_REQ.code);
-  }
+  // if (!request.body.treatment_area) {
+  //   return badRequest(response, Constants.MESSAGES.ROOM_ID_REQ.code);
+  // }
   if (!request.body.scheduled_date) {
     return badRequest(response, Constants.MESSAGES.SESSION_DATE_REQ.code);
   }

@@ -96,13 +96,20 @@
     "CAMPUS": "campus"
   },
   "SessionStatus": {
-    "AVAILABLE":"available",
+    "AVAILABLE": "available",
     "APPROVAL_PENDING": "approval_pending",
     "SCHEDULED": "scheduled",
     "REJECTED": "rejected",
     "IN_PROGRESS": "in_progress",
     "COMPLETED": "completed",
     "CANCELLED": "cancelled"
+  },
+  "Approval_Status": {
+    "REJECTED": "rejected",
+    "UPCOMING": "upcoming",
+    "COMPLETED": "completed",
+    "CANCELLED": "cancelled",
+    "APPROVAL_PENDING": "approval_pending"
   },
   "SessionType": {
     "TREATMENT": "treatment",
