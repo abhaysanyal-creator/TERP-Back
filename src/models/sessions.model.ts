@@ -21,6 +21,10 @@ const SessionSchema = new Schema<ISession>(
       id: { type: Schema.Types.ObjectId, required: true, ref: "patients" },
       name: { type: String },
     },
+    organisation: {
+      id: { type: Schema.Types.ObjectId, required: true, ref: "organisations" },
+      name: { type: String },
+    },
     session_id: { type: String },
     clinic_id: {
       type: Schema.Types.ObjectId,
@@ -34,6 +38,12 @@ const SessionSchema = new Schema<ISession>(
     session_type: {
       type: String,
       enum: Object.values(enums.SessionType),
+    },
+    authorisation_serial_number: {
+      type: String,
+    },
+    co_payment_amount: {
+      type: Number,
     },
     meeting_type: {
       type: String,

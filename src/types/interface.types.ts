@@ -406,6 +406,9 @@ export interface IDepartment extends Document {
 
 export interface ISession extends Document {
   patient: { id: Types.ObjectId; name: string };
+  organisation: { id: Types.ObjectId; name: string };
+  authorisation_serial_number: string;
+  co_payment_amount: number;
   session_id: string;
   clinic_id: Types.ObjectId;
   treatment: { id: Types.ObjectId; name: string };
@@ -506,7 +509,7 @@ export interface ISession extends Document {
     end_time: Date;
   };
   status: string;
-  therapist_approval:string;
+  therapist_approval: string;
   note: string;
   cancellation_info?: {
     reason: string;
