@@ -319,7 +319,7 @@ export const getAllAvailabilityService = async (
         const workEnd = new Date(`${d}T${slot.end_time.slice(11)}`);
 
         let current = new Date(workStart);
-        const slotDuration = 30; // minutes
+        const slotDuration = 60; // minutes
 
         while (current < workEnd) {
           const slotStart = new Date(current);
