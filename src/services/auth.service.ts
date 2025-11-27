@@ -11,6 +11,7 @@ import Constants from "../locales/constants";
 import { sendOtpEmail } from "../utils/email.ses";
 import { CostExplorer } from "aws-sdk";
 import { badRequest } from "../response/response";
+import { userModel } from "../models";
 
 interface LoginPaylaod {
   email: string;
@@ -52,7 +53,7 @@ export const loginService = async (payload: LoginPaylaod) => {
   };
 };
 
-export const verifyOtpService = async (userId: string, otpInput: string) => {
+export const verifyOtpService = async (userId: string, otpInput: string, isMFA: boolean) => {
   try {
     const isValid = await verifyOtp(userId, otpInput);
 
@@ -114,11 +115,17 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
       };
     }
 
-    const token = generateToken(
-      { id: result._id.toString(), role: result.role, origin_service: "ERP" },
-      JWT_SECRET,
-      1296000
-    );
+    let token;
+    let sessionId;
+    if(isMFA){
+      token = generateToken(
+        { id: result._id.toString(), role: result.role, origin_service: "ERP" },
+        JWT_SECRET,
+        1296000
+      );
+    }else{
+      sessionId = await bcrypt.hash(result._id.toString(), 10);
+    }
 
     return {
       response: {
@@ -126,6 +133,7 @@ export const verifyOtpService = async (userId: string, otpInput: string) => {
         message: Constants.MESSAGES.LOGIN_SUCCESS.message,
       },
       token,
+      sessionId,
       result,
     };
   } catch (error) {
@@ -203,3 +211,62 @@ export const resendOtpService = (
     }
   });
 };
+
+export const forgotPasswordService = async (
+  payload: Record<string, any>
+): Promise<Record<string, any>> => new Promise(async (resolve, reject) => {
+    try {
+      const user = await userModel.findOne({
+        email: payload.email,
+      });
+
+      if (!user) {
+        throw new Error(Constants.MESSAGES.NOT_FOUND.code);
+      }
+
+      const otp = generateOTP();
+      saveOtp(user._id.toString(), otp);
+
+      console.log(`OTP for user ${payload.email}: ${otp}`);
+      await sendOtpEmail(user.email, otp);
+
+      return resolve({
+        message: "OTP sent. Please verify to reset Password",
+        userId: user._id,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+export const resetPasswordService = async (
+  payload: Record<string, any>
+): Promise<Record<string, any>> => new Promise(async (resolve, reject) => {
+    try {
+
+      const {session_id, password, email} = payload;
+      const user = await userModel.findOne({
+        email,
+        is_deleted: false
+      });
+
+      if (!user) {
+        throw new Error(Constants.MESSAGES.NOT_FOUND.code);
+      }
+
+      const isValidSession = await bcrypt.compare(user._id.toString(), session_id);
+      
+      if (!isValidSession) {
+        throw new Error(Constants.MESSAGES.NO_TOKEN.code);
+      }
+      const encryptedPassword = await bcrypt.hash(password.toString(), 10);
+      
+      await userModel.findByIdAndUpdate(user._id, {password: encryptedPassword})
+
+      return resolve({
+        message: "Your Password has been reset",
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
