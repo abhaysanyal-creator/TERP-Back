@@ -7,6 +7,7 @@ import {
 } from "../types/interface.types";
 import enums from "../enums.json";
 import { addressSchema } from "./organisation.model";
+import { DocSchema } from "./employee.model";
 
 const paymentMethodSchema = new Schema(
   {
@@ -88,6 +89,10 @@ const patientSchema: Schema<Patients> = new Schema(
     last_name: { type: String, required: true },
     national_id: { type: String, unique: true, required: true },
     contact_number: { type: String, required: true },
+    therapist: {
+      id: { type: Schema.Types.ObjectId },
+      name: { type: String },
+    },
     gender: {
       type: Schema.Types.String,
       enum: enums.Gender as any,
@@ -96,6 +101,7 @@ const patientSchema: Schema<Patients> = new Schema(
     dob: { type: Date, required: true },
     organisation_assignment: organisationSchema,
     is_active: { type: Boolean, default: true },
+    documents:[DocSchema],
     address: addressSchema,
     disabilities_list: [disabilitySchema],
     companions_list: [companionSchema],

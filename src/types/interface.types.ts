@@ -240,9 +240,13 @@ export interface Patients extends Document {
   national_id: string;
   gender: string;
   is_active: boolean;
+  therapist: {
+    id: Types.ObjectId;
+    name: string;
+  };
   contact_number: string;
   email: string;
-  therapist: Types.ObjectId;
+  documents: EmpDocuments[];
   dob: Date;
   is_deleted: boolean;
   organisation_assignment: Organisation;
