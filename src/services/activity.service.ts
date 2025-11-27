@@ -193,7 +193,7 @@ export const createExpenseService = (
         },
         {
           $push: {
-            expenses: { $each: payload.body },
+            expenses: { $each: [payload.body] },
           },
         },
         { new: true, returnDocument: "after" }
@@ -214,20 +214,25 @@ export const updateExpenseService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
+      const setObj: Record<string, any> = {};
+      for (const key in payload.body) {
+        if (payload.body[key] !== undefined) {
+          setObj[`expenses.$[elem].${key}`] = payload.body[key];
+        }
+      }
+      const expIdParam = payload.params.exp_id;
+
+      const arrayFilterId = mongoose.Types.ObjectId.isValid(expIdParam)
+        ? ObjectId(expIdParam)
+        : expIdParam;
+
       const newExpense = await mongoose.model("activities").findOneAndUpdate(
-        {
-          _id: ObjectId(payload.params.id),
-          is_active: true,
-        },
-        {
-          $set: {
-            "expenses.$[elem]": payload.body,
-          },
-        },
+        { _id: ObjectId(payload.params.id), is_active: true },
+        { $set: setObj },
         {
           new: true,
           returnDocument: "after",
-          arrayFilters: [{ "elem._id": ObjectId(payload.params.exp_id) }],
+          arrayFilters: [{ "elem._id": arrayFilterId }],
         }
       );
 
@@ -258,13 +263,11 @@ export const deleteExpenseService = (
         },
         {
           new: true,
-          returnDocument: "after",
-          arrayFilters: [{ "elem._id": ObjectId(payload.params.exp_id) }],
         }
       );
 
       if (!newExpense)
-        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.DELETE.code);
 
       resolve(newExpense);
     } catch (error) {

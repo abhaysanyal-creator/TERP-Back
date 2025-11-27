@@ -144,8 +144,8 @@ export const createExpenseController: ExpressMiddleware = async (
     }
 
     if (
-      existingActivity?.expense?.find(
-        (exp: any) => exp.name === request.body.name
+      existingActivity?.expenses?.find(
+        (exp: any) => exp?.expense_name?.toLowerCase() === request.body.expense_name?.toLowerCase()
       )
     ) {
       return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
@@ -176,13 +176,13 @@ export const updateExpenseController: ExpressMiddleware = async (
       return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
     }
 
-    if (
-      existingActivity?.expense?.find(
-        (exp: any) => exp.name === request.body.name
-      )
-    ) {
-      return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
-    }
+    // if (
+    //   existingActivity?.expenses?.find(
+    //     (exp: any) => exp.expense_name === request.body.expense_name
+    //   )
+    // ) {
+    //   return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
+    // }
     const result = await updateExpenseService(request);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {

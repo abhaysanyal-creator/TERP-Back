@@ -21,7 +21,7 @@ export const createEmployeeService = (
       payload.password = hashedPassword;
       payload.is_first_login = true;
       payload.role = ObjectId(payload.employee_roles.id);
-
+      
       const newEmployee = await mongoose.model("employees").create(payload);
 
       await sendEmail(newEmployee.email, plainPassword, "Password for Login");

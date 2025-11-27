@@ -93,9 +93,13 @@ export const confirmUploadController: ExpressMiddleware = async (
       category: category,
     };
 
-    entity.documents.push(obj);
+    try {
+      entity.documents.push(obj);
 
-    await entity.save();
+      await entity.save();
+    } catch (error) {
+      return badRequest(response, getErrorMessage(error));
+    }
 
     return success(response, Constants.MESSAGES.SUCCESS.code, {});
   } catch (error) {
