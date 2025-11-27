@@ -9,6 +9,25 @@ export const createAppointmentService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
+      if (payload.patient.id) {
+        await mongoose
+          .model("patients")
+          .findOneAndUpdate(
+            {
+              _id: ObjectId(payload.patient.id),
+            },
+            {
+              $set: {
+                therapist: payload.therapist,
+              },
+            },
+            {
+              new: true,
+            }
+          )
+          .exec();
+      }
+
       const newBooking = await mongoose.model("sessions").create(payload);
 
       if (!newBooking) {
@@ -56,7 +75,7 @@ export const viewAppointmentService = (
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.FIND.code);
       }
 
-     existingBooking.documents = await Promise.all(
+      existingBooking.documents = await Promise.all(
         (existingBooking.documents || []).map(async (doc: any) => ({
           ...doc,
           signedUrl: await getSignedUrlForView(doc.key),
@@ -227,14 +246,12 @@ export const listAppointmentService = (
       if (payload.therapist_id)
         and.push({ "therapist.id": ObjectId(payload.therapist_id) });
 
-      if (payload.therapist)
-        and.push({ "therapist.name": payload.therapist });
+      if (payload.therapist) and.push({ "therapist.name": payload.therapist });
 
       if (payload.treatment_id)
         and.push({ "treatment.id": payload.treatment_id });
-      
-      if (payload.treatment)
-        and.push({ "treatment.name": payload.treatment });
+
+      if (payload.treatment) and.push({ "treatment.name": payload.treatment });
 
       if (payload.is_active !== undefined)
         and.push({ is_active: payload.is_active });

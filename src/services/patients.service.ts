@@ -115,6 +115,10 @@ export const listPatientService = (
       if (payload.is_active !== undefined)
         and.push({ is_active: payload.is_active });
 
+      if (payload.therapist_id) {
+        and.push({ "therapist.id": ObjectId(payload.therapist_id) });
+      }
+      
       if (payload.search) {
         or.push({
           $expr: {
