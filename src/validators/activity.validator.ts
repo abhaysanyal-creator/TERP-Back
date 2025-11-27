@@ -187,7 +187,7 @@ export const createExpenseValidator: ExpressMiddlewareNext = (
   if (!request.params.id) {
     return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
   }
-  if (!request.body.name) {
+  if (!request.body.expense_name) {
     return badRequest(response, Constants.MESSAGES.EXPENSE_NAME_REQ.code);
   }
   if (!request.body.amount) {
@@ -239,10 +239,6 @@ export const updateExpenseValidator: ExpressMiddlewareNext = (
         Constants.MESSAGES.EXPENSE_CATEGORY_REQUIRED_FORMAT.code
       );
     }
-    return badRequest(
-      response,
-      Constants.MESSAGES.EXPENSE_CATEGORY_REQUIRED.code
-    );
   }
   next();
 };

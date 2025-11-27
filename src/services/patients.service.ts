@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { generateCode, ObjectId } from "../utils/helpers";
 import Constants from "../locales/constants";
+import { getSignedUrlForView } from "../controllers/upload.controller";
 
 export const createPatientService = (
   payload: Record<string, any>
@@ -118,7 +119,7 @@ export const listPatientService = (
       if (payload.therapist_id) {
         and.push({ "therapist.id": ObjectId(payload.therapist_id) });
       }
-      
+
       if (payload.search) {
         or.push({
           $expr: {
