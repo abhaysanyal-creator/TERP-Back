@@ -2,9 +2,11 @@ import { badRequest, errorResponse, success } from "../response/response";
 import type { ExpressMiddleware } from "../types/express.types";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import {
+  forgotPasswordService,
   getMeService,
   loginService,
   resendOtpService,
+  resetPasswordService,
   verifyOtpService,
 } from "../services/auth.service";
 import Constants from "../locales/constants";
@@ -38,13 +40,14 @@ export const verifyOtpController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const { userId, otp } = request.body;
-    const result = await verifyOtpService(userId, otp);
+    const { userId, otp, isMFA } = request.body;
+    const result = await verifyOtpService(userId, otp, isMFA);
 
     return success(response, result.response.code, {
       message: result.response.message,
       token: result.token,
       user: result.result,
+      session_id: result.sessionId
     });
   } catch (error) {
     const err = error as any;
@@ -76,6 +79,30 @@ export const resendOtpController: ExpressMiddleware = async (
 ) => {
   try {
     const result = await resendOtpService(request.body);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const forgotPasswordController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const result =await forgotPasswordService(request.body);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const resetPasswordController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const result =await resetPasswordService(request.body);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     return badRequest(response, getErrorMessage(error));

@@ -18,3 +18,32 @@ export const resendCodeValidator: ExpressMiddlewareNext = (request, response, ne
   }
   next();
 };
+
+export const forgotPasswordValidator: ExpressMiddlewareNext = (request, response, next) => {
+  if (!request.body.email) {
+    return badRequest(response, Lang.EMAIL_IS_REQUIRED);
+  }
+  next();
+};
+
+export const resetPasswordValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (
+    !request.body.session_id ||
+    !request.body.password ||
+    !request.body.email
+  ) {
+    return badRequest(
+      response,
+      request.body.password
+        ? request.body.session_id
+          ? Lang.EMAIL_IS_REQUIRED
+          : Lang.TOKEN_REQUIRED
+        : Lang.PASSWORD_IS_REQUIRED
+    );
+  }
+  next();
+};
