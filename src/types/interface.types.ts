@@ -135,6 +135,7 @@ export interface Employee extends Document {
   hire_date: string;
   blocked_times?: BlockTime[];
   role?: Types.ObjectId;
+  is_first_login:boolean;
   job_percentage: number;
   dob: string;
   organization_assignments: Organisation[];

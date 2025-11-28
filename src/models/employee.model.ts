@@ -66,14 +66,13 @@ export const DocSchema: Schema<EmpDocuments> = new Schema(
 
 export const blockTimeSchema = new Schema(
   {
-    id: { type: String, required: true },
-    date: { type: String, required: true },
-    start_time: { type: String, required: true },
-    end_time: { type: String, required: true },
+    start_date: { type: String },
+    end_date: { type: String },
+    start_time: { type: String },
+    end_time: { type: String },
     created_by: {
       type: Schema.Types.ObjectId,
       ref: "employees",
-      required: true,
     },
     patient: { type: Schema.Types.ObjectId, ref: "patients" },
     department: { type: Schema.Types.ObjectId, ref: "departments" },
@@ -125,6 +124,10 @@ const employeeSchema = new Schema<Employee>(
     dob: { type: String, required: true },
     organization_assignments: [organisationSchema],
     location_assignments: [{ type: String, required: true }],
+    is_first_login: {
+      type: Boolean,
+      default: true,
+    },
     blocked_times: [blockTimeSchema],
     address: { type: addressSchema, required: true },
     time_zone: { type: String, required: true },
