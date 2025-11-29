@@ -1,13 +1,16 @@
-import mongoose from "mongoose";
+import mongoose, { PipelineStage } from "mongoose";
 import Constants from "../locales/constants";
 import { ObjectId } from "../utils/helpers";
+import { Activity } from "../types/interface.types";
+
+const activityModel = mongoose.model<Activity>("activities");
 
 export const createActivityService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const newActivity = await mongoose.model("activities").create(payload);
+      const newActivity = await activityModel.create(payload);
 
       if (!newActivity) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
@@ -26,10 +29,7 @@ export const viewActivityService = (
     try {
       const id = ObjectId(payload.id);
 
-      const activity = await mongoose
-        .model("activities")
-        .findOne({ _id: id })
-        .exec();
+      const activity = await activityModel.findOne({ _id: id }).exec();
 
       if (!activity) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.FIND.code);
@@ -55,8 +55,7 @@ export const updateActivityService = (
         delete payload.body.internal_code;
       }
 
-      const updatedActivity = await mongoose
-        .model("activities")
+      const updatedActivity = await activityModel
         .findOneAndUpdate(
           { _id: ObjectId(payload.params.id) },
           { $set: payload.body },
@@ -79,17 +78,15 @@ export const deleteActivityService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const deletedActivity = await mongoose
-        .model("activities")
-        .findOneAndUpdate(
-          {
-            _id: ObjectId(payload.id),
-          },
-          {
-            $set: { is_deleted: true },
-          },
-          { new: true }
-        );
+      const deletedActivity = await activityModel.findOneAndUpdate(
+        {
+          _id: ObjectId(payload.id),
+        },
+        {
+          $set: { is_deleted: true },
+        },
+        { new: true }
+      );
       resolve(deletedActivity);
     } catch (error) {
       console.error(error);
@@ -150,7 +147,7 @@ export const listActivityService = (
       if (or.length) and.push({ $or: or });
       if (and.length) match.$and = and;
 
-      const pipeline: any[] = [
+      const pipeline: PipelineStage[] = [
         { $match: match },
         { $sort: { createdAt: -1 } },
         { $skip: skip },
@@ -160,8 +157,8 @@ export const listActivityService = (
       const countPipeline = [{ $match: match }, { $count: "total" }];
 
       const [activities, countResult] = await Promise.all([
-        mongoose.model("activities").aggregate(pipeline),
-        mongoose.model("activities").aggregate(countPipeline),
+        activityModel.aggregate(pipeline),
+        activityModel.aggregate(countPipeline),
       ]);
 
       const totalCount = countResult[0]?.total || 0;
@@ -186,14 +183,18 @@ export const createExpenseService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const newExpense = await mongoose.model("activities").findOneAndUpdate(
+      const expenseArray = Array.isArray(payload.body)
+        ? payload.body
+        : [payload.body];
+
+      const newExpense = await activityModel.findOneAndUpdate(
         {
           _id: ObjectId(payload.params.id),
           is_active: true,
         },
         {
           $push: {
-            expenses: { $each: [payload.body] },
+            expenses: { $each: expenseArray },
           },
         },
         { new: true, returnDocument: "after" }
@@ -226,7 +227,7 @@ export const updateExpenseService = (
         ? ObjectId(expIdParam)
         : expIdParam;
 
-      const newExpense = await mongoose.model("activities").findOneAndUpdate(
+      const newExpense = await activityModel.findOneAndUpdate(
         { _id: ObjectId(payload.params.id), is_active: true },
         { $set: setObj },
         {
@@ -251,7 +252,7 @@ export const deleteExpenseService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const newExpense = await mongoose.model("activities").findOneAndUpdate(
+      const newExpense = await activityModel.findOneAndUpdate(
         {
           _id: ObjectId(payload.params.id),
           is_active: true,

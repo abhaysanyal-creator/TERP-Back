@@ -10,6 +10,9 @@ import Lang from "../locales/en.json";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import Constants from "../locales/constants";
 import mongoose from "mongoose";
+import { User } from "../types/interface.types";
+
+const userModel = mongoose.model<User>("users");
 
 export const adminCreateController: ExpressMiddleware = async (
   request,
@@ -46,7 +49,7 @@ export const updateAdminController: ExpressMiddleware = async (
   try {
     const payload = request;
 
-    if (!(await mongoose.model("users").findById(request.params.id))) {
+    if (!(await userModel.findById(request.params.id))) {
       return badRequest(response, Constants.MESSAGES.DOESNT_EXIST.code);
     }
     const result = await updateAdminService(payload);

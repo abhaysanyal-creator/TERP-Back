@@ -7,6 +7,8 @@ import bcrypt from "bcrypt";
 import { sendEmail } from "../utils/email.ses";
 import enums from "../enums.json";
 
+const employeeModel = mongoose.model<Employee>("employees");
+
 export const createEmployeeService = (
   payload: Record<string, any>
 ): Record<string, any> => {
@@ -21,8 +23,8 @@ export const createEmployeeService = (
       payload.password = hashedPassword;
       payload.is_first_login = true;
       payload.role = ObjectId(payload.employee_roles.id);
-      
-      const newEmployee = await mongoose.model("employees").create(payload);
+
+      const newEmployee = await employeeModel.create(payload);
 
       await sendEmail(newEmployee.email, plainPassword, "Password for Login");
       resolve(newEmployee);
@@ -34,9 +36,8 @@ export const createEmployeeService = (
 
 export const viewEmployeeService = async (payload: Record<string, any>) => {
   try {
-    const EmployeeModel = mongoose.model<Employee>("employees");
 
-    const employee = await EmployeeModel.findOne({ _id: ObjectId(payload.id) })
+    const employee = await employeeModel.findOne({ _id: ObjectId(payload.id) })
       .lean()
       .select("-password")
       .exec();
@@ -216,8 +217,8 @@ export const listEmployeeService = (
       const countPipeline = [{ $match: match }, { $count: "total" }];
 
       const [employees, countResult] = await Promise.all([
-        mongoose.model("employees").aggregate(pipeline),
-        mongoose.model("employees").aggregate(countPipeline),
+        employeeModel.aggregate(pipeline),
+        employeeModel.aggregate(countPipeline),
       ]);
 
       const totalCount = countResult[0]?.total || 0;
@@ -349,4 +350,3 @@ export const getAllAvailabilityService = async (
 
   return finalResponse;
 };
-

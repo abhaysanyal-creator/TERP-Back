@@ -10,14 +10,16 @@ import {
   updateDepartmentService,
   viewDepartmentService,
 } from "../services/department.service";
+import { IDepartment } from "../types/interface.types";
+
+const deptModel = mongoose.model<IDepartment>("departments");
 
 export const createDeptController: ExpressMiddleware = async (
   request,
   response
 ) => {
   try {
-    const existingOrg = await mongoose
-      .model("departments")
+    const existingOrg = await deptModel
       .findOne({
         $or: [
           { department_name: request.body.department_name },
@@ -86,8 +88,7 @@ export const viewDeptController: ExpressMiddleware = async (
   try {
     const id = request.params.id as string;
 
-    const existingOrg = await mongoose
-      .model("departments")
+    const existingOrg = await deptModel
       .findOne({ _id: ObjectId(id), is_deleted: false })
       .exec();
 
@@ -106,8 +107,7 @@ export const updateDeptController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const existingDept = await mongoose
-      .model("departments")
+    const existingDept = await deptModel
       .findOne({
         _id: { $ne: ObjectId(request.params.id) },
         $or: [

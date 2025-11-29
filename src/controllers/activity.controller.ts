@@ -14,14 +14,16 @@ import {
 } from "../services/activity.service";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import { ObjectId } from "../utils/helpers";
+import { Activity } from "../types/interface.types";
+
+const activityModel = mongoose.model<Activity>("activities");
 
 export const createActivityController: ExpressMiddleware = async (
   request,
   response
 ) => {
   try {
-    const isActivityExist = await mongoose
-      .model("activities")
+    const isActivityExist = await activityModel
       .findOne({
         activity_name: request.body.activity_name,
         "organisation.id": request.body.organisation.id,
@@ -47,8 +49,7 @@ export const viewActivityController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const existingActivity = await mongoose
-      .model("activities")
+    const existingActivity = await activityModel
       .findOne({
         _id: ObjectId(request.params.id),
         is_deleted: false,
@@ -72,8 +73,7 @@ export const updateActivityController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const foundActivity = await mongoose
-      .model("activities")
+    const foundActivity = await activityModel
       .findOne({ _id: ObjectId(request.params.id), is_deleted: false })
       .exec();
 
@@ -130,8 +130,7 @@ export const createExpenseController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const existingActivity = await mongoose
-      .model("activities")
+    const existingActivity = await activityModel
       .findOne({
         _id: ObjectId(request.params.id),
         is_deleted: false,
@@ -143,13 +142,24 @@ export const createExpenseController: ExpressMiddleware = async (
       return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
     }
 
-    if (
-      existingActivity?.expenses?.find(
-        (exp: any) => exp?.expense_name?.toLowerCase() === request.body.expense_name?.toLowerCase()
-      )
-    ) {
+    const bodyArray = Array.isArray(request.body)
+      ? request.body
+      : [request.body];
+
+    const requestedNames = bodyArray.map((item) => item.expense_name);
+
+    const existingNames = (existingActivity?.expenses || []).map(
+      (e: any) => e.expense_name
+    );
+
+    const isDuplicate = requestedNames.some((name) =>
+      existingNames.includes(name)
+    );
+
+    if (isDuplicate) {
       return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
     }
+
     const result = await createExpenseService(request);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
@@ -163,8 +173,7 @@ export const updateExpenseController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const existingActivity = await mongoose
-      .model("activities")
+    const existingActivity = await activityModel
       .findOne({
         _id: ObjectId(request.params.id),
         is_deleted: false,
@@ -196,8 +205,7 @@ export const deleteExpenseController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const existingActivity = await mongoose
-      .model("activities")
+    const existingActivity = await activityModel
       .findOne({
         _id: ObjectId(request.params.id),
         is_deleted: false,
