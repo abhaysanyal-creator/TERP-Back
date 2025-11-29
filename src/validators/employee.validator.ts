@@ -51,7 +51,17 @@ export const createEmployeeValidator: ExpressMiddlewareNext = (
         "Valid hire date is required"
     );
   }
-  if (request.body.specialisation.length > 0) {
+  if (request.body.employee_roles.name === "therapist") {
+    if (
+      !Array.isArray(request.body.specialisation) ||
+      request.body.specialisation.length === 0
+    ) {
+      return badRequest(
+        response,
+        Constants.MESSAGES.SPECIALISATION_FIELD_REQ.code
+      );
+    }
+
     const hasEmpty = request.body.specialisation.some((spec: any) =>
       Object.values(spec).some((value) => !value)
     );

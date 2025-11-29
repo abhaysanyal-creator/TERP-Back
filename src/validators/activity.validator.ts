@@ -187,7 +187,7 @@ export const createExpenseValidator: ExpressMiddlewareNext = (
   if (!request.params.id) {
     return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
   }
-  if (!request.body.expense_name) {
+  if (!request.body.map((expense: any) => expense.name)) {
     return badRequest(response, Constants.MESSAGES.EXPENSE_NAME_REQ.code);
   }
   if (!request.body.amount) {

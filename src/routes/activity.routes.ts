@@ -61,7 +61,7 @@ router.post(
 router.post(
   "/add-expense/:id",
   authorisationMiddleware,
-  createExpenseValidator,
+  // createExpenseValidator,
   createExpenseController
 );
 
