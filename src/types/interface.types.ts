@@ -303,6 +303,15 @@ export interface TreatmentPriceIndexing {
   include_patient_cost: boolean;
   patient_cost: string;
 }
+
+export interface Expense {
+  expense_name?: string;
+  category?: string;
+  amount?: number;
+  is_deleted?: boolean;
+  is_active?: boolean;
+}
+
 export interface Activity extends Document {
   organisation: {
     _id: Types.ObjectId;
@@ -323,13 +332,7 @@ export interface Activity extends Document {
   is_deleted: boolean;
   branch_name: string;
   clinic_id: string;
-  expenses: {
-    name: string;
-    category: string;
-    amount: number;
-    is_deleted: boolean;
-    is_active: boolean;
-  };
+  expenses: Expense[];
   owner: string;
   is_active: boolean;
   manager: Types.ObjectId;
