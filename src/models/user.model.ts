@@ -4,7 +4,8 @@ import type { User } from "../types/interface.types";
 const userSchema: Schema<User> = new Schema(
   {
     username: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
+    first_name: { type: String, required: true },
+    last_name:{ type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     employee_id: { type: String },
