@@ -1,14 +1,9 @@
 import mongoose, { model, Schema } from "mongoose";
 import type {
   Activity,
-  Address,
-  IRoom,
-  Therapists,
-  TimeSlot,
   TreatmentPriceIndexing,
 } from "../types/interface.types";
 import enums from "../enums.json";
-import { addressSchema, contactSchema } from "./organisation.model";
 
 const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema({
   specialisation: {
@@ -20,26 +15,6 @@ const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema({
   include_patient_cost: { type: Boolean, default: false },
   patient_cost: { type: String },
 });
-
-const timeSlotSchema: Schema<TimeSlot> = new Schema(
-  {
-    id: { type: String },
-    start_time: { type: String, required: true },
-    end_time: { type: String, required: true },
-  },
-  {
-    _id: false,
-  }
-);
-
-const workingHourSchema = new Schema(
-  {
-    day: { type: Number, required: true },
-    slots: [timeSlotSchema],
-    enabled: { type: Boolean, default: true },
-  },
-  { _id: false }
-);
 
 export const roomSchema = new Schema(
   {
@@ -83,21 +58,6 @@ export const expenseSchema = new Schema({
   is_active: { type: Boolean, default: true },
 });
 
-const TherapistSchema: Schema<Therapists> = new Schema(
-  {
-    id: {
-      type: Schema.Types.ObjectId,
-      ref: "employees",
-    },
-    name: { type: String },
-    employee_id: { type: String },
-    specialisation: { type: String },
-    working_hours: [workingHourSchema],
-    organisation: { type: Schema.Types.ObjectId, ref: "organisations" },
-  },
-  { _id: false }
-);
-
 const activitySchema: Schema<Activity> = new Schema({
   type: { type: String, enum: enums.ActivityType, required: true },
   activity_name: { type: String, required: true },
@@ -109,20 +69,16 @@ const activitySchema: Schema<Activity> = new Schema({
     id: { type: Schema.Types.ObjectId, required: true, ref: "departments" },
     name: { type: String, required: true },
   },
-  activity_id: { type: String, required: true, unique: true },
   internal_code: { type: String, required: true, unique: true },
-  building_size: { type: Number, required: true },
-  area_in: { type: String, enum: enums.AreaIn, default: enums.AreaIn.SQ_MTR },
-  expenses: [expenseSchema],
   is_deleted: { type: Boolean, default: false },
   is_active: { type: Boolean, default: true },
-  protected_space: { type: Boolean, default: true },
-  contacts: [contactSchema],
-  therapists: [TherapistSchema],
-  address: addressSchema,
-  rooms: [roomSchema],
-  operating_hours: [workingHourSchema],
-  treatment: [TreatmentPricingSchema],
+  clinics: [
+    {
+      id: Schema.Types.ObjectId,
+      name: String,
+      treatment: [TreatmentPricingSchema],
+    },
+  ],
 });
 
 const activityModel = model<Activity>(

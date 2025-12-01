@@ -1,18 +1,16 @@
 import mongoose, { PipelineStage } from "mongoose";
 import Constants from "../locales/constants";
 import { ObjectId } from "../utils/helpers";
-import { Activity, Clinic } from "../types/interface.types";
+import { Clinic } from "../types/interface.types";
 
-const activityModel = mongoose.model<Activity>("activities");
-const clinicModel = mongoose.model<Clinic>("clinics")
+const clinicModel = mongoose.model<Clinic>("clinics");
 
-
-export const createActivityService = (
+export const createClinicService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const newActivity = await activityModel.create(payload);
+      const newActivity = await clinicModel.create(payload);
 
       if (!newActivity) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
@@ -24,14 +22,14 @@ export const createActivityService = (
   });
 };
 
-export const viewActivityService = (
+export const viewClinicService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
       const id = ObjectId(payload.id);
 
-      const activity = await activityModel.findOne({ _id: id }).exec();
+      const activity = await clinicModel.findOne({ _id: id }).exec();
 
       if (!activity) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.FIND.code);
@@ -44,7 +42,7 @@ export const viewActivityService = (
   });
 };
 
-export const updateActivityService = (
+export const updateClinicService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
@@ -57,7 +55,7 @@ export const updateActivityService = (
         delete payload.body.internal_code;
       }
 
-      const updatedActivity = await activityModel
+      const updatedActivity = await clinicModel
         .findOneAndUpdate(
           { _id: ObjectId(payload.params.id) },
           { $set: payload.body },
@@ -75,12 +73,12 @@ export const updateActivityService = (
   });
 };
 
-export const deleteActivityService = (
+export const deleteClinicService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const deletedActivity = await activityModel.findOneAndUpdate(
+      const deletedActivity = await clinicModel.findOneAndUpdate(
         {
           _id: ObjectId(payload.id),
         },
@@ -97,7 +95,7 @@ export const deleteActivityService = (
   });
 };
 
-export const listActivityService = (
+export const listClinicService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
@@ -114,14 +112,17 @@ export const listActivityService = (
       const and: any[] = [];
 
       if (payload.id) and.push({ id: ObjectId(payload.id) });
-      if (payload.activity_name) and.push({ id: payload.activity_name });
       if (payload.organisation_id)
         and.push({
           "organisation.id": ObjectId(payload.organisation_id),
         });
-      if (payload.department_id)
+
+      if (payload.protected_space)
+        and.push({ protected_space: payload.protected_space });
+
+      if (payload.working_hours)
         and.push({
-          "department.id": ObjectId(payload.department_id),
+          operating_hours: payload.operating_hours,
         });
 
       if (payload.search) {
@@ -133,7 +134,7 @@ export const listActivityService = (
             },
           },
           {
-            "department.name": { $regex: payload.search.trim(), $options: "i" },
+            name: { $regex: payload.search.trim(), $options: "i" },
           }
         );
       }
@@ -150,15 +151,15 @@ export const listActivityService = (
 
       const countPipeline = [{ $match: match }, { $count: "total" }];
 
-      const [activities, countResult] = await Promise.all([
-        activityModel.aggregate(pipeline),
-        activityModel.aggregate(countPipeline),
+      const [clinics, countResult] = await Promise.all([
+        clinicModel.aggregate(pipeline),
+        clinicModel.aggregate(countPipeline),
       ]);
 
       const totalCount = countResult[0]?.total || 0;
 
       resolve({
-        data: activities,
+        data: clinics,
         meta: {
           count: totalCount,
           pages: Math.ceil(totalCount / limit),
@@ -172,99 +173,31 @@ export const listActivityService = (
   });
 };
 
-export const createExpenseService = (
+export const addEmployeeClinicService = (
   payload: Record<string, any>
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const expenseArray = Array.isArray(payload.body)
-        ? payload.body
-        : [payload.body];
-
-      const newExpense = await activityModel.findOneAndUpdate(
-        {
-          _id: ObjectId(payload.params.id),
-          is_active: true,
-        },
-        {
-          $push: {
-            expenses: { $each: expenseArray },
-          },
-        },
-        { new: true, returnDocument: "after" }
-      );
-
-      if (!newExpense)
-        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
-
-      resolve(newExpense);
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
-export const updateExpenseService = (
-  payload: Record<string, any>
-): Record<string, any> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const setObj: Record<string, any> = {};
-      for (const key in payload.body) {
-        if (payload.body[key] !== undefined) {
-          setObj[`expenses.$[elem].${key}`] = payload.body[key];
-        }
+      if (payload.body.internal_code) {
+        delete payload.body.internal_code;
       }
-      const expIdParam = payload.params.exp_id;
 
-      const arrayFilterId = mongoose.Types.ObjectId.isValid(expIdParam)
-        ? ObjectId(expIdParam)
-        : expIdParam;
-
-      const newExpense = await activityModel.findOneAndUpdate(
-        { _id: ObjectId(payload.params.id), is_active: true },
-        { $set: setObj },
-        {
-          new: true,
-          returnDocument: "after",
-          arrayFilters: [{ "elem._id": arrayFilterId }],
-        }
-      );
-
-      if (!newExpense)
-        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
-
-      resolve(newExpense);
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
-export const deleteExpenseService = (
-  payload: Record<string, any>
-): Record<string, any> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const newExpense = await activityModel.findOneAndUpdate(
-        {
-          _id: ObjectId(payload.params.id),
-          is_active: true,
-        },
-        {
-          $pull: {
-            expenses: { _id: ObjectId(payload.params.exp_id) },
+      const updatedClinic = await clinicModel
+        .findOneAndUpdate(
+          { _id: ObjectId(payload.params.id) },
+          {
+            $push: {
+              employees: payload.body,
+            },
           },
-        },
-        {
-          new: true,
-        }
-      );
+          { new: true, runValidators: true }
+        )
+        .exec();
 
-      if (!newExpense)
-        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.DELETE.code);
-
-      resolve(newExpense);
+      if (!updatedClinic) {
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
+      }
+      resolve(updatedClinic);
     } catch (error) {
       reject(error);
     }
