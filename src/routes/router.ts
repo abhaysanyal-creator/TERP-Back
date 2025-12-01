@@ -12,6 +12,7 @@ import referenceRoutes from "./reference.routes";
 import commonRoutes from "./common.routes";
 import departmentRoutes from "./department.routes";
 import sessionsRoutes from "./sessions.routes";
+import clinicRoutes from "./clinic.routes";
 
 const router = Router();
 
@@ -28,5 +29,6 @@ router.use("/reference", referenceRoutes);
 router.use("/common", commonRoutes);
 router.use("/departments", departmentRoutes);
 router.use("/sessions", sessionsRoutes);
+router.use("/clinics", clinicRoutes);
 
 export default router;
