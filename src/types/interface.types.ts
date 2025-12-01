@@ -21,7 +21,8 @@ export interface User extends Document {
   email: string;
   is_deleted: boolean;
   employee_id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   password: string;
   role: Types.ObjectId;
   createdAt?: Date;
@@ -135,7 +136,7 @@ export interface Employee extends Document {
   hire_date: string;
   blocked_times?: BlockTime[];
   role?: Types.ObjectId;
-  is_first_login:boolean;
+  is_first_login: boolean;
   job_percentage: number;
   dob: string;
   organization_assignments: Organisation[];
@@ -412,6 +413,17 @@ export interface IDepartment extends Document {
   department_end_date?: Date;
 }
 
+export interface Recurrence {
+  repeat_every: {
+    value: number;
+    unit: string;
+  };
+  repeat_on: string[];
+  ends: string;
+  end_date?: Date;
+  occurrences?: number;
+}
+
 export interface ISession extends Document {
   patient: { id: Types.ObjectId; name: string };
   organisation: { id: Types.ObjectId; name: string };
@@ -498,19 +510,7 @@ export interface ISession extends Document {
   scheduled_date: string;
   scheduled_end: string;
   is_recurring: boolean;
-  recurrence?: {
-    repeat_every: {
-      value: { type: Number; default: 1 };
-      unit: String;
-    };
-    repeat_on: string[];
-    ends: {
-      type: String;
-      enum: string;
-    };
-    end_date: { type: Date };
-    occurrences: { type: Number };
-  };
+  recurrence?: Recurrence[];
   compensation_session: {
     make_up_session_date: Date;
     start_time: Date;
