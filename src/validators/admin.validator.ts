@@ -10,8 +10,11 @@ export const adminCreateValidator: ExpressMiddlewareNext = (
   if (!request.body.username) {
     return badRequest(response, Lang.USERNAME_IS_REQUIRED);
   }
-  if (!request.body.name) {
-    return badRequest(response, Lang.USERNAME_IS_REQUIRED);
+  if (!request.body.first_name) {
+    return badRequest(response, Lang.FIRST_NAME_REQUIRED);
+  }
+    if (!request.body.last_name) {
+    return badRequest(response, Lang.LAST_NAME_REQUIRED);
   }
   if (!request.body.email) {
     return badRequest(response, Lang.EMAIL_IS_REQUIRED);
