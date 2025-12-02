@@ -113,6 +113,12 @@ export const blockTimeSchema = new Schema(
         name: { type: String },
       },
     ],
+    team_members: [
+      {
+        id: { type: Schema.Types.ObjectId, ref: "employees" },
+        name: { type: String },
+      },
+    ],
     description: { type: String, maxlength: 50 },
     is_recurring: { type: Boolean, default: false },
   },
