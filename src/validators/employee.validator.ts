@@ -381,32 +381,33 @@ export const blockTimeValidator: ExpressMiddlewareNext = (
   if (!request.body.id) {
     return badRequest(response, Constants.MESSAGES.EMP_ID_REQ.code);
   }
-  if (!request.body.start_time) {
-    return badRequest(response, Constants.MESSAGES.START_TIME_REQ.code);
-  }
-  if (!request.body.end_time) {
-    return badRequest(response, Constants.MESSAGES.END_TIME_REQ.code);
-  }
 
-  if (!request.body.created_by) {
-    return badRequest(response, Constants.MESSAGES.CREATED_BY_REQ.code);
-  }
-  if (!request.body.reason) {
+  if (!request.body.block_type) {
     return badRequest(response, Constants.MESSAGES.BLOCK_TYPE_REQUIRED.code);
   }
-  if (request.body.reason) {
-    if (!Object.values(enums.BlockType).includes(request.body.reason)) {
+  if (request.body.block_type.name !== enums.BlockType.VACATION) {
+    if (!request.body.start_time) {
+      return badRequest(response, Constants.MESSAGES.START_TIME_REQ.code);
+    }
+    if (!request.body.end_time) {
+      return badRequest(response, Constants.MESSAGES.END_TIME_REQ.code);
+    }
+  }
+  if (request.body.block_type.name) {
+    if (
+      !Object.values(enums.BlockType).includes(request.body.block_type.name)
+    ) {
       return badRequest(
         response,
         Constants.MESSAGES.INVALID_BLOCK_TYPE_REQUIRED.code
       );
     }
-    if (!request.body.department) {
-      return badRequest(response, Constants.MESSAGES.DEPARTMENT_ID_REQ.code);
-    }
-    if (!request.body.activity) {
-      return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
-    }
+  }
+  if (!request.body.department) {
+    return badRequest(response, Constants.MESSAGES.DEPARTMENT_ID_REQ.code);
+  }
+  if (!request.body.activity) {
+    return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
   }
   if (request.body.description && request.body.description.length > 50) {
     return badRequest(response, Constants.MESSAGES.MAX_50_CHAR.code);

@@ -3,6 +3,7 @@ import { badRequest, success } from "../response/response";
 import { ExpressMiddleware } from "../types/express.types";
 import Constants from "../locales/constants";
 import {
+  addRecurringSessionsService,
   createAppointmentService,
   listAppointmentService,
   updateAppointmentsService,
@@ -15,6 +16,11 @@ import enums from "../enums.json";
 import { assigningWaitingListService } from "../services/assignWaitingListService";
 import { getSignedUrlForView } from "./upload.controller";
 
+const sessionsModel = mongoose.model("sessions");
+const activityModel = mongoose.model("activities");
+const employeeModel = mongoose.model("employees");
+const waitingListModel = mongoose.model("waiting_list");
+
 export const createAppointmentController: ExpressMiddleware = async (
   request,
   response
@@ -23,16 +29,25 @@ export const createAppointmentController: ExpressMiddleware = async (
     const session_id = await generateCode("TH", 10);
     request.body.session_id = session_id;
 
-    const overlappingBooking = await mongoose.model("activities").findOne({
+    // Checking for the recurrence
+
+    const isRecurring = request.body.is_recurring === true;
+    //validating only the parent session
+    const validateDate = request.body.scheduled_date;
+    const validateStart = request.body.scheduled_start;
+    const validateEnd = request.body.scheduled_end;
+
+    // Check for room overlap
+    const overlappingBooking = await activityModel.findOne({
       _id: ObjectId(request.body.clinic_id),
       "rooms.id": ObjectId(request.body.treatment_area.id),
       "rooms.bookings": {
         $elemMatch: {
-          scheduled_date: request.body.scheduled_date,
+          scheduled_date: validateDate,
           $or: [
             {
-              scheduled_start: { $lt: request.body.scheduled_end },
-              scheduled_end: { $gt: request.body.scheduled_start },
+              scheduled_start: { $lt: validateEnd },
+              scheduled_end: { $gt: validateStart },
             },
           ],
           status: "booked",
@@ -44,8 +59,7 @@ export const createAppointmentController: ExpressMiddleware = async (
       return badRequest(response, Constants.MESSAGES.ROOM_UNAVAIL.code);
     }
 
-    const therapist = await mongoose
-      .model("employees")
+    const therapist = await employeeModel
       .findOne({ _id: ObjectId(request.body.therapist.id) })
       .lean()
       .exec();
@@ -57,21 +71,21 @@ export const createAppointmentController: ExpressMiddleware = async (
       );
     }
 
-    const overLappingAppointment = await mongoose.model("sessions").findOne({
+    const overLappingAppointment = await sessionsModel.findOne({
       "therapist.id": ObjectId(request.body.therapist.id),
-      scheduled_date: request.body.scheduled_date,
+      scheduled_date: validateDate,
       status: { $ne: enums.SessionStatus.CANCELLED },
-      scheduled_start: { $lt: request.body.scheduled_end },
-      scheduled_end: { $gt: request.body.scheduled_start },
+      scheduled_start: { $lt: validateEnd },
+      scheduled_end: { $gt: validateStart },
     });
 
     if (overLappingAppointment) {
-      await mongoose.model("waiting_list").create({
+      await waitingListModel.create({
         therapist_id: request.body.therapist.id,
         patient_id: request.body.patient.id,
-        preferred_date: request.body.scheduled_date,
-        preferred_start: request.body.scheduled_start,
-        preferred_end: request.body.scheduled_end,
+        preferred_date: validateDate,
+        preferred_start: validateStart,
+        preferred_end: validateEnd,
       });
       return badRequest(
         response,
@@ -100,8 +114,6 @@ export const viewAppointmentController: ExpressMiddleware = async (
     if (!isBookingExist) {
       return badRequest(response, Constants.MESSAGES.ID_REQ.code);
     }
-
-    
 
     const result = await viewAppointmentService(request.params);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
@@ -170,6 +182,26 @@ export const listAppointmentController: ExpressMiddleware = async (
 ) => {
   try {
     const result = await listAppointmentService(request.body);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const addRecurringSessionsController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const parent_session = await sessionsModel.findById(
+      ObjectId(request.params.id)
+    );
+
+    if (!parent_session) {
+      return badRequest(response, Constants.MESSAGES.SESSION_ID_REQ.code);
+    }
+    const result = await addRecurringSessionsService(request, parent_session);
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
