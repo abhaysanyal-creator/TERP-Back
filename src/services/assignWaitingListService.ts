@@ -41,7 +41,7 @@ export const assigningWaitingListService = async () => {
         .model("sessions")
         .updateOne(
           { _id: freeSlot._id },
-          { $set: { status: enums.SessionStatus.AVAILABLE } },
+          { $set: { status: enums.SessionStatus.APPROVAL_PENDING } },
           { session }
         );
 
@@ -52,7 +52,7 @@ export const assigningWaitingListService = async () => {
       { _id: freeSlot._id },
       {
         $set: {
-          status: enums.SessionStatus.SCHEDULED,
+          status: enums.SessionStatus.APPROVAL_PENDING,
           patient: waiting.patient,
         },
       },
