@@ -9,11 +9,15 @@ import {
   updateEmployeeService,
   viewEmployeeService,
 } from "../services/employee.service";
-import type { ExpressMiddleware } from "../types/express.types";
+import type {
+  AuthenticatedRequest,
+  ExpressMiddleware,
+} from "../types/express.types";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import mongoose, { mongo } from "mongoose";
 import { isBlockWithinWorkingHours, ObjectId } from "../utils/helpers";
 import Constants from "../locales/constants";
+import { CloudWatchLogs } from "aws-sdk";
 
 export const createEmployeeController: ExpressMiddleware = async (
   request,
@@ -176,6 +180,10 @@ export const blockTimeEmployeeController: ExpressMiddleware = async (
   response
 ) => {
   try {
+    const user = (request as AuthenticatedRequest)?.user?.id;
+
+    request.body.created_by = user;
+
     const existingEmployee = await mongoose.model("employees").findOne({
       _id: ObjectId(request.body.id),
       is_deleted: false,

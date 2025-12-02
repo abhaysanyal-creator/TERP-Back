@@ -120,8 +120,8 @@ export const blockTimeEmployeeService = (
         .model("employees")
         .findOneAndUpdate(
           { _id: ObjectId(payload.id), is_deleted: { $ne: true } },
-          { $set: { blocked_times: payload } },
-          { returnDocument: "after" }
+          { $push: { blocked_times: payload } },
+          { new: true, returnDocument: "after" }
         )
         .exec();
 

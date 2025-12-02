@@ -38,7 +38,6 @@ router.patch(
   updateAppointmentsController
 );
 
-
 router.patch(
   "/change-status/:id",
   authorisationMiddleware,
@@ -48,6 +47,13 @@ router.patch(
 
 router.post(
   "/list",
+  authorisationMiddleware,
+  listAppointmentsValidator,
+  listAppointmentController
+);
+
+router.post(
+  "/add-compensatory-session/:id",
   authorisationMiddleware,
   listAppointmentsValidator,
   listAppointmentController

@@ -170,3 +170,18 @@ export const listAppointmentsValidator: ExpressMiddlewareNext = (
   }
   next();
 };
+
+export const addRecurringSessionsValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.body.repeat_every) {
+    return badRequest(
+      response,
+      Constants.MESSAGES.REPEATING_DETAILS_REQUIRED.code
+    );
+  }
+
+  next();
+};

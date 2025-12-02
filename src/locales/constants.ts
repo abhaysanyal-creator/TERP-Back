@@ -16,6 +16,10 @@ export default {
       code: "DOC_TYPE_REQ",
       message: "Document type is required!!",
     },
+    REPEATING_DETAILS_REQUIRED: {
+      code: "REPEATING_DETAILS_REQUIRED",
+      message: "Repeating Details are required!!",
+    },
     TEAM_LEAD_REQ_TRUE_FALSE: {
       code: "TEAM_LEAD_REQ_TRUE_FALSE",
     },
