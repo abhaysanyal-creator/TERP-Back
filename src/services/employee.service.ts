@@ -267,7 +267,7 @@ export const getAllAvailabilityService = async (
 
   const therapists = await mongoose
     .model("employees")
-    .find({ is_active: true, "employee_roles.name": "Therapist" });
+    .find({ is_active: true, "employee_roles.name": enums.RoleEnum.THERAPIST });
 
   if (!therapists || therapists.length === 0) {
     throw new Error(Constants.MESSAGES.NOT_FOUND.code);
