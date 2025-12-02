@@ -1,6 +1,7 @@
 import { Specialisation } from "./../types/interface.types";
 import { Schema, model } from "mongoose";
 import type {
+  BlockTime,
   EmpDocuments,
   Employee,
   Organisation,
@@ -64,7 +65,7 @@ export const DocSchema: Schema<EmpDocuments> = new Schema(
   }
 );
 
-export const blockTimeSchema = new Schema(
+export const blockTimeSchema: Schema<BlockTime> = new Schema(
   {
     start_date: { type: String },
     end_date: { type: String },

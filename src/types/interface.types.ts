@@ -106,16 +106,21 @@ export interface EmpDocuments {
 }
 export interface BlockTime {
   id?: string;
-  start_time: Date;
-  end_time: Date;
-  created_by: string;
-  created_by_type: string;
-  department: Types.ObjectId;
-  activity: Types.ObjectId;
-  patient: Types.ObjectId;
-  reason?: string;
+  start_date: string;
+  end_date: string;
+  start_time: string;
+  end_time: string;
+  created_by: Types.ObjectId;
+  created_by_type?: string;
+  department: { id: Types.ObjectId; name: string };
+  activity: { id: Types.ObjectId; name: string };
+  patients?: { id: Types.ObjectId; name: string }[];
+  therapists?: { id: Types.ObjectId; name: string }[];
+  block_type?: { name: string; label: string };
   description?: string;
-  organisation_id?: string;
+  organisation?: { id: Types.ObjectId; name: string };
+  team_members?: { id: Types.ObjectId; name: string }[];
+  supervisor?: { id: Types.ObjectId; name: string }[];
   is_recurring?: boolean;
 }
 
