@@ -4,7 +4,7 @@ import enums from "../enums.json";
 
 export interface Role {
   name: string;
-  value?: string;
+  label?: string;
   permissions: {
     name: string;
     permission: string;
@@ -127,7 +127,7 @@ export interface Employee extends Document {
   national_id: string;
   employee_type: string;
   position_types: string;
-  employee_roles: { id: Types.ObjectId; name: string };
+  employee_roles: { id: Types.ObjectId; name: string; label?: string };
   documents: EmpDocuments[];
   team_leader: boolean;
   is_deleted: boolean;
@@ -516,6 +516,9 @@ export interface ISession extends Document {
     start_time: Date;
     end_time: Date;
   };
+  is_parent_session: boolean;
+  parent_session_id: Types.ObjectId;
+  recurrence_group_id: Types.ObjectId;
   status: string;
   therapist_approval: string;
   note: string;
