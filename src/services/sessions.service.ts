@@ -268,6 +268,7 @@ export const listAppointmentService = (
         const start = new Date(payload.date);
         const end = new Date(payload.date);
         end.setDate(end.getDate() + 1);
+        console.log(payload.date);
 
         and.push({
           scheduled_date: {
@@ -276,6 +277,22 @@ export const listAppointmentService = (
           },
         });
       }
+
+      if (payload.from_date && payload.to_date) {
+        const start = new Date(payload.from_date);
+        const end = new Date(payload.to_date);
+
+        // Include full last day
+        end.setDate(end.getDate() + 1);
+
+        and.push({
+          scheduled_date: {
+            $gte: start,
+            $lt: end,
+          },
+        });
+      }
+
       if (payload.time) {
         const time = new Date(payload.time).toISOString().substring(11, 16);
 

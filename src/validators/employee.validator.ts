@@ -385,14 +385,7 @@ export const blockTimeValidator: ExpressMiddlewareNext = (
   if (!request.body.block_type) {
     return badRequest(response, Constants.MESSAGES.BLOCK_TYPE_REQUIRED.code);
   }
-  if (request.body.block_type.name !== enums.BlockType.VACATION) {
-    if (!request.body.start_time) {
-      return badRequest(response, Constants.MESSAGES.START_TIME_REQ.code);
-    }
-    if (!request.body.end_time) {
-      return badRequest(response, Constants.MESSAGES.END_TIME_REQ.code);
-    }
-  }
+
   if (request.body.block_type.name) {
     if (
       !Object.values(enums.BlockType).includes(request.body.block_type.name)
@@ -402,16 +395,52 @@ export const blockTimeValidator: ExpressMiddlewareNext = (
         Constants.MESSAGES.INVALID_BLOCK_TYPE_REQUIRED.code
       );
     }
+    if (request.body.block_type.name === enums.BlockType.VACATION) {
+      if (!request.body.start_date) {
+        return badRequest(response, Constants.MESSAGES.START_TIME_REQ.code);
+      }
+      if (!request.body.end_date) {
+        return badRequest(response, Constants.MESSAGES.END_TIME_REQ.code);
+      }
+    }
+
+    if (request.body.block_type.name === enums.BlockType.UNAVAILABLE) {
+      if (!request.body.start_date) {
+        return badRequest(response, Constants.MESSAGES.START_TIME_REQ.code);
+      }
+      if (!request.body.start_time) {
+        return badRequest(response, Constants.MESSAGES.START_TIME_REQ.code);
+      }
+      if (!request.body.end_time) {
+        return badRequest(response, Constants.MESSAGES.END_TIME_REQ.code);
+      }
+      if (request.body.description && request.body.description.length > 50) {
+        return badRequest(response, Constants.MESSAGES.MAX_50_CHAR.code);
+      }
+    }
+
+    if (
+      request.body.block_type.name !==
+      (enums.BlockType.VACATION || enums.BlockType.UNAVAILABLE)
+    ) {
+      if (!request.body.start_time) {
+        return badRequest(response, Constants.MESSAGES.START_TIME_REQ.code);
+      }
+      if (!request.body.end_time) {
+        return badRequest(response, Constants.MESSAGES.END_TIME_REQ.code);
+      }
+      if (!request.body.department) {
+        return badRequest(response, Constants.MESSAGES.DEPARTMENT_ID_REQ.code);
+      }
+      if (!request.body.activity) {
+        return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
+      }
+      if (request.body.description && request.body.description.length > 50) {
+        return badRequest(response, Constants.MESSAGES.MAX_50_CHAR.code);
+      }
+    }
   }
-  if (!request.body.department) {
-    return badRequest(response, Constants.MESSAGES.DEPARTMENT_ID_REQ.code);
-  }
-  if (!request.body.activity) {
-    return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
-  }
-  if (request.body.description && request.body.description.length > 50) {
-    return badRequest(response, Constants.MESSAGES.MAX_50_CHAR.code);
-  }
+
   next();
 };
 
