@@ -1,5 +1,6 @@
 import { request } from "http";
 import mongoose from "mongoose";
+import { ObjectId } from "../utils/helpers";
 
 export const addRolesService = (
   payload: Record<string, any>
@@ -46,11 +47,15 @@ export const updateRolesService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const newRole = await mongoose
-        .model("roles")
-        .findOneAndUpdate({ _id: payload.params.id }, payload.body, {
+      console.log(payload.body);
+      const newRole = await mongoose.model("roles").findOneAndUpdate(
+        { _id: ObjectId(payload.params.id) },
+        { $set: payload.body },
+        {
+          new:true,
           returnDocument: "after",
-        });
+        }
+      );
       return resolve(newRole);
     } catch (error) {
       return reject(error);

@@ -114,6 +114,7 @@ const employeeSchema = new Schema<Employee>(
     employee_roles: {
       id: { type: Schema.Types.ObjectId },
       name: { type: String },
+      label:{type:String}
     },
     team_leader: { type: Boolean, required: true },
     hire_date: { type: String, required: true },
