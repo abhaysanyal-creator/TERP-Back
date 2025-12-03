@@ -84,7 +84,7 @@ router.delete(
 router.patch(
   "/:id/add-employee",
   authorisationMiddleware,
-  addEmployeeClinicValidator,
+  // addEmployeeClinicValidator,
   addEmployeeActivityController
 );
 
