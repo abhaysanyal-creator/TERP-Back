@@ -69,30 +69,45 @@ const SessionSchema = new Schema<ISession>(
     is_recurring: { type: Boolean, default: false },
     documents: [DocSchema],
     recurrence: {
-      type: {
-        _id: false,
-        repeat_every: {
-          value: { type: Number },
-          unit: {
-            type: String,
-            enum: Object.values(enums.RecurrenceUnits),
-          },
-        },
-        repeat_on: [
-          {
-            type: String,
-            enum: Object.values(enums.RecurrenceOn),
-          },
-        ],
-        ends: {
+      _id: false,
+      repeat_every: {
+        value: { type: Number },
+        unit: {
           type: String,
-          enum: Object.values(enums.RecurrenceEnds),
+          enum: Object.values(enums.RecurrenceUnits),
         },
-        end_date: { type: Date },
-        occurrences: { type: Number },
       },
+      repeat_on: [
+        {
+          type: String,
+          enum: Object.values(enums.RecurrenceOn),
+        },
+      ],
+      ends: {
+        type: String,
+        enum: Object.values(enums.RecurrenceEnds),
+      },
+      end_date: { type: Date },
+      occurrences: { type: Number },
+    },
+
+    is_parent_session: {
+      type: Boolean,
+      default: false, // parent = true, child = false
+    },
+
+    parent_session_id: {
+      type: Schema.Types.ObjectId,
+      ref: "sessions",
       default: null,
     },
+
+    recurrence_group_id: {
+      type: Schema.Types.ObjectId,
+      default: null,
+      index: true, // enables fast "find all sessions in group"
+    },
+
     compensation_session: {
       _id: false,
       type: {
@@ -105,7 +120,7 @@ const SessionSchema = new Schema<ISession>(
     status: {
       type: String,
       enum: enums.SessionStatus,
-      default: enums.SessionStatus.SCHEDULED,
+      default: enums.SessionStatus.APPROVAL_PENDING,
     },
     therapist_approval: {
       type: String,

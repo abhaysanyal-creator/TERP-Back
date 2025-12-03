@@ -3,6 +3,12 @@ import { generateCode, ObjectId } from "../utils/helpers";
 import Constants from "../locales/constants";
 import enums from "../enums.json";
 import { getSignedUrlForView } from "../controllers/upload.controller";
+import { generateRecurringSessions } from "../utils/getRecurrences";
+import { ISession } from "../types/interface.types";
+
+const sessionsModel = mongoose.model("sessions");
+const patientsModel = mongoose.model("patients");
+const activitiesModel = mongoose.model("activities");
 
 export const createAppointmentService = (
   payload: Record<string, any>
@@ -10,8 +16,7 @@ export const createAppointmentService = (
   return new Promise(async (resolve, reject) => {
     try {
       if (payload.patient.id) {
-        await mongoose
-          .model("patients")
+        await patientsModel
           .findOneAndUpdate(
             {
               _id: ObjectId(payload.patient.id),
@@ -28,13 +33,61 @@ export const createAppointmentService = (
           .exec();
       }
 
-      const newBooking = await mongoose.model("sessions").create(payload);
+      const occurences = payload.recurrence?.occurrences ?? 1;
+
+      const newBooking = await sessionsModel.create({
+        ...payload,
+        parent_session_id: null,
+      });
 
       if (!newBooking) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
       }
 
-      const pushed = await mongoose.model("activities").updateOne(
+      if (!payload.is_recurring || !payload.recurrence) {
+        resolve([newBooking]);
+      }
+
+      const recurringDates = generateRecurringSessions(
+        new Date(payload.scheduled_date),
+        payload.recurrence
+      );
+
+      const childSessions: ISession[] = [];
+
+      for (const date of recurringDates) {
+        const isoDate = date.toISOString().split("T")[0];
+        const child = await sessionsModel.create({
+          ...payload,
+          scheduled_date: isoDate,
+          parent_session_id: newBooking._id,
+          is_recurring: false, // children must not recursively generate
+          recurrence: null,
+        });
+
+        childSessions.push(child);
+        await activitiesModel.updateOne(
+          {
+            _id: ObjectId(payload.clinic_id),
+            "rooms.id": ObjectId(payload.treatment_area.id),
+          },
+          {
+            $push: {
+              "rooms.$.bookings": {
+                session_id: child.session_id,
+                therapist_id: child.therapist.id,
+                patient_id: child.patient.id,
+                scheduled_date: child.scheduled_date,
+                scheduled_start: child.scheduled_start,
+                scheduled_end: child.scheduled_end,
+                status: enums.Room_Status.BOOKED,
+              },
+            },
+          }
+        );
+      }
+
+      await activitiesModel.updateOne(
         {
           _id: ObjectId(payload.clinic_id),
           "rooms.id": ObjectId(payload.treatment_area.id),
@@ -66,8 +119,7 @@ export const viewAppointmentService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const existingBooking = await mongoose
-        .model("sessions")
+      const existingBooking = await sessionsModel
         .findById(ObjectId(payload.id))
         .exec();
 
@@ -97,8 +149,7 @@ export const updateAppointmentsService = (
       const requestBody = payload.body;
       const id = payload.params.id;
 
-      const updatedBooking = await mongoose
-        .model("sessions")
+      const updatedBooking = await sessionsModel
         .findOneAndUpdate(
           { _id: ObjectId(id) },
           {
@@ -127,8 +178,7 @@ export const updateSessionsStatusService = (
       const requestBody = payload.body.status;
       const id = payload.params.id;
 
-      const updatedBooking = await mongoose
-        .model("sessions")
+      const updatedBooking = await sessionsModel
         .findOneAndUpdate(
           { _id: ObjectId(id) },
           {
@@ -156,8 +206,7 @@ export const deleteBookingService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const deletedBooking = await mongoose
-        .model("bookings")
+      const deletedBooking = await sessionsModel
         .findOneAndUpdate(
           { _id: ObjectId(payload.id), is_deleted: { $ne: true } },
           { $set: { is_deleted: true } },
@@ -180,8 +229,7 @@ export const changeBookingStatusService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const changedBooking = await mongoose
-        .model("bookings")
+      const changedBooking = await sessionsModel
         .findOneAndReplace(
           { _id: payload.id, is_deleted: false },
           { $set: { status: payload.status } },
@@ -220,6 +268,7 @@ export const listAppointmentService = (
         const start = new Date(payload.date);
         const end = new Date(payload.date);
         end.setDate(end.getDate() + 1);
+        console.log(payload.date);
 
         and.push({
           scheduled_date: {
@@ -228,6 +277,22 @@ export const listAppointmentService = (
           },
         });
       }
+
+      if (payload.from_date && payload.to_date) {
+        const start = new Date(payload.from_date);
+        const end = new Date(payload.to_date);
+
+        // Include full last day
+        end.setDate(end.getDate() + 1);
+
+        and.push({
+          scheduled_date: {
+            $gte: start,
+            $lt: end,
+          },
+        });
+      }
+
       if (payload.time) {
         const time = new Date(payload.time).toISOString().substring(11, 16);
 
@@ -276,8 +341,8 @@ export const listAppointmentService = (
       const countPipeline = [{ $match: match }, { $count: "total" }];
 
       const [sessions, countResult] = await Promise.all([
-        mongoose.model("sessions").aggregate(pipeline),
-        mongoose.model("sessions").aggregate(countPipeline),
+        sessionsModel.aggregate(pipeline),
+        sessionsModel.aggregate(countPipeline),
       ]);
 
       const totalCount = countResult[0]?.total || 0;
@@ -291,6 +356,99 @@ export const listAppointmentService = (
           total: totalCount,
         },
       });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const addRecurringSessionsService = (
+  payload: Record<string, any>,
+  parent_session: ISession
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const payloadBody = payload.body;
+
+      if (payloadBody.patient.id) {
+        await patientsModel
+          .findOneAndUpdate(
+            {
+              _id: ObjectId(payloadBody.patient.id),
+            },
+            {
+              $set: {
+                therapist: payloadBody.therapist,
+              },
+            },
+            {
+              new: true,
+            }
+          )
+          .exec();
+      }
+
+      const occurences = payloadBody.recurrence?.occurrences ?? 1;
+
+      const recurringDates = generateRecurringSessions(
+        new Date(parent_session.scheduled_date),
+        payloadBody.recurrence
+      );
+
+      const recurrenceGroupId =
+        parent_session.recurrence_group_id ?? new mongoose.Types.ObjectId();
+
+      if (!parent_session.recurrence_group_id) {
+        await sessionsModel.updateOne(
+          { _id: parent_session._id },
+          { $set: { recurrence_group_id: recurrenceGroupId } }
+        );
+      }
+
+      const childSessions: Partial<ISession>[] = [];
+
+      for (const date of recurringDates) {
+        const isoDate = date.toISOString().split("T")[0];
+
+        const childSessionCode = `${parent_session.session_id}-R-${
+          childSessions.length + 1
+        }`;
+        const childSessionPayload: Partial<ISession> = {
+          ...payloadBody,
+          session_id: childSessionCode,
+          scheduled_date: isoDate,
+          is_recurring: true,
+          is_parent_session: false,
+          recurrence: null,
+          parent_session_id: parent_session._id,
+          recurrence_group_id: recurrenceGroupId,
+        };
+
+        const child = await sessionsModel.create(childSessionPayload);
+
+        childSessions.push(child);
+
+        await activitiesModel.updateOne(
+          {
+            _id: ObjectId(payloadBody.clinic_id),
+            "rooms.id": ObjectId(payloadBody.treatment_area.id),
+          },
+          {
+            $push: {
+              "rooms.$.bookings": {
+                session_id: child.session_id,
+                therapist_id: child.therapist.id,
+                patient_id: child.patient.id,
+                scheduled_date: child.scheduled_date,
+                scheduled_start: child.scheduled_start,
+                scheduled_end: child.scheduled_end,
+                status: enums.Room_Status.BOOKED,
+              },
+            },
+          }
+        );
+      }
+      resolve(childSessions);
     } catch (error) {
       reject(error);
     }

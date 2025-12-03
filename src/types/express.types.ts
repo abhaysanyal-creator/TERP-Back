@@ -7,3 +7,9 @@ export type ExpressMiddlewareNext = (
   response: Response,
   next: NextFunction
 ) => void;
+
+export interface AuthenticatedRequest extends Request {
+  user?: {
+    id: string;
+  };
+}

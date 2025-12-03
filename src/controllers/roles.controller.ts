@@ -10,6 +10,7 @@ import Lang from "../locales/en.json";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import Constants from "../locales/constants";
 import mongoose from "mongoose";
+import { ObjectId } from "../utils/helpers";
 
 export const addRolesController: ExpressMiddleware = async (
   request,
@@ -48,14 +49,15 @@ export const updateRolesController: ExpressMiddleware = async (
   try {
     const isRoleExist = await mongoose
       .model("roles")
-      .findById(request.params.id);
+      .findById(ObjectId(request.params.id));
 
     if (!isRoleExist)
       return badRequest(response, Constants.MESSAGES.ID_REQ.code);
-    
+
     const payload = request;
 
     const result = await updateRolesService(payload);
+    console.log(result,"==========")
     return success(response, Lang.USER_CREATED, result);
   } catch (error) {
     return badRequest(response, getErrorMessage(error));

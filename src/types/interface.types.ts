@@ -21,7 +21,8 @@ export interface User extends Document {
   email: string;
   is_deleted: boolean;
   employee_id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   password: string;
   role: Types.ObjectId;
   createdAt?: Date;
@@ -105,16 +106,21 @@ export interface EmpDocuments {
 }
 export interface BlockTime {
   id?: string;
-  start_time: Date;
-  end_time: Date;
-  created_by: string;
-  created_by_type: string;
-  department: Types.ObjectId;
-  activity: Types.ObjectId;
-  patient: Types.ObjectId;
-  reason?: string;
+  start_date: string;
+  end_date: string;
+  start_time: string;
+  end_time: string;
+  created_by: Types.ObjectId;
+  created_by_type?: string;
+  department: { id: Types.ObjectId; name: string };
+  activity: { id: Types.ObjectId; name: string };
+  patients?: { id: Types.ObjectId; name: string }[];
+  therapists?: { id: Types.ObjectId; name: string }[];
+  block_type?: { name: string; label: string };
   description?: string;
-  organisation_id?: string;
+  organisation?: { id: Types.ObjectId; name: string };
+  team_members?: { id: Types.ObjectId; name: string }[];
+  supervisor?: { id: Types.ObjectId; name: string }[];
   is_recurring?: boolean;
 }
 
@@ -126,7 +132,7 @@ export interface Employee extends Document {
   national_id: string;
   employee_type: string;
   position_types: string;
-  employee_roles: { id: Types.ObjectId; name: string };
+  employee_roles: { id: Types.ObjectId; name: string; label?: string };
   documents: EmpDocuments[];
   team_leader: boolean;
   is_deleted: boolean;
@@ -442,6 +448,17 @@ export interface IDepartment extends Document {
   department_end_date?: Date;
 }
 
+export interface Recurrence {
+  repeat_every: {
+    value: number;
+    unit: string;
+  };
+  repeat_on: string[];
+  ends: string;
+  end_date?: Date;
+  occurrences?: number;
+}
+
 export interface ISession extends Document {
   patient: { id: Types.ObjectId; name: string };
   organisation: { id: Types.ObjectId; name: string };
@@ -529,24 +546,15 @@ export interface ISession extends Document {
   scheduled_date: string;
   scheduled_end: string;
   is_recurring: boolean;
-  recurrence?: {
-    repeat_every: {
-      value: { type: Number; default: 1 };
-      unit: String;
-    };
-    repeat_on: string[];
-    ends: {
-      type: String;
-      enum: string;
-    };
-    end_date: { type: Date };
-    occurrences: { type: Number };
-  };
+  recurrence?: Recurrence[];
   compensation_session: {
     make_up_session_date: Date;
     start_time: Date;
     end_time: Date;
   };
+  is_parent_session: boolean;
+  parent_session_id: Types.ObjectId;
+  recurrence_group_id: Types.ObjectId;
   status: string;
   therapist_approval: string;
   note: string;

@@ -1,0 +1,76 @@
+import dayjs from "dayjs";
+import weekday from "dayjs/plugin/weekday";
+import isoWeek from "dayjs/plugin/isoWeek";
+import enums from "../enums.json";
+import { Recurrence } from "../types/interface.types";
+
+dayjs.extend(weekday);
+dayjs.extend(isoWeek);
+
+export const generateRecurringSessions = (
+  startDate: Date,
+  recurrences: Recurrence
+) => {
+  const { repeat_every, repeat_on, ends, end_date, occurrences } = recurrences;
+
+  const unit = repeat_every.unit.toLowerCase();
+  const step = repeat_every.value;
+
+  const sessions = [];
+  let count = 0;
+  let current = dayjs(startDate);
+
+  const checkEnd = () => {
+    if (ends === enums.RecurrenceEnds.DATE && current.isAfter(end_date))
+      return true;
+    if (
+      ends === enums.RecurrenceEnds.AFTER_OCCURRENCES &&
+      count >= occurrences!
+    )
+      return true;
+    return false;
+  };
+
+  if (unit === enums.RecurrenceUnits.DAY) {
+    while (!checkEnd()) {
+      sessions.push(current.toDate());
+      current = current.add(step, "day");
+      count++;
+    }
+  }
+
+  if (unit === enums.RecurrenceUnits.WEEK) {
+    const weekdays: Record<string, number> = {
+      SUN: 0,
+      MON: 1,
+      TUE: 2,
+      WED: 3,
+      THU: 4,
+      FRI: 5,
+      SAT: 6,
+    };
+
+    while (!checkEnd()) {
+      for (const day of repeat_on) {
+        const target = current.weekday(weekdays[day]);
+        if (target.isAfter(startDate) || count > 0) {
+          if (ends === "ON_DATE" && target.isAfter(end_date)) break;
+          sessions.push(target.toDate());
+          count++;
+          if (checkEnd()) break;
+        }
+      }
+      current = current.add(step, "week");
+    }
+  }
+
+  if (unit === enums.RecurrenceUnits.MONTH) {
+    while (!checkEnd()) {
+      sessions.push(current.toDate());
+      current = current.add(step, "month");
+      count++;
+    }
+  }
+
+  return sessions;
+};

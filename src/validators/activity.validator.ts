@@ -14,21 +14,6 @@ export const createActivityValidator: ExpressMiddlewareNext = (
   ) {
     return badRequest(response, Constants.MESSAGES.TYPE_REQUIRED.code);
   }
-
-  if (
-    !request.body.organisation ||
-    !request.body.organisation.id ||
-    !request.body.organisation.name
-  )
-    return badRequest(response, Constants.MESSAGES.ORG_ID_REQUIRED.code);
-
-  if (
-    !request.body.department ||
-    !request.body.department.id ||
-    !request.body.department.name
-  )
-    return badRequest(response, Constants.MESSAGES.DEPARTMENT_ID_REQ.code);
-
   if (!request.body.activity_id)
     return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
 
@@ -95,8 +80,6 @@ export const createActivityValidator: ExpressMiddlewareNext = (
     return badRequest(response, Constants.MESSAGES.INVALID_ROOMS_FORMAT.code);
   }
 
-  if (!request.body.treatment || !Array.isArray(request.body.treatment))
-    return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
 
   // for (const t of request.body.treatment) {
   //   if (
@@ -254,5 +237,26 @@ export const deleteExpenseValidator: ExpressMiddlewareNext = (
   if (!request.params.exp_id) {
     return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
   }
+  next();
+};
+
+export const addEmployeeClinicValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.CLINIC_ID_REQ.code);
+  }
+  if (!request.body.id) {
+    return badRequest(response, Constants.MESSAGES.EMP_ID_REQ.code);
+  }
+  if (!request.body.role) {
+    return badRequest(response, Constants.MESSAGES.ROLE_IS_REQ.code);
+  }
+  if (!request.body.name) {
+    return badRequest(response, Constants.MESSAGES.EMPLOYEE_NAME_REQ.code);
+  }
+
   next();
 };

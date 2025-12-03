@@ -96,11 +96,11 @@
     "CAMPUS": "campus"
   },
   "SessionStatus": {
-    "AVAILABLE": "available",
     "APPROVAL_PENDING": "approval_pending",
-    "SCHEDULED": "scheduled",
+    "UPCOMING": "upcoming",
     "REJECTED": "rejected",
     "IN_PROGRESS": "in_progress",
+    "DRAFT": "draft",
     "COMPLETED": "completed",
     "CANCELLED": "cancelled"
   },
@@ -149,10 +149,13 @@
     "SATURDAY": "sat"
   },
   "BlockType": {
-    "PATIENT_MEET": "patient_meet",
+    "THERAPIST_PATIENT_MEET": "therapist_patient_meet",
+    "THERAPIST_PATIENTS_MEET": "therapist_patients_meet",
+    "SUPERVISOR_THERAPIST_MEET": "supervisor_therapist_meet",
+    "SUPERVISOR_THERAPISTS_MEET": "supervisor_therapists_meet",
+    "CLINIC_TEAM_MEET": "clinic_team_meet",
     "VACATION": "vacation",
-    "UN_AVAILABLE": "un_available",
-    "TEAM_MEETING": "team_meeting"
+    "UNAVAILABLE": "unavailable"
   },
   "WaitingListStatus": {
     "WAITING": "waiting",

@@ -1,6 +1,7 @@
 import { Specialisation } from "./../types/interface.types";
 import { Schema, model } from "mongoose";
 import type {
+  BlockTime,
   EmpDocuments,
   Employee,
   Organisation,
@@ -64,7 +65,7 @@ export const DocSchema: Schema<EmpDocuments> = new Schema(
   }
 );
 
-export const blockTimeSchema = new Schema(
+export const blockTimeSchema: Schema<BlockTime> = new Schema(
   {
     start_date: { type: String },
     end_date: { type: String },
@@ -74,21 +75,55 @@ export const blockTimeSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "employees",
     },
-    patient: { type: Schema.Types.ObjectId, ref: "patients" },
-    department: { type: Schema.Types.ObjectId, ref: "departments" },
-    activity: { type: Schema.Types.ObjectId, ref: "activities" },
+    patients: [
+      {
+        id: { type: Schema.Types.ObjectId, ref: "patients" },
+        name: { type: String },
+      },
+    ],
+    therapists: [
+      {
+        id: { type: Schema.Types.ObjectId, ref: "patients" },
+        name: { type: String },
+      },
+    ],
+    department: {
+      id: { type: Schema.Types.ObjectId, ref: "departments" },
+      name: { type: String },
+    },
+    organisation: {
+      id: { type: Schema.Types.ObjectId, ref: "organisations" },
+      name: { type: String },
+    },
+    activity: {
+      name: { type: String, enum: enums.ActivityType },
+      label: { type: String },
+    },
     created_by_type: {
       type: String,
       enum: ["therapist", "clinic", "reception"],
       default: null,
     },
-    reason: { type: String, enum: enums.BlockType },
+    block_type: {
+      name: { type: String, enum: enums.BlockType },
+      label: { type: String },
+    },
+    supervisor: [
+      {
+        id: { type: Schema.Types.ObjectId, ref: "employees" },
+        name: { type: String },
+      },
+    ],
+    team_members: [
+      {
+        id: { type: Schema.Types.ObjectId, ref: "employees" },
+        name: { type: String },
+      },
+    ],
     description: { type: String, maxlength: 50 },
-    organisation_id: { type: Schema.Types.ObjectId, ref: "organisations" },
     is_recurring: { type: Boolean, default: false },
   },
   {
-    _id: false,
     timestamps: true,
   }
 );
@@ -114,6 +149,7 @@ const employeeSchema = new Schema<Employee>(
     employee_roles: {
       id: { type: Schema.Types.ObjectId },
       name: { type: String },
+      label: { type: String },
     },
     team_leader: { type: Boolean, required: true },
     hire_date: { type: String, required: true },

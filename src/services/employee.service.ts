@@ -120,8 +120,8 @@ export const blockTimeEmployeeService = (
         .model("employees")
         .findOneAndUpdate(
           { _id: ObjectId(payload.id), is_deleted: { $ne: true } },
-          { $set: { blocked_times: payload } },
-          { returnDocument: "after" }
+          { $push: { blocked_times: payload } },
+          { new: true, returnDocument: "after" }
         )
         .exec();
 
@@ -186,6 +186,8 @@ export const listEmployeeService = (
       if (payload.employee_roles)
         and.push({ "employee_roles.id": ObjectId(payload.employee_roles) });
 
+      if (payload.role_name)
+        and.push({ "employee_roles.name": payload.role_name });
       if (payload.organisation_id) {
         and.push({
           "organization_assignments.id": ObjectId(payload.organisation_id),
@@ -270,7 +272,7 @@ export const getAllAvailabilityService = async (
 
   const therapists = await mongoose
     .model("employees")
-    .find({ is_active: true, "employee_roles.name": "Therapist" });
+    .find({ is_active: true, "employee_roles.name": enums.RoleEnum.THERAPIST });
 
   if (!therapists || therapists.length === 0) {
     throw new Error(Constants.MESSAGES.NOT_FOUND.code);
@@ -308,7 +310,10 @@ export const getAllAvailabilityService = async (
         "therapist.id": therapist._id,
         scheduled_start: { $gte: dayStart, $lte: dayEnd },
         status: {
-          $in: [enums.SessionStatus.IN_PROGRESS, enums.SessionStatus.SCHEDULED],
+          $in: [
+            enums.SessionStatus.IN_PROGRESS,
+            enums.SessionStatus.APPROVAL_PENDING,
+          ],
         },
       });
 
