@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
+  addEmployeeActivityController,
   createActivityController,
   createExpenseController,
   deleteActivityController,
@@ -11,6 +12,7 @@ import {
   viewActivityController,
 } from "../controllers/activity.controller";
 import {
+  addEmployeeClinicValidator,
   createActivityValidator,
   createExpenseValidator,
   deleteClinicValidator,
@@ -83,7 +85,7 @@ router.patch(
   "/:id/add-employee",
   authorisationMiddleware,
   addEmployeeClinicValidator,
-  addEmployeeClinicController
+  addEmployeeActivityController
 );
 
 export default router;
