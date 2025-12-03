@@ -4,7 +4,7 @@ import enums from "../enums.json";
 
 export interface Role {
   name: string;
-  value?: string;
+  label?: string;
   permissions: {
     name: string;
     permission: string;
