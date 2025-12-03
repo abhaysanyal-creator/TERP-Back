@@ -20,6 +20,14 @@ export default {
       code: "REPEATING_DETAILS_REQUIRED",
       message: "Repeating Details are required!!",
     },
+    ROLE_IS_REQ: {
+      code: "ROLE_IS_REQ",
+      message: "Role is required!!",
+    },
+    EMPLOYEE_NAME_REQ: {
+      code: "EMPLOYEE_NAME_REQ",
+      message: "Employee name is required!!",
+    },
     TEAM_LEAD_REQ_TRUE_FALSE: {
       code: "TEAM_LEAD_REQ_TRUE_FALSE",
     },

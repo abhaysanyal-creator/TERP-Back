@@ -256,3 +256,24 @@ export const deleteExpenseValidator: ExpressMiddlewareNext = (
   }
   next();
 };
+
+export const addEmployeeClinicValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.CLINIC_ID_REQ.code);
+  }
+  if (!request.body.id) {
+    return badRequest(response, Constants.MESSAGES.EMP_ID_REQ.code);
+  }
+  if (!request.body.role) {
+    return badRequest(response, Constants.MESSAGES.ROLE_IS_REQ.code);
+  }
+  if (!request.body.name) {
+    return badRequest(response, Constants.MESSAGES.EMPLOYEE_NAME_REQ.code);
+  }
+
+  next();
+};

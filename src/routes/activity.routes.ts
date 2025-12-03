@@ -79,4 +79,11 @@ router.delete(
   deleteExpenseController
 );
 
+router.patch(
+  "/:id/add-employee",
+  authorisationMiddleware,
+  addEmployeeClinicValidator,
+  addEmployeeClinicController
+);
+
 export default router;

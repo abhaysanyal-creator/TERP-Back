@@ -3,6 +3,7 @@ import type { ExpressMiddleware } from "../types/express.types";
 import { badRequest, success } from "../response/response";
 import Constants from "../locales/constants";
 import {
+  addEmployeeActivityService,
   createActivityService,
   createExpenseService,
   deleteActivityService,
@@ -218,6 +219,30 @@ export const deleteExpenseController: ExpressMiddleware = async (
     }
 
     const result = await deleteExpenseService(request);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const addEmployeeActivityController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const isClinicExist = await activityModel
+      .findOne({
+        _id: ObjectId(request.params.id),
+      })
+      .exec();
+
+    if (isClinicExist) {
+      return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
+    }
+
+    const result = await addEmployeeActivityService(request);
+
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {
     console.error(error);
