@@ -8,13 +8,6 @@ export const createClinicValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (
-    !request.body.organisation ||
-    !request.body.organisation.id ||
-    !request.body.organisation.name
-  )
-    return badRequest(response, Constants.MESSAGES.ORG_ID_REQUIRED.code);
-
   // if (
   //   !request.body.department ||
   //   !request.body.department.id ||
