@@ -16,6 +16,7 @@ const DepartmentSchema = new Schema<IDepartment>(
     is_deleted: { type: Boolean, default: false },
     activities: [
       {
+        _id: false,
         activity: {
           id: { type: Schema.Types.ObjectId },
           name: { type: String },

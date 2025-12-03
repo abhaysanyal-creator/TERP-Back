@@ -329,10 +329,7 @@ export interface Activity extends Document {
     name: string;
   };
   activity_name: string;
-  department: {
-    _id: Types.ObjectId;
-    name: string;
-  };
+  departments: Types.ObjectId[];
   activity_id: string;
   internal_code: string;
   building_size: number;

@@ -121,7 +121,7 @@ export const listActivityService = (
         });
       if (payload.department_id)
         and.push({
-          "department.id": ObjectId(payload.department_id),
+          "departments": ObjectId(payload.department_id),
         });
 
       if (payload.protected_space)
@@ -330,6 +330,18 @@ export const addIndexPriceService = (
       if (!updatedClinic) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
       }
+
+      await activityModel.findOneAndUpdate(
+        {
+          _id: ObjectId(payload.body.activity.id),
+        },
+        {
+          $push: {
+            departments: payload.params.deptId,
+          },
+        }
+      );
+
       resolve(updatedClinic);
     } catch (error) {
       reject(error);

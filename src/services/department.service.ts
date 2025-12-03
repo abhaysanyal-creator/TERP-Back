@@ -35,8 +35,8 @@ export const viewDepartmentService = (
         },
         {
           $lookup: {
-            localField: "_id",
-            foreignField: "department.id",
+            localField: "activities.activity.id",
+            foreignField: "_id",
             as: "activities",
             from: "activities",
           },

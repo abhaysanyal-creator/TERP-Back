@@ -10,21 +10,22 @@ import type {
 import enums from "../enums.json";
 import { addressSchema, contactSchema } from "./organisation.model";
 
-export const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema(
-  {
-    specialisation: {
-      id: { type: Schema.Types.ObjectId },
-      name: { type: String },
+export const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> =
+  new Schema(
+    {
+      specialisation: {
+        id: { type: Schema.Types.ObjectId },
+        name: { type: String },
+      },
+      organisation_cost: { type: String },
+      platform_cost: { type: String },
+      include_patient_cost: { type: Boolean, default: false },
+      patient_cost: { type: String },
     },
-    organisation_cost: { type: String },
-    platform_cost: { type: String },
-    include_patient_cost: { type: Boolean, default: false },
-    patient_cost: { type: String },
-  },
-  {
-    _id: false,
-  }
-);
+    {
+      _id: false,
+    }
+  );
 
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {
@@ -110,10 +111,12 @@ const activitySchema: Schema<Activity> = new Schema({
     id: { type: Schema.Types.ObjectId, ref: "organisations" },
     name: { type: String },
   },
-  department: {
-    id: { type: Schema.Types.ObjectId, ref: "departments" },
-    name: { type: String },
-  },
+  departments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "departments",
+    },
+  ],
   activity_id: { type: String, unique: true },
   internal_code: { type: String, unique: true },
   building_size: { type: Number },
