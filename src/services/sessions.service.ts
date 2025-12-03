@@ -390,19 +390,6 @@ export const addRecurringSessionsService = (
 
       const occurences = payloadBody.recurrence?.occurrences ?? 1;
 
-      // const newBooking = await sessionsModel.create({
-      //   ...payloadBody,
-      //   parent_session_id: null,
-      // });
-
-      // if (!newBooking) {
-      //   throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
-      // }
-
-      // if (!payloadBody.is_recurring || !payloadBody.recurrence) {
-      //   resolve([newBooking]);
-      // }
-
       const recurringDates = generateRecurringSessions(
         new Date(parent_session.scheduled_date),
         payloadBody.recurrence

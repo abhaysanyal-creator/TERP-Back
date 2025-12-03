@@ -276,3 +276,35 @@ export const deleteExpenseService = (
     }
   });
 };
+
+export const addEmployeeActivityService = (
+  payload: Record<string, any>
+): Record<string, any> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (payload.body.internal_code) {
+        delete payload.body.internal_code;
+      }
+
+      const updatedClinic = await activityModel
+        .findOneAndUpdate(
+          { _id: ObjectId(payload.params.id) },
+          {
+            $push: {
+              employees: payload.body,
+            },
+          },
+          { new: true, runValidators: true }
+        )
+        .exec();
+
+      if (!updatedClinic) {
+        throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
+      }
+      
+      resolve(updatedClinic);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
