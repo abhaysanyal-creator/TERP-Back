@@ -29,8 +29,8 @@ export const createActivityValidator: ExpressMiddlewareNext = (
   // )
   //   return badRequest(response, Constants.MESSAGES.DEPARTMENT_ID_REQ.code);
 
-  if (!request.body.activity_id)
-    return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
+  // if (!request.body.activity_id)
+  //   return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
 
   if (!request.body.internal_code)
     return badRequest(response, Constants.MESSAGES.INTERNAL_CODE_REQUIRED.code);
