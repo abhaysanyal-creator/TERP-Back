@@ -89,7 +89,7 @@ const clinicSchema: Schema<Clinic> = new Schema({
   ],
   employees: [
     {
-      role: { type: String },
+      role: { id: { type: Schema.Types.ObjectId }, name: { type: String } },
       id: { type: Schema.Types.ObjectId },
       name: { type: String },
     },
