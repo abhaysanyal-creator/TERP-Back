@@ -26,9 +26,7 @@ export const createActivityController: ExpressMiddleware = async (
   try {
     const isActivityExist = await activityModel
       .findOne({
-        activity_name: request.body.activity_name,
-        "organisation.id": request.body.organisation.id,
-        "department.id": request.body.department.id,
+        activity_name: request.body.activity_name
       })
       .exec();
 
@@ -237,8 +235,8 @@ export const addEmployeeActivityController: ExpressMiddleware = async (
       })
       .exec();
 
-    if (isClinicExist) {
-      return badRequest(response, Constants.MESSAGES.ALREADY_EXISTS.code);
+    if (!isClinicExist) {
+      return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
     }
 
     const result = await addEmployeeActivityService(request);

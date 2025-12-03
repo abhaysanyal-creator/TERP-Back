@@ -120,6 +120,7 @@ const activitySchema: Schema<Activity> = new Schema({
   contacts: [contactSchema],
   employees: [
     {
+      _id: false,
       id: { type: Schema.Types.ObjectId, ref: "employees" },
       name: { type: String },
       role: {
