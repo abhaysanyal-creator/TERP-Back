@@ -10,16 +10,21 @@ import type {
 import enums from "../enums.json";
 import { addressSchema, contactSchema } from "./organisation.model";
 
-const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema({
-  specialisation: {
-    id: { type: Schema.Types.ObjectId },
-    name: { type: String },
+const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema(
+  {
+    specialisation: {
+      id: { type: Schema.Types.ObjectId },
+      name: { type: String },
+    },
+    organisation_cost: { type: String },
+    platform_cost: { type: String },
+    include_patient_cost: { type: Boolean, default: false },
+    patient_cost: { type: String },
   },
-  organisation_cost: { type: String },
-  platform_cost: { type: String },
-  include_patient_cost: { type: Boolean, default: false },
-  patient_cost: { type: String },
-});
+  {
+    _id: false,
+  }
+);
 
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {

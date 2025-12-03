@@ -277,3 +277,14 @@ export const addEmployeeClinicValidator: ExpressMiddlewareNext = (
 
   next();
 };
+
+export const addIndexPriceValidator: ExpressMiddlewareNext = (
+  request,
+  response,
+  next
+) => {
+  if (!request.params.id) {
+    return badRequest(response, Constants.MESSAGES.CLINIC_ID_REQ.code);
+  }
+  next();
+};

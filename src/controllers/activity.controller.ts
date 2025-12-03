@@ -4,6 +4,7 @@ import { badRequest, success } from "../response/response";
 import Constants from "../locales/constants";
 import {
   addEmployeeActivityService,
+  addIndexPriceService,
   createActivityService,
   createExpenseService,
   deleteActivityService,
@@ -240,6 +241,30 @@ export const addEmployeeActivityController: ExpressMiddleware = async (
     }
 
     const result = await addEmployeeActivityService(request);
+
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const addIndexPriceController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const isClinicExist = await activityModel
+      .findOne({
+        _id: ObjectId(request.params.id),
+      })
+      .exec();
+
+    if (!isClinicExist) {
+      return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
+    }
+
+    const result = await addIndexPriceService(request);
 
     return success(response, Constants.MESSAGES.SUCCESS.code, result);
   } catch (error) {

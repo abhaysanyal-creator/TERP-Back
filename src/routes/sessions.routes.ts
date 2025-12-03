@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
+  addRecurringSessionsValidator,
   createAppointmentValidator,
   listAppointmentsValidator,
   updateAppointmentsValidator,
@@ -8,12 +9,14 @@ import {
   viewAppointmentValidator,
 } from "../validators/sessions.validator";
 import {
+  addRecurringSessionsController,
   createAppointmentController,
   listAppointmentController,
   updateAppointmentsController,
   updateSessionStatusController,
   viewAppointmentController,
 } from "../controllers/sessions.controller";
+import { addEmployeeClinicValidator } from "../validators/activity.validator";
 
 const router = Router();
 
@@ -55,8 +58,8 @@ router.post(
 router.post(
   "/add-compensatory-session/:id",
   authorisationMiddleware,
-  listAppointmentsValidator,
-  listAppointmentController
+  addRecurringSessionsValidator,
+  addRecurringSessionsController
 );
 
 export default router;

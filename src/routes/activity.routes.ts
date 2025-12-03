@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import {
   addEmployeeActivityController,
+  addIndexPriceController,
   createActivityController,
   createExpenseController,
   deleteActivityController,
@@ -13,6 +14,7 @@ import {
 } from "../controllers/activity.controller";
 import {
   addEmployeeClinicValidator,
+  addIndexPriceValidator,
   createActivityValidator,
   createExpenseValidator,
   deleteClinicValidator,
@@ -86,6 +88,13 @@ router.patch(
   authorisationMiddleware,
   // addEmployeeClinicValidator,
   addEmployeeActivityController
+);
+
+router.patch(
+  "/:id/add-index-price",
+  authorisationMiddleware,
+  addIndexPriceValidator,
+  addIndexPriceController
 );
 
 export default router;
