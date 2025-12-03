@@ -1,6 +1,6 @@
 import mongoose, { PipelineStage } from "mongoose";
 import Constants from "../locales/constants";
-import { ObjectId } from "../utils/helpers";
+import { generateCode, ObjectId } from "../utils/helpers";
 import { Activity } from "../types/interface.types";
 
 const activityModel = mongoose.model<Activity>("activities");
@@ -10,6 +10,7 @@ export const createActivityService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
+      payload.activity_id = generateCode("ACT", 6);
       const newActivity = await activityModel.create(payload);
 
       if (!newActivity) {

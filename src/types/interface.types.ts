@@ -338,6 +338,14 @@ export interface Activity extends Document {
   is_deleted: boolean;
   branch_name: string;
   clinic_id: string;
+  employees: {
+    id: Types.ObjectId;
+    name: string;
+    role: {
+      id: Types.ObjectId;
+      name: string;
+    };
+  }[];
   expenses: Expense[];
   owner: string;
   is_active: boolean;

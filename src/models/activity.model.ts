@@ -12,8 +12,8 @@ import { addressSchema, contactSchema } from "./organisation.model";
 
 const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema({
   specialisation: {
-    id: { type: Schema.Types.ObjectId, required: true },
-    name: { type: String, required: true },
+    id: { type: Schema.Types.ObjectId },
+    name: { type: String },
   },
   organisation_cost: { type: String },
   platform_cost: { type: String },
@@ -24,8 +24,8 @@ const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema({
 const timeSlotSchema: Schema<TimeSlot> = new Schema(
   {
     id: { type: String },
-    start_time: { type: String, required: true },
-    end_time: { type: String, required: true },
+    start_time: { type: String },
+    end_time: { type: String },
   },
   {
     _id: false,
@@ -34,7 +34,7 @@ const timeSlotSchema: Schema<TimeSlot> = new Schema(
 
 const workingHourSchema = new Schema(
   {
-    day: { type: Number, required: true },
+    day: { type: Number },
     slots: [timeSlotSchema],
     enabled: { type: Boolean, default: true },
   },
@@ -47,7 +47,7 @@ export const roomSchema = new Schema(
       type: Schema.Types.ObjectId,
       default: () => new mongoose.Types.ObjectId(),
     },
-    name: { type: String, required: true },
+    name: { type: String },
 
     status: {
       type: String,
@@ -59,9 +59,9 @@ export const roomSchema = new Schema(
         session_id: { type: String },
         therapist_id: { type: Schema.Types.ObjectId, ref: "employees" },
         patient_id: { type: Schema.Types.ObjectId, ref: "patients" },
-        scheduled_date: { type: String, required: true },
-        scheduled_start: { type: String, required: true },
-        scheduled_end: { type: String, required: true },
+        scheduled_date: { type: String },
+        scheduled_start: { type: String },
+        scheduled_end: { type: String },
         status: {
           type: String,
           enum: enums.Room_Status,
@@ -99,26 +99,35 @@ const TherapistSchema: Schema<Therapists> = new Schema(
 );
 
 const activitySchema: Schema<Activity> = new Schema({
-  type: { type: String, enum: enums.ActivityType, required: true },
-  activity_name: { type: String, required: true },
+  type: { type: String, enum: enums.ActivityType },
+  activity_name: { type: String },
   organisation: {
-    id: { type: Schema.Types.ObjectId, required: true, ref: "organisations" },
-    name: { type: String, required: true },
+    id: { type: Schema.Types.ObjectId, ref: "organisations" },
+    name: { type: String },
   },
   department: {
-    id: { type: Schema.Types.ObjectId, required: true, ref: "departments" },
-    name: { type: String, required: true },
+    id: { type: Schema.Types.ObjectId, ref: "departments" },
+    name: { type: String },
   },
-  activity_id: { type: String, required: true, unique: true },
-  internal_code: { type: String, required: true, unique: true },
-  building_size: { type: Number, required: true },
+  activity_id: { type: String, unique: true },
+  internal_code: { type: String, unique: true },
+  building_size: { type: Number },
   area_in: { type: String, enum: enums.AreaIn, default: enums.AreaIn.SQ_MTR },
   expenses: [expenseSchema],
   is_deleted: { type: Boolean, default: false },
   is_active: { type: Boolean, default: true },
   protected_space: { type: Boolean, default: true },
   contacts: [contactSchema],
-  therapists: [TherapistSchema],
+  employees: [
+    {
+      id: { type: Schema.Types.ObjectId, ref: "employees" },
+      name: { type: String },
+      role: {
+        id: { type: Schema.Types.ObjectId, ref: "roles" },
+        name: { type: String },
+      },
+    },
+  ],
   address: addressSchema,
   rooms: [roomSchema],
   operating_hours: [workingHourSchema],
