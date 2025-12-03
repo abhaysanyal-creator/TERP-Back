@@ -1,9 +1,10 @@
 import mongoose, { PipelineStage } from "mongoose";
 import Constants from "../locales/constants";
 import { generateCode, ObjectId } from "../utils/helpers";
-import { Activity } from "../types/interface.types";
+import { Activity, IDepartment } from "../types/interface.types";
 
 const activityModel = mongoose.model<Activity>("activities");
+const deptModel = mongoose.model<IDepartment>("departments");
 
 export const createActivityService = (
   payload: Record<string, any>
@@ -314,12 +315,12 @@ export const addIndexPriceService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const updatedClinic = await activityModel
+      const updatedClinic = await deptModel
         .findOneAndUpdate(
-          { _id: ObjectId(payload.params.id) },
+          { _id: ObjectId(payload.params.deptId) },
           {
             $push: {
-              treatment: payload.body,
+              activities: payload.body,
             },
           },
           { new: true, runValidators: true }

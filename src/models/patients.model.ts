@@ -93,6 +93,12 @@ const patientSchema: Schema<Patients> = new Schema(
       id: { type: Schema.Types.ObjectId },
       name: { type: String },
     },
+    activities: [
+      {
+        id: { type: Schema.Types.ObjectId },
+        name: { type: String },
+      },
+    ],
     gender: {
       type: Schema.Types.String,
       enum: enums.Gender as any,
@@ -101,7 +107,7 @@ const patientSchema: Schema<Patients> = new Schema(
     dob: { type: Date, required: true },
     organisation_assignment: organisationSchema,
     is_active: { type: Boolean, default: true },
-    documents:[DocSchema],
+    documents: [DocSchema],
     address: addressSchema,
     disabilities_list: [disabilitySchema],
     companions_list: [companionSchema],

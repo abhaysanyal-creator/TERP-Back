@@ -15,24 +15,6 @@ export const createAppointmentService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (payload.patient.id) {
-        await patientsModel
-          .findOneAndUpdate(
-            {
-              _id: ObjectId(payload.patient.id),
-            },
-            {
-              $set: {
-                therapist: payload.therapist,
-              },
-            },
-            {
-              new: true,
-            }
-          )
-          .exec();
-      }
-
       const occurences = payload.recurrence?.occurrences ?? 1;
 
       const newBooking = await sessionsModel.create({
@@ -42,6 +24,25 @@ export const createAppointmentService = (
 
       if (!newBooking) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
+      }
+
+      if (newBooking.patient.id) {
+        await patientsModel
+          .findOneAndUpdate(
+            {
+              _id: ObjectId(newBooking.patient.id),
+            },
+            {
+              $set: {
+                therapist: newBooking.therapist,
+                activities: newBooking.activity,
+              },
+            },
+            {
+              new: true,
+            }
+          )
+          .exec();
       }
 
       if (!payload.is_recurring || !payload.recurrence) {

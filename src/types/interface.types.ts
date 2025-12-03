@@ -247,6 +247,11 @@ export interface Patients extends Document {
   national_id: string;
   gender: string;
   is_active: boolean;
+  activities: {
+    id: Types.ObjectId;
+    name: string;
+    label: string;
+  }[];
   therapist: {
     id: Types.ObjectId;
     name: string;
@@ -392,6 +397,14 @@ export interface IDepartment extends Document {
   is_deleted: boolean;
   is_active: boolean;
   department_id: string;
+  activities: {
+    activity: {
+      id: Types.ObjectId;
+      name: string;
+      type: string;
+    };
+    treatment: TreatmentPriceIndexing[];
+  }[];
   address: Address;
   contacts: Contact;
   region: {
@@ -443,7 +456,7 @@ export interface ISession extends Document {
   authorisation_serial_number: string;
   co_payment_amount: string;
   session_id: string;
-  clinic_id: Types.ObjectId;
+  activity: { id: Types.ObjectId; name: string };
   treatment: { id: Types.ObjectId; name: string };
   session_type: string;
   documents: EmpDocuments[];

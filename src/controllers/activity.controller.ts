@@ -17,6 +17,7 @@ import {
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import { ObjectId } from "../utils/helpers";
 import { Activity } from "../types/interface.types";
+import { departmentModel } from "../models";
 
 const activityModel = mongoose.model<Activity>("activities");
 
@@ -27,7 +28,7 @@ export const createActivityController: ExpressMiddleware = async (
   try {
     const isActivityExist = await activityModel
       .findOne({
-        activity_name: request.body.activity_name
+        activity_name: request.body.activity_name,
       })
       .exec();
 
@@ -254,13 +255,16 @@ export const addIndexPriceController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const isClinicExist = await activityModel
-      .findOne({
-        _id: ObjectId(request.params.id),
-      })
-      .exec();
+    const [dept, activity] = await Promise.all([
+      departmentModel.findById(ObjectId(request.params.deptId)).exec(),
+      activityModel.findById(ObjectId(request.body.activity.id)).exec(),
+    ]);
 
-    if (!isClinicExist) {
+    if (!dept) {
+      return badRequest(response, Constants.MESSAGES.DEPARTMENT_ID_REQ.code);
+    }
+
+    if (!activity) {
       return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
     }
 

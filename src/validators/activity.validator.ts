@@ -283,8 +283,8 @@ export const addIndexPriceValidator: ExpressMiddlewareNext = (
   response,
   next
 ) => {
-  if (!request.params.id) {
-    return badRequest(response, Constants.MESSAGES.CLINIC_ID_REQ.code);
+  if (!request.params.deptId) {
+    return badRequest(response, Constants.MESSAGES.DEPARTMENT_ID_REQ.code);
   }
   next();
 };

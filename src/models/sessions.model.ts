@@ -26,10 +26,13 @@ const SessionSchema = new Schema<ISession>(
       name: { type: String },
     },
     session_id: { type: String },
-    clinic_id: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "activities",
+    activity: {
+      id: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: "activities",
+      },
+      name: { type: String },
     },
     treatment: {
       id: { type: Schema.Types.ObjectId, required: true },

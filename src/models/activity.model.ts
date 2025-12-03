@@ -10,7 +10,7 @@ import type {
 import enums from "../enums.json";
 import { addressSchema, contactSchema } from "./organisation.model";
 
-const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema(
+export const TreatmentPricingSchema: Schema<TreatmentPriceIndexing> = new Schema(
   {
     specialisation: {
       id: { type: Schema.Types.ObjectId },

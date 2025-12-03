@@ -14,7 +14,6 @@ import mongoose from "mongoose";
 import { generateCode, ObjectId } from "../utils/helpers";
 import enums from "../enums.json";
 import { assigningWaitingListService } from "../services/assignWaitingListService";
-import { getSignedUrlForView } from "./upload.controller";
 
 const sessionsModel = mongoose.model("sessions");
 const activityModel = mongoose.model("activities");

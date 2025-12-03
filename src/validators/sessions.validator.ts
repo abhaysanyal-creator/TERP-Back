@@ -65,7 +65,7 @@ export const updateBookingValidator: ExpressMiddlewareNext = (
     return badRequest(response, Constants.MESSAGES.ID_REQ.code);
   }
 
-  if (request.body.clinic_id && request.body.clinic_id === "") {
+  if (request.body.activity.id && request.body.activity.id === "") {
     return badRequest(response, Constants.MESSAGES.CLINIC_ID_REQ.code);
   }
 

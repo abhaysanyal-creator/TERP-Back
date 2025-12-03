@@ -91,7 +91,7 @@ router.patch(
 );
 
 router.patch(
-  "/:id/add-index-price",
+  "/:deptId/add-index-price",
   authorisationMiddleware,
   addIndexPriceValidator,
   addIndexPriceController
