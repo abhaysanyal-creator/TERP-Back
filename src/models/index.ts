@@ -14,6 +14,7 @@ import metaDataModel from "./meta-data.model";
 import { departmentModel } from "./department.model";
 import { sessionModel } from "./sessions.model";
 import WaitingListModel from "./waiting_list.model";
+import clinicModel from "./clinic.model";
 
 export {
   Country,
@@ -32,4 +33,5 @@ export {
   departmentModel,
   sessionModel,
   WaitingListModel,
+  clinicModel,
 };

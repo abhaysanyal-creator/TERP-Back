@@ -320,20 +320,17 @@ export interface Expense {
 
 export interface Activity extends Document {
   organisation: {
-    _id: Types.ObjectId;
+    id: Types.ObjectId;
     name: string;
   };
   activity_name: string;
   department: {
-    _id: Types.ObjectId;
+    id: Types.ObjectId;
     name: string;
   };
   activity_id: string;
   internal_code: string;
-  building_size: number;
-  protected_space: boolean;
   contacts: Contact[];
-  area_in: string;
   type: string;
   is_deleted: boolean;
   branch_name: string;
@@ -343,11 +340,44 @@ export interface Activity extends Document {
   is_active: boolean;
   manager: Types.ObjectId;
   therapists: [Therapists];
+  address: Address;
+  clinics: [
+    {
+      id: Types.ObjectId;
+      name: Types.ObjectId;
+      treatment: TreatmentPriceIndexing[];
+    }
+  ];
+}
+
+export interface Clinic extends Document {
+  organisation: {
+    id: Types.ObjectId;
+    name: string;
+  };
+  name: string;
+  department: {
+    id: Types.ObjectId;
+    name: string;
+  };
+  activity_id: string;
+  internal_code: string;
+  building_size: number;
+  employees: [{ id: Types.ObjectId; name: string; role: string }];
+  protected_space: boolean;
+  contacts: Contact[];
+  area_in: string;
+  type: string;
+  is_deleted: boolean;
+  branch_name: string;
+  activities: [{ id: Types.ObjectId; name: string }];
+  expenses: Expense[];
+  owner: string;
+  is_active: boolean;
   rooms: IRoom[];
   address: Address;
   operating_hours: WorkingHour;
   no_of_rooms: number;
-  treatment: TreatmentPriceIndexing[];
 }
 
 export interface Bookings extends Document {
@@ -446,6 +476,7 @@ export interface ISession extends Document {
     is_arrived: boolean;
   };
   treatment_area: {
+    clinic_id: Types.ObjectId;
     _id: Types.ObjectId;
     label: string;
     value: string;

@@ -188,6 +188,11 @@ export const listEmployeeService = (
 
       if (payload.role_name)
         and.push({ "employee_roles.name": payload.role_name });
+      if (payload.organisation_id) {
+        and.push({
+          "organization_assignments.id": ObjectId(payload.organisation_id),
+        });
+      }
 
       if (payload.is_active !== undefined)
         and.push({ is_active: payload.is_active });

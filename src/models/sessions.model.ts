@@ -55,6 +55,7 @@ const SessionSchema = new Schema<ISession>(
       is_arrived: { type: Boolean, default: false },
     },
     treatment_area: {
+      clinic_id: { type: Schema.Types.ObjectId },
       id: { type: Schema.Types.ObjectId },
       name: { type: String },
       value: { type: String },
