@@ -15,19 +15,19 @@ export const createActivityValidator: ExpressMiddlewareNext = (
     return badRequest(response, Constants.MESSAGES.TYPE_REQUIRED.code);
   }
 
-  if (
-    !request.body.organisation ||
-    !request.body.organisation.id ||
-    !request.body.organisation.name
-  )
-    return badRequest(response, Constants.MESSAGES.ORG_ID_REQUIRED.code);
+  // if (
+  //   !request.body.organisation ||
+  //   !request.body.organisation.id ||
+  //   !request.body.organisation.name
+  // )
+  //   return badRequest(response, Constants.MESSAGES.ORG_ID_REQUIRED.code);
 
-  if (
-    !request.body.department ||
-    !request.body.department.id ||
-    !request.body.department.name
-  )
-    return badRequest(response, Constants.MESSAGES.DEPARTMENT_ID_REQ.code);
+  // if (
+  //   !request.body.department ||
+  //   !request.body.department.id ||
+  //   !request.body.department.name
+  // )
+  //   return badRequest(response, Constants.MESSAGES.DEPARTMENT_ID_REQ.code);
 
   if (!request.body.activity_id)
     return badRequest(response, Constants.MESSAGES.ACTIVITY_ID_REQ.code);
@@ -95,8 +95,8 @@ export const createActivityValidator: ExpressMiddlewareNext = (
     return badRequest(response, Constants.MESSAGES.INVALID_ROOMS_FORMAT.code);
   }
 
-  if (!request.body.treatment || !Array.isArray(request.body.treatment))
-    return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
+  // if (!request.body.treatment || !Array.isArray(request.body.treatment))
+  //   return badRequest(response, Constants.MESSAGES.INVALID_FORMAT.code);
 
   // for (const t of request.body.treatment) {
   //   if (
