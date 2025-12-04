@@ -39,6 +39,10 @@ export default {
       code: "EXPENSE_NAME_REQUIRED",
       message: "Expense name is required!!",
     },
+    PREFERENCE_QUANTITY:{
+      code:"ONLY_3_PREFERENCES_ALLOWED",
+      message:"Only 3 preferences are allowed!!"
+    },
     AMOUNT_REQUIRED: {
       code: "EXPENSE_AMOUNT_REQUIRED",
       message: "Expense amount is required!!",

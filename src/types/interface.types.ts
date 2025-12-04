@@ -144,6 +144,10 @@ export interface Employee extends Document {
   role?: Types.ObjectId;
   is_first_login: boolean;
   job_percentage: number;
+  index_pricing: {
+    specialisation: { id: Types.ObjectId; name: string };
+    renumeration: number;
+  }[];
   dob: string;
   organization_assignments: Organisation[];
   location_assignments: string[];

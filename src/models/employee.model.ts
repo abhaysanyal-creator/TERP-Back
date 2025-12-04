@@ -177,6 +177,17 @@ const employeeSchema = new Schema<Employee>(
     mobile_phone: { type: String, required: true },
     specialisation: [specialisationSchema],
     home_phone: { type: String },
+    index_pricing: [
+      {
+        specialisation: {
+          id: { type: Schema.Types.ObjectId, ref: "metadatas" },
+          name: { type: String },
+        },
+        renumeration: {
+          type: Number,
+        },
+      },
+    ],
     email: { type: String, required: true },
     notes: { type: String },
     gender: {

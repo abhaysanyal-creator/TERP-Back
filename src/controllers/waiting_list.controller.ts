@@ -22,6 +22,10 @@ export const createEntryController: ExpressMiddleware = async (
       (request.body.funding === enums.FundingTypes.PRIVATE ? -1000 : 0) +
       (request.body.funding === enums.FundingTypes.GOVERNMENT_AID ? -500 : 0);
 
+    if (request.body.preferences.length > 3) {
+      return badRequest(response, Constants.MESSAGES.PREFERENCE_QUANTITY.code);
+    }
+
     const result = await mongoose.model("waiting_list").create({
       ...request.body,
       priorityRating,
