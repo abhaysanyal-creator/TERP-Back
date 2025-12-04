@@ -255,10 +255,20 @@ export const listDepartmentService = (
         { $limit: limit },
         {
           $lookup: {
-            localField: "_id",
             from: "activities",
+            localField: "_id",
             foreignField: "department.id",
             as: "activities",
+          },
+        },
+        {
+          $addFields: {
+            activity_count: { $size: "$activities" },
+          },
+        },
+        {
+          $project: {
+            activities: 0,
           },
         },
       ];

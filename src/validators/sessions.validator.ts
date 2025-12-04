@@ -11,7 +11,7 @@ export const createAppointmentValidator: ExpressMiddlewareNext = (
   if (!request.body.patient) {
     return badRequest(response, Constants.MESSAGES.PATIENT_ID_REQ.code);
   }
-  if (!request.body.clinic_id) {
+  if (!request.body.activity.id) {
     return badRequest(response, Constants.MESSAGES.CLINIC_ID_REQ.code);
   }
   if (!request.body.treatment) {

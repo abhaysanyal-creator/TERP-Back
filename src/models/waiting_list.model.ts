@@ -42,18 +42,16 @@ const waitingListSchema = new Schema<WaitingListDoc>(
     activity: {
       type: Schema.Types.ObjectId,
       ref: "activities",
-      required: true,
       index: true,
     },
-    patient: { type: Schema.Types.ObjectId, ref: "patients", required: true },
+    patient: { type: Schema.Types.ObjectId, ref: "patients" },
     treatment: {
       type: Schema.Types.ObjectId,
       ref: "metadatas",
-      required: true,
       index: true,
     },
     preferred_therapist: { type: Schema.Types.ObjectId, ref: "employees" },
-    preferences: { type: [preferenceSchema], required: true },
+    preferences: { type: [preferenceSchema] },
     joinedAt: { type: Date, default: Date.now, index: true },
     priority_score: { type: Number },
     priorityOverride: { type: Number },
@@ -65,7 +63,6 @@ const waitingListSchema = new Schema<WaitingListDoc>(
     funding: {
       type: String,
       enum: enums.FundingTypes,
-      required: true,
       index: true,
     },
     status: {

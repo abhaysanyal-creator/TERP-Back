@@ -121,7 +121,7 @@ export const listActivityService = (
         });
       if (payload.department_id)
         and.push({
-          "departments": ObjectId(payload.department_id),
+          departments: ObjectId(payload.department_id),
         });
 
       if (payload.protected_space)

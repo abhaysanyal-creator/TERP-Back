@@ -448,6 +448,7 @@ export interface Recurrence {
 }
 
 export interface ISession extends Document {
+  _id: Types.ObjectId;
   patient: { id: Types.ObjectId; name: string };
   organisation: { id: Types.ObjectId; name: string };
   authorisation_serial_number: string;
@@ -459,7 +460,7 @@ export interface ISession extends Document {
   documents: EmpDocuments[];
   meeting_type: string;
   therapist: {
-    _id: Types.ObjectId;
+    id: Types.ObjectId;
     name: string;
     is_arrived: boolean;
   };

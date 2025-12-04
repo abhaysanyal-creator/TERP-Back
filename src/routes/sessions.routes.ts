@@ -58,7 +58,7 @@ router.post(
 router.post(
   "/add-compensatory-session/:id",
   authorisationMiddleware,
-  addRecurringSessionsValidator,
+  // addRecurringSessionsValidator,
   addRecurringSessionsController
 );
 

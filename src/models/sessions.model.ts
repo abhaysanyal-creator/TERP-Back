@@ -18,25 +18,25 @@ import { DocSchema } from "./employee.model";
 const SessionSchema = new Schema<ISession>(
   {
     patient: {
-      id: { type: Schema.Types.ObjectId, required: true, ref: "patients" },
+      id: { type: Schema.Types.ObjectId, ref: "patients" },
       name: { type: String },
     },
     organisation: {
-      id: { type: Schema.Types.ObjectId, required: true, ref: "organisations" },
+      id: { type: Schema.Types.ObjectId, ref: "organisations" },
       name: { type: String },
     },
     session_id: { type: String },
     activity: {
       id: {
         type: Schema.Types.ObjectId,
-        required: true,
+      
         ref: "activities",
       },
       name: { type: String },
     },
     treatment: {
-      id: { type: Schema.Types.ObjectId, required: true },
-      name: { type: String, required: true },
+      id: { type: Schema.Types.ObjectId},
+      name: { type: String},
     },
     session_type: {
       type: String,
@@ -65,9 +65,9 @@ const SessionSchema = new Schema<ISession>(
     total_cost: {
       type: String,
     },
-    scheduled_start: { type: String, required: true },
-    scheduled_date: { type: String, required: true },
-    scheduled_end: { type: String, required: true },
+    scheduled_start: { type: String },
+    scheduled_date: { type: String },
+    scheduled_end: { type: String },
     is_recurring: { type: Boolean, default: false },
     documents: [DocSchema],
     recurrence: {

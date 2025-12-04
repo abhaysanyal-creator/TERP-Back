@@ -50,20 +50,36 @@ export const generateRecurringSessions = (
       SAT: 6,
     };
 
-    while (!checkEnd()) {
+    let safety = 0; // prevent infinite loops
+
+    while (!checkEnd() && safety < 1000) {
+      safety++;
       for (const day of repeat_on) {
         const target = current.weekday(weekdays[day]);
-        if (target.isAfter(startDate) || count > 0) {
-          if (ends === "ON_DATE" && target.isAfter(end_date)) break;
-          sessions.push(target.toDate());
-          count++;
-          if (checkEnd()) break;
+        // always skip past dates
+        if (target.isBefore(dayjs(startDate))) continue;
+
+        // if ending on date and past end_date, stop
+        if (ends === enums.RecurrenceEnds.DATE && target.isAfter(end_date)) {
+          return sessions;
         }
+
+        sessions.push(target.toDate());
+        count++;
+
+        if (checkEnd()) return sessions;
       }
+
+      // move to next week
       current = current.add(step, "week");
+    }
+
+    if (safety >= 1000) {
+      console.warn("generateRecurringSessions: reached max iterations!");
     }
   }
 
+  console.log("======================");
   if (unit === enums.RecurrenceUnits.MONTH) {
     while (!checkEnd()) {
       sessions.push(current.toDate());

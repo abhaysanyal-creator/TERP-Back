@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { generateCode, ObjectId } from "../utils/helpers";
 import Constants from "../locales/constants";
 import enums from "../enums.json";
@@ -371,23 +371,23 @@ export const addRecurringSessionsService = (
     try {
       const payloadBody = payload.body;
 
-      if (payloadBody.patient.id) {
-        await patientsModel
-          .findOneAndUpdate(
-            {
-              _id: ObjectId(payloadBody.patient.id),
-            },
-            {
-              $set: {
-                therapist: payloadBody.therapist,
-              },
-            },
-            {
-              new: true,
-            }
-          )
-          .exec();
-      }
+      // if (payloadBody.patient.id) {
+      //   await patientsModel
+      //     .findOneAndUpdate(
+      //       {
+      //         _id: ObjectId(payloadBody.patient.id),
+      //       },
+      //       {
+      //         $set: {
+      //           therapist: payloadBody.therapist,
+      //         },
+      //       },
+      //       {
+      //         new: true,
+      //       }
+      //     )
+      //     .exec();
+      // }
 
       const occurences = payloadBody.recurrence?.occurrences ?? 1;
 
@@ -424,16 +424,52 @@ export const addRecurringSessionsService = (
       for (const date of recurringDates) {
         const isoDate = date.toISOString().split("T")[0];
 
+        if (
+          await sessionsModel.findOne({
+            "therapist.id": parent_session.therapist.id,
+            scheduled_date: isoDate,
+            is_deleted: false,
+            $expr: {
+              $and: [
+                { $lt: ["$scheduled_start", parent_session.scheduled_end] },
+                { $lt: [parent_session.scheduled_start, "$scheduled_end"] },
+              ],
+            },
+          })
+        ) {
+          throw new Error(
+            `Therapist not available on ${isoDate} (${new Date(
+              parent_session.scheduled_start
+            )}-${new Date(parent_session.scheduled_end)})`
+          );
+        }
+
         const childSessionCode = `${parent_session.session_id}-R-${
           childSessions.length + 1
         }`;
+
         const childSessionPayload: Partial<ISession> = {
-          ...payloadBody,
-          session_id: childSessionCode,
+          patient: parent_session.patient,
+          organisation: parent_session.organisation,
+          therapist: parent_session.therapist,
+          treatment: parent_session.treatment,
+          treatment_area: parent_session.treatment_area,
+          activity: parent_session.activity,
+
+          scheduled_start: parent_session.scheduled_start,
+          scheduled_end: parent_session.scheduled_end,
           scheduled_date: isoDate,
+
+          total_cost: parent_session.total_cost,
+          session_type: parent_session.session_type,
+          meeting_type: parent_session.meeting_type,
+          authorisation_serial_number:
+            parent_session.authorisation_serial_number,
+          co_payment_amount: parent_session.co_payment_amount,
+
+          session_id: childSessionCode,
           is_recurring: true,
           is_parent_session: false,
-          recurrence: null,
           parent_session_id: parent_session._id,
           recurrence_group_id: recurrenceGroupId,
         };
@@ -444,7 +480,7 @@ export const addRecurringSessionsService = (
 
         await activitiesModel.updateOne(
           {
-            _id: ObjectId(payloadBody.clinic_id),
+            _id: ObjectId(payloadBody.activity.id),
             "rooms.id": ObjectId(payloadBody.treatment_area.id),
           },
           {
