@@ -19,7 +19,7 @@ router.post(
   listEntryController
 );
 
-router.post(
+router.get(
   "/view/:id",
   authorisationMiddleware,
   viewEntryValidator,

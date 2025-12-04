@@ -24,9 +24,6 @@ export const createEntryValidator: ExpressMiddlewareNext = (
       Constants.MESSAGES.WAITING_LIST_PREFERENCE.code
     );
   }
-  if (!request.body.funding) {
-    return badRequest(response, Constants.MESSAGES.FUNDING_TYPE_REQUIRED.code);
-  }
   next();
 };
 

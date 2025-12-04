@@ -10,12 +10,12 @@ export interface Preference {
 
 export interface WaitingListDoc extends Document {
   activity: { id: Types.ObjectId; name: string };
-  organisation: { id: Types.ObjectId; name: string };
+  organisation: { id: Types.ObjectId; name: string,type:string };
   patient: { id: Types.ObjectId; name: string };
   treatment: { id: Types.ObjectId; name: string };
   preferences: Preference[];
   co_payment_amount: string;
-  preferred_therapist: Types.ObjectId;
+  therapist: { id: Types.ObjectId; name: string };
   preferred_time: {
     scheduled_date: string;
     scheduled_start: string;
@@ -26,6 +26,8 @@ export interface WaitingListDoc extends Document {
   priorityOverride?: number;
   funding: string;
   status: string;
+  is_deleted:false;
+  is_active:true;
   notifiedAt?: Date;
   meta?: any;
 }
@@ -44,6 +46,7 @@ const waitingListSchema = new Schema<WaitingListDoc>(
     organisation: {
       id: { type: Schema.Types.ObjectId, ref: "organisations" },
       name: { type: String },
+      type: { type: String },
     },
     activity: {
       id: {
@@ -60,8 +63,12 @@ const waitingListSchema = new Schema<WaitingListDoc>(
       id: { type: Schema.Types.ObjectId, ref: "metadatas" },
       name: { type: String },
     },
-    preferred_therapist: { type: Schema.Types.ObjectId, ref: "employees" },
-    preferences: { type: [preferenceSchema] },
+    therapist: {
+      id: { type: Schema.Types.ObjectId, ref: "employees" },
+      name: { type: String },
+      is_arrived: { type: Boolean, default: false },
+    },
+    preferences: [preferenceSchema],
     joinedAt: { type: Date, default: Date.now, index: true },
     priority_score: { type: Number },
     co_payment_amount: {
@@ -84,6 +91,8 @@ const waitingListSchema = new Schema<WaitingListDoc>(
       default: enums.WaitingListStatus.WAITING,
       index: true,
     },
+    is_deleted:{type:Boolean,default:false},
+    is_active:{type:Boolean,default:true},
     notifiedAt: Date,
     meta: Schema.Types.Mixed,
   },

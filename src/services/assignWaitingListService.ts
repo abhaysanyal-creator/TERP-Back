@@ -10,7 +10,9 @@ export const assigningWaitingListService = async () => {
 
     const freeSlot = await mongoose.model("sessions").findOneAndUpdate(
       {
-        status: enums.SessionStatus.REJECTED || enums.SessionStatus.CANCELLED,
+        status: {
+          $in: [enums.SessionStatus.REJECTED, enums.SessionStatus.CANCELLED],
+        },
       },
       {
         $set: { status: "LOCKED" },
@@ -20,6 +22,7 @@ export const assigningWaitingListService = async () => {
 
     if (!freeSlot) {
       await session.abortTransaction();
+      return;
     }
 
     // finding the patient in the waiting list // based on preference

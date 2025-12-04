@@ -13,12 +13,14 @@ export const createEntryController: ExpressMiddleware = async (
   response
 ) => {
   try {
+    request.body.funding = request?.body?.organisation?.type
+      ? request.body.organisation.type
+      : null;
+
     const priorityRating =
       Date.now() +
-      (request.body.funding_type === enums.FundingTypes.PRIVATE ? -1000 : 0) +
-      (request.body.funding_type === enums.FundingTypes.GOVERNMENT_AID
-        ? -500
-        : 0);
+      (request.body.funding === enums.FundingTypes.PRIVATE ? -1000 : 0) +
+      (request.body.funding === enums.FundingTypes.GOVERNMENT_AID ? -500 : 0);
 
     const result = await mongoose.model("waiting_list").create({
       ...request.body,
@@ -49,26 +51,6 @@ export const listEntryController: ExpressMiddleware = async (
     const or: any[] = [];
     const and: any[] = [];
 
-    // if (payload.patient_id) and.push({ "patient.id": payload.patient_id });
-
-    // if (payload.clinic_id) and.push({ clinic_id: ObjectId(payload.clinic_id) });
-
-    // if (payload.therapist_id)
-    //   and.push({ "therapist.id": ObjectId(payload.therapist_id) });
-
-    // if (payload.treatment_id)
-    //   and.push({ "treatment.id": payload.treatment_id });
-
-    // if (payload.is_active !== undefined)
-    //   and.push({ is_active: payload.is_active });
-
-    // if (payload.status) and.push({ status: payload.status });
-
-    // if (payload.search) {
-    //   or.push({ "patient.name": { $regex: payload.search, $options: "i" } });
-    //   or.push({ session_id: { $regex: payload.search, $options: "i" } });
-    // }
-
     if (payload.scheduled_date) {
       const start = new Date(payload.scheduled_date);
       const end = new Date(payload.scheduled_date);
@@ -96,7 +78,7 @@ export const listEntryController: ExpressMiddleware = async (
     if (or.length) and.push({ $or: or });
     if (and.length) match.$and = and;
 
-    const pipeline: any[] = [
+    const pipeline: PipelineStage[] = [
       { $match: match },
       { $sort: { createdAt: -1 } },
       { $skip: skip },
@@ -112,7 +94,7 @@ export const listEntryController: ExpressMiddleware = async (
 
     const totalCount = countResult[0]?.total || 0;
 
-    return {
+    return success(response, Constants.MESSAGES.SUCCESS.code, {
       data: entries,
       meta: {
         pages: Math.ceil(totalCount / limit),
@@ -120,9 +102,9 @@ export const listEntryController: ExpressMiddleware = async (
         limit,
         total: totalCount,
       },
-    };
+    });
   } catch (error) {
-    return error;
+    return badRequest(response, getErrorMessage(error));
   }
 };
 
