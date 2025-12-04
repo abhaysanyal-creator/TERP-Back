@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import { createEntryValidator, listEntryValidator, viewEntryValidator } from "../validators/waiting_list.validator";
-import { createEntryController, listEntryController, viewEntryController } from "../controllers/waiting_list.controller";
+import { createEntryController, getDemandInsightsController, listEntryController, viewEntryController } from "../controllers/waiting_list.controller";
 
 const router = Router();
 
@@ -24,6 +24,12 @@ router.post(
   authorisationMiddleware,
   viewEntryValidator,
   viewEntryController
+);
+
+router.post(
+  "/demand-insights",
+  authorisationMiddleware,
+  getDemandInsightsController
 );
 
 export default router;

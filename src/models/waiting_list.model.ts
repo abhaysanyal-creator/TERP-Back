@@ -1,5 +1,6 @@
 import { Schema, model, Document, Types } from "mongoose";
 import enums from "../enums.json";
+import { stringList } from "aws-sdk/clients/datapipeline";
 
 export interface Preference {
   day: Number;
@@ -8,11 +9,12 @@ export interface Preference {
 }
 
 export interface WaitingListDoc extends Document {
-  activity: Types.ObjectId;
-  patient: Types.ObjectId;
-  guardian: Types.ObjectId;
-  treatment: Types.ObjectId;
+  activity: { id: Types.ObjectId; name: string };
+  organisation: { id: Types.ObjectId; name: string };
+  patient: { id: Types.ObjectId; name: string };
+  treatment: { id: Types.ObjectId; name: string };
   preferences: Preference[];
+  co_payment_amount: string;
   preferred_therapist: Types.ObjectId;
   preferred_time: {
     scheduled_date: string;
@@ -39,21 +41,32 @@ const preferenceSchema = new Schema(
 
 const waitingListSchema = new Schema<WaitingListDoc>(
   {
-    activity: {
-      type: Schema.Types.ObjectId,
-      ref: "activities",
-      index: true,
+    organisation: {
+      id: { type: Schema.Types.ObjectId, ref: "organisations" },
+      name: { type: String },
     },
-    patient: { type: Schema.Types.ObjectId, ref: "patients" },
+    activity: {
+      id: {
+        type: Schema.Types.ObjectId,
+        ref: "activities",
+      },
+      name: { type: String },
+    },
+    patient: {
+      id: { type: Schema.Types.ObjectId, ref: "patients" },
+      name: { type: String },
+    },
     treatment: {
-      type: Schema.Types.ObjectId,
-      ref: "metadatas",
-      index: true,
+      id: { type: Schema.Types.ObjectId, ref: "metadatas" },
+      name: { type: String },
     },
     preferred_therapist: { type: Schema.Types.ObjectId, ref: "employees" },
     preferences: { type: [preferenceSchema] },
     joinedAt: { type: Date, default: Date.now, index: true },
     priority_score: { type: Number },
+    co_payment_amount: {
+      type: String,
+    },
     priorityOverride: { type: Number },
     preferred_time: {
       scheduled_date: { type: Number },
@@ -77,7 +90,12 @@ const waitingListSchema = new Schema<WaitingListDoc>(
   { timestamps: true }
 );
 
-waitingListSchema.index({ clinic: 1, treatment: 1, status: 1, joinedAt: 1 });
+waitingListSchema.index({
+  "activity.id": 1,
+  "treatment.id": 1,
+  status: 1,
+  joinedAt: 1,
+});
 
 const WaitingListModel = model<WaitingListDoc>(
   "waiting_list",

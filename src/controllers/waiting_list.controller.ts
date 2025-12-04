@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { PipelineStage } from "mongoose";
 import { ExpressMiddleware } from "../types/express.types";
 import enums from "../enums.json";
 import Constants from "../locales/constants";
@@ -6,6 +6,7 @@ import { badRequest, success } from "../response/response";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import { assigningWaitingListService } from "../services/assignWaitingListService";
 import { ObjectId } from "../utils/helpers";
+import { WaitingListModel } from "../models";
 
 export const createEntryController: ExpressMiddleware = async (
   request,
@@ -140,6 +141,59 @@ export const viewEntryController: ExpressMiddleware = async (
     }
 
     return success(response, Constants.MESSAGES.SUCCESS.code, entryExist);
+  } catch (error) {
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const getDemandInsightsController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const aggregationPipeline: PipelineStage[] = [
+      { $match: { status: enums.WaitingListStatus.WAITING } },
+
+      { $unwind: "$preferences" },
+
+      {
+        $group: {
+          _id: {
+            clinic: "$activity",
+            treatment: "$treatment",
+            day: "$preferences.day",
+            start: "$preferences.start_time",
+          },
+          demandCount: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: "activities",
+          localField: "activity.id",
+          foreignField: "_id",
+          as: "activities",
+        },
+      },
+      { $unwind: "$activities" },
+
+      {
+        $lookup: {
+          from: "metadatas",
+          localField: "_id.treatment",
+          foreignField: "_id",
+          as: "treatment",
+        },
+      },
+      { $unwind: "$treatment" },
+
+      // Sort by most demanded
+      { $sort: { demandCount: -1 } },
+    ];
+
+    const insightResult = await WaitingListModel.aggregate(aggregationPipeline);
+
+    return success(response, Constants.MESSAGES.SUCCESS.code, insightResult);
   } catch (error) {
     return badRequest(response, getErrorMessage(error));
   }
