@@ -10,6 +10,7 @@ import {
   deleteActivityService,
   deleteExpenseService,
   listActivityService,
+  listExpenseService,
   updateActivityService,
   updateExpenseService,
   viewActivityService,
@@ -201,6 +202,20 @@ export const updateExpenseController: ExpressMiddleware = async (
   }
 };
 
+export const listExpenseController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+
+    const result = await listExpenseService(request);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
 export const deleteExpenseController: ExpressMiddleware = async (
   request,
   response
@@ -276,3 +291,4 @@ export const addIndexPriceController: ExpressMiddleware = async (
     return badRequest(response, getErrorMessage(error));
   }
 };
+

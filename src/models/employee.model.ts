@@ -155,6 +155,7 @@ const employeeSchema = new Schema<Employee>(
     hire_date: { type: String, required: true },
     activities: [
       {
+        _id: false,
         id: { type: Schema.Types.ObjectId },
         name: { type: String },
       },

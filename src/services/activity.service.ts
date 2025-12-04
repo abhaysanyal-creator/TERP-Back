@@ -213,6 +213,67 @@ export const createExpenseService = (
   });
 };
 
+export const listExpenseService = async (payload: Record<string, any>) => {
+  try {
+    const page = Number(payload.body.page) || 1;
+    const limit = Number(payload.body.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const match: any = {
+      is_deleted: false,
+    };
+
+    // Filter on the basis of activity id
+    if (payload.body.activity_id) {
+      match._id = ObjectId(payload.body.activity_id);
+    }
+
+
+    const pipeline: PipelineStage[] = [
+      { $match: match },
+      { $unwind: "$expenses" },
+      { $match: { "expenses.is_deleted": false } },
+      {
+        $project: {
+          _id: 0,
+          activity_id: "$_id",
+          activity_name: "$activity_name",
+          expense: "$expenses",
+        },
+      },
+      { $sort: { "expense.createdAt": -1 } },
+      { $skip: skip },
+      { $limit: limit },
+    ];
+
+    const countPipeline: PipelineStage[] = [
+      { $match: match },
+      { $unwind: "$expenses" },
+      { $match: { "expenses.is_deleted": false } },
+      { $count: "total" },
+    ];
+
+    const [expenses, countResult] = await Promise.all([
+      activityModel.aggregate(pipeline),
+      activityModel.aggregate(countPipeline),
+    ]);
+
+    const totalCount = countResult[0]?.total || 0;
+
+    return {
+      data: expenses,
+      meta: {
+        count: totalCount,
+        pages: Math.ceil(totalCount / limit),
+        page,
+        limit,
+      },
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const updateExpenseService = (
   payload: Record<string, any>
 ): Record<string, any> => {

@@ -8,6 +8,7 @@ import {
   deleteActivityController,
   deleteExpenseController,
   listActivityController,
+  listExpenseController,
   updateActivityController,
   updateExpenseController,
   viewActivityController,
@@ -77,10 +78,10 @@ router.post(
 );
 
 router.post(
-  "/list",
+  "/list-expense",
   authorisationMiddleware,
   // createExpenseValidator,
-  createExpenseController
+  listExpenseController
 );
 
 router.patch(
