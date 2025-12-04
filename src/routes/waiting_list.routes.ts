@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authorisationMiddleware } from "../middlewares/auth.middlewares";
 import { createEntryValidator, listEntryValidator, viewEntryValidator } from "../validators/waiting_list.validator";
-import { createEntryController, getDemandInsightsController, listEntryController, viewEntryController } from "../controllers/waiting_list.controller";
+import { createEntryController, deleteEntryController, getDemandInsightsController, listEntryController, viewEntryController } from "../controllers/waiting_list.controller";
 
 const router = Router();
 
@@ -24,6 +24,13 @@ router.get(
   authorisationMiddleware,
   viewEntryValidator,
   viewEntryController
+);
+
+router.delete(
+  "/delete/:id",
+  authorisationMiddleware,
+  viewEntryValidator,
+  deleteEntryController
 );
 
 router.post(

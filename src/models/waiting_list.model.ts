@@ -10,7 +10,7 @@ export interface Preference {
 
 export interface WaitingListDoc extends Document {
   activity: { id: Types.ObjectId; name: string };
-  organisation: { id: Types.ObjectId; name: string,type:string };
+  organisation: { id: Types.ObjectId; name: string; type: string };
   patient: { id: Types.ObjectId; name: string };
   treatment: { id: Types.ObjectId; name: string };
   preferences: Preference[];
@@ -21,13 +21,22 @@ export interface WaitingListDoc extends Document {
     scheduled_start: string;
     scheduled_end: string;
   };
+  total_cost: string;
+  treatment_area: {
+    id: Types.ObjectId;
+    name: string;
+    value: string;
+  };
+  scheduled_start: string;
+  scheduled_date: string;
+  scheduled_end: string;
   priority_score: number;
   joinedAt: Date;
   priorityOverride?: number;
   funding: string;
   status: string;
-  is_deleted:false;
-  is_active:true;
+  is_deleted: false;
+  is_active: true;
   notifiedAt?: Date;
   meta?: any;
 }
@@ -63,6 +72,11 @@ const waitingListSchema = new Schema<WaitingListDoc>(
       id: { type: Schema.Types.ObjectId, ref: "metadatas" },
       name: { type: String },
     },
+    treatment_area: {
+      id: { type: Schema.Types.ObjectId },
+      name: { type: String },
+      value: { type: String },
+    },
     therapist: {
       id: { type: Schema.Types.ObjectId, ref: "employees" },
       name: { type: String },
@@ -85,14 +99,20 @@ const waitingListSchema = new Schema<WaitingListDoc>(
       enum: enums.FundingTypes,
       index: true,
     },
+    total_cost: {
+      type: String,
+    },
     status: {
       type: String,
       enum: enums.WaitingListStatus,
       default: enums.WaitingListStatus.WAITING,
       index: true,
     },
-    is_deleted:{type:Boolean,default:false},
-    is_active:{type:Boolean,default:true},
+    scheduled_start: { type: String },
+    scheduled_date: { type: String },
+    scheduled_end: { type: String },
+    is_deleted: { type: Boolean, default: false },
+    is_active: { type: Boolean, default: true },
     notifiedAt: Date,
     meta: Schema.Types.Mixed,
   },

@@ -69,7 +69,7 @@ export const createAppointmentService = (
         childSessions.push(child);
         await activitiesModel.updateOne(
           {
-            _id: ObjectId(payload.clinic_id),
+            _id: ObjectId(payload.activity.id),
             "rooms.id": ObjectId(payload.treatment_area.id),
           },
           {
@@ -90,7 +90,7 @@ export const createAppointmentService = (
 
       await activitiesModel.updateOne(
         {
-          _id: ObjectId(payload.clinic_id),
+          _id: ObjectId(payload.activity.id),
           "rooms.id": ObjectId(payload.treatment_area.id),
         },
         {

@@ -6,7 +6,8 @@ import { badRequest, success } from "../response/response";
 import { getErrorMessage } from "../middlewares/app.middlewares";
 import { assigningWaitingListService } from "../services/assignWaitingListService";
 import { ObjectId } from "../utils/helpers";
-import { WaitingListModel } from "../models";
+
+const waitingListModel = mongoose.model("waiting_list");
 
 export const createEntryController: ExpressMiddleware = async (
   request,
@@ -26,7 +27,7 @@ export const createEntryController: ExpressMiddleware = async (
       return badRequest(response, Constants.MESSAGES.PREFERENCE_QUANTITY.code);
     }
 
-    const result = await mongoose.model("waiting_list").create({
+    const result = await waitingListModel.create({
       ...request.body,
       priorityRating,
     });
@@ -92,8 +93,8 @@ export const listEntryController: ExpressMiddleware = async (
     const countPipeline = [{ $match: match }, { $count: "total" }];
 
     const [entries, countResult] = await Promise.all([
-      mongoose.model("waiting_list").aggregate(pipeline),
-      mongoose.model("waiting_list").aggregate(countPipeline),
+      waitingListModel.aggregate(pipeline),
+      waitingListModel.aggregate(countPipeline),
     ]);
 
     const totalCount = countResult[0]?.total || 0;
@@ -117,9 +118,31 @@ export const viewEntryController: ExpressMiddleware = async (
   response
 ) => {
   try {
-    const entryExist = await mongoose
-      .model("waiting_list")
+    const entryExist = await waitingListModel
       .findOne({ _id: request.params.id, is_deleted: false })
+      .exec();
+
+    if (!entryExist) {
+      return badRequest(response, Constants.MESSAGES.NOT_FOUND.code);
+    }
+
+    return success(response, Constants.MESSAGES.SUCCESS.code, entryExist);
+  } catch (error) {
+    return badRequest(response, getErrorMessage(error));
+  }
+};
+
+export const deleteEntryController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const entryExist = await waitingListModel
+      .findOneAndUpdate(
+        { _id: ObjectId(request.params.id) },
+        { $set: { is_deleted: true } },
+        { new: true, returnDocument: "after" }
+      )
       .exec();
 
     if (!entryExist) {
@@ -177,7 +200,7 @@ export const getDemandInsightsController: ExpressMiddleware = async (
       { $sort: { demandCount: -1 } },
     ];
 
-    const insightResult = await WaitingListModel.aggregate(aggregationPipeline);
+    const insightResult = await waitingListModel.aggregate(aggregationPipeline);
 
     return success(response, Constants.MESSAGES.SUCCESS.code, insightResult);
   } catch (error) {
