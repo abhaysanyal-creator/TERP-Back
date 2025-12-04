@@ -6,21 +6,21 @@ import { createEntryController, listEntryController, viewEntryController } from 
 const router = Router();
 
 router.post(
-  "/waiting-list/create",
+  "/create",
   authorisationMiddleware,
   createEntryValidator,
   createEntryController
 );
 
 router.post(
-  "/waiting-list/list",
+  "/list",
   authorisationMiddleware,
   listEntryValidator,
   listEntryController
 );
 
 router.post(
-  "/waiting-list/view/:id",
+  "/view/:id",
   authorisationMiddleware,
   viewEntryValidator,
   viewEntryController

@@ -81,13 +81,18 @@ export const roomSchema = new Schema(
   { _id: false }
 );
 
-export const expenseSchema = new Schema({
-  expense_name: { type: String },
-  category: { type: String, enum: enums.CostRecurrence },
-  amount: { type: Number },
-  is_deleted: { type: Boolean, default: false },
-  is_active: { type: Boolean, default: true },
-});
+export const expenseSchema = new Schema(
+  {
+    expense_name: { type: String },
+    category: { type: String, enum: enums.CostRecurrence },
+    amount: { type: Number },
+    is_deleted: { type: Boolean, default: false },
+    is_active: { type: Boolean, default: true },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const TherapistSchema: Schema<Therapists> = new Schema(
   {
