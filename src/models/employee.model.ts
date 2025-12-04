@@ -153,6 +153,12 @@ const employeeSchema = new Schema<Employee>(
     },
     team_leader: { type: Boolean, required: true },
     hire_date: { type: String, required: true },
+    activities: [
+      {
+        id: { type: Schema.Types.ObjectId },
+        name: { type: String },
+      },
+    ],
     role: { type: Schema.Types.ObjectId, ref: "roles" },
     password: { type: String, required: true },
     job_percentage: { type: Number, min: 0, max: 100, required: true },

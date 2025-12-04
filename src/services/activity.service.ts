@@ -1,10 +1,11 @@
 import mongoose, { PipelineStage } from "mongoose";
 import Constants from "../locales/constants";
 import { generateCode, ObjectId } from "../utils/helpers";
-import { Activity, IDepartment } from "../types/interface.types";
+import { Activity, Employee, IDepartment } from "../types/interface.types";
 
 const activityModel = mongoose.model<Activity>("activities");
 const deptModel = mongoose.model<IDepartment>("departments");
+const employeeModel = mongoose.model<Employee>("employees");
 
 export const createActivityService = (
   payload: Record<string, any>
@@ -284,26 +285,39 @@ export const addEmployeeActivityService = (
 ): Record<string, any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (payload.body.internal_code) {
-        delete payload.body.internal_code;
-      }
+      const activityId = payload.params.id;
+      const employees = payload.body; // you are sending an array
 
-      const updatedClinic = await activityModel
-        .findOneAndUpdate(
-          { _id: ObjectId(payload.params.id) },
-          {
-            $push: {
-              employees: payload.body,
-            },
-          },
-          { new: true, runValidators: true }
-        )
-        .exec();
+      // Update add all employees
+      const updatedActivity = await activityModel.findOneAndUpdate(
+        { _id: ObjectId(activityId) },
+        {
+          $push: { employees: { $each: employees } },
+        },
+        { new: true, runValidators: true }
+      );
 
-      if (!updatedClinic) {
+      if (!updatedActivity) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.UPDATE.code);
       }
-      resolve(updatedClinic);
+
+      // Prepare activity reference to push into employee.activities
+      const activityRef = {
+        id: updatedActivity._id,
+        name: updatedActivity.activity_name,
+      };
+
+      // Update ALL employees in bulk
+      const bulkOps = employees.map((e: any) => ({
+        updateOne: {
+          filter: { _id: ObjectId(e.id) },
+          update: { $addToSet: { activities: activityRef } },
+        },
+      }));
+
+      await employeeModel.bulkWrite(bulkOps);
+
+      resolve(updatedActivity);
     } catch (error) {
       reject(error);
     }

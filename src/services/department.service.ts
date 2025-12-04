@@ -253,24 +253,6 @@ export const listDepartmentService = (
         { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit },
-        {
-          $lookup: {
-            from: "activities",
-            localField: "_id",
-            foreignField: "department.id",
-            as: "activities",
-          },
-        },
-        {
-          $addFields: {
-            activity_count: { $size: "$activities" },
-          },
-        },
-        {
-          $project: {
-            activities: 0,
-          },
-        },
       ];
 
       const countPipeline = [{ $match: match }, { $count: "total" }];

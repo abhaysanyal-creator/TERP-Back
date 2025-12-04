@@ -69,6 +69,20 @@ router.post(
   createExpenseController
 );
 
+router.post(
+  "/add-expense/:id",
+  authorisationMiddleware,
+  // createExpenseValidator,
+  createExpenseController
+);
+
+router.post(
+  "/list",
+  authorisationMiddleware,
+  // createExpenseValidator,
+  createExpenseController
+);
+
 router.patch(
   "/update-expense/:id/:exp_id",
   authorisationMiddleware,

@@ -137,6 +137,7 @@ export interface Employee extends Document {
   team_leader: boolean;
   is_deleted: boolean;
   time_zone: string;
+  activities: { id: Types.ObjectId; name: string; label?: string };
   password: string;
   hire_date: string;
   blocked_times?: BlockTime[];
