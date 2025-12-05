@@ -11,12 +11,12 @@ import {
 import {
   addRecurringSessionsController,
   createAppointmentController,
+  getCalendarDataController,
   listAppointmentController,
   updateAppointmentsController,
   updateSessionStatusController,
   viewAppointmentController,
 } from "../controllers/sessions.controller";
-import { addEmployeeClinicValidator } from "../validators/activity.validator";
 
 const router = Router();
 
@@ -60,6 +60,12 @@ router.post(
   authorisationMiddleware,
   // addRecurringSessionsValidator,
   addRecurringSessionsController
+);
+
+router.post(
+  "/get-calendar-list",
+  authorisationMiddleware,
+  getCalendarDataController
 );
 
 export default router;

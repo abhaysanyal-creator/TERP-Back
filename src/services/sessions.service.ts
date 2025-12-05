@@ -9,6 +9,7 @@ import { ISession } from "../types/interface.types";
 const sessionsModel = mongoose.model("sessions");
 const patientsModel = mongoose.model("patients");
 const activitiesModel = mongoose.model("activities");
+const waitingListModel = mongoose.model("waiting_list");
 
 export const createAppointmentService = (
   payload: Record<string, any>
@@ -24,6 +25,13 @@ export const createAppointmentService = (
 
       if (!newBooking) {
         throw new Error(Constants.MESSAGES.SOMETHING_WENT_WRONG.CREATE.code);
+      }
+
+      if (payload.waiting_list_id) {
+        await waitingListModel.findOneAndDelete({
+          _id: ObjectId(payload.waiting_list_id),
+        });
+        console.log("Deleting from waiting list", payload.waiting_list_id);
       }
 
       if (newBooking.patient.id) {
@@ -504,3 +512,7 @@ export const addRecurringSessionsService = (
     }
   });
 };
+
+// export const getCalendarService = (
+//   payload: Record<string, any>
+// ): Record<string, any> => {};

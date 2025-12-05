@@ -233,3 +233,17 @@ export const addRecurringSessionsController: ExpressMiddleware = async (
     return badRequest(response, getErrorMessage(error));
   }
 };
+
+
+export const getCalendarDataController: ExpressMiddleware = async (
+  request,
+  response
+) => {
+  try {
+    const result = await listAppointmentService(request.body);
+    return success(response, Constants.MESSAGES.SUCCESS.code, result);
+  } catch (error) {
+    console.error(error);
+    return badRequest(response, getErrorMessage(error));
+  }
+};
