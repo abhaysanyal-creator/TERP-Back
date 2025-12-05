@@ -535,9 +535,9 @@ export interface ISession extends Document {
       };
     }[];
   };
-  scheduled_start: string;
-  scheduled_date: string;
-  scheduled_end: string;
+  scheduled_start: Date;
+  scheduled_date: Date;
+  scheduled_end: Date;
   is_recurring: boolean;
   recurrence?: Recurrence[];
   compensation_session: {

@@ -29,14 +29,14 @@ const SessionSchema = new Schema<ISession>(
     activity: {
       id: {
         type: Schema.Types.ObjectId,
-      
+
         ref: "activities",
       },
       name: { type: String },
     },
     treatment: {
-      id: { type: Schema.Types.ObjectId},
-      name: { type: String},
+      id: { type: Schema.Types.ObjectId },
+      name: { type: String },
     },
     session_type: {
       type: String,
@@ -65,9 +65,9 @@ const SessionSchema = new Schema<ISession>(
     total_cost: {
       type: String,
     },
-    scheduled_start: { type: String },
-    scheduled_date: { type: String },
-    scheduled_end: { type: String },
+    scheduled_start: { type: Date },
+    scheduled_date: { type: Date },
+    scheduled_end: { type: Date },
     is_recurring: { type: Boolean, default: false },
     documents: [DocSchema],
     recurrence: {
@@ -142,6 +142,8 @@ const SessionSchema = new Schema<ISession>(
     versionKey: false,
   }
 );
+
+SessionSchema.index({ scheduled_date: 1 });
 
 export const sessionModel = mongoose.model<ISession>(
   "sessions",

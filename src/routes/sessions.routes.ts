@@ -11,7 +11,6 @@ import {
 import {
   addRecurringSessionsController,
   createAppointmentController,
-  getCalendarDataController,
   listAppointmentController,
   updateAppointmentsController,
   updateSessionStatusController,
@@ -62,10 +61,10 @@ router.post(
   addRecurringSessionsController
 );
 
-router.post(
-  "/get-calendar-list",
-  authorisationMiddleware,
-  getCalendarDataController
-);
+// router.post(
+//   "/get-calendar-list",
+//   authorisationMiddleware,
+//   getCalendarDataController
+// );
 
 export default router;

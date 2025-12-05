@@ -5,6 +5,7 @@ import enums from "../enums.json";
 import { getSignedUrlForView } from "../controllers/upload.controller";
 import { generateRecurringSessions } from "../utils/getRecurrences";
 import { ISession } from "../types/interface.types";
+import { endOfDay, getDateRange, startOfDay } from "../utils/getDate";
 
 const sessionsModel = mongoose.model("sessions");
 const patientsModel = mongoose.model("patients");
@@ -273,32 +274,23 @@ export const listAppointmentService = (
       const or: any[] = [];
       const and: any[] = [];
 
-      if (payload.date) {
-        const start = new Date(payload.date);
-        const end = new Date(payload.date);
-        end.setDate(end.getDate() + 1);
-        console.log(payload.date);
+      if (payload.filter_type) {
+        const range = getDateRange(payload.filter_type);
 
-        and.push({
-          scheduled_date: {
-            $gte: start,
-            $lt: end,
-          },
-        });
+        if (range) {
+          and.push({
+            scheduled_date: { $gte: range.from, $lte: range.to },
+          });
+        }
       }
 
+      // CASE 2: custom date range
       if (payload.from_date && payload.to_date) {
-        const start = new Date(payload.from_date);
-        const end = new Date(payload.to_date);
-
-        // Include full last day
-        end.setDate(end.getDate() + 1);
+        const from = startOfDay(payload.from_date);
+        const to = endOfDay(payload.to_date);
 
         and.push({
-          scheduled_date: {
-            $gte: start,
-            $lt: end,
-          },
+          scheduled_date: { $gte: from, $lte: to },
         });
       }
 
@@ -314,8 +306,8 @@ export const listAppointmentService = (
 
       if (payload.patient_id) and.push({ "patient.id": payload.patient_id });
 
-      if (payload.clinic_id)
-        and.push({ clinic_id: ObjectId(payload.clinic_id) });
+      if (payload.activity_id)
+        and.push({ "activity.id": ObjectId(payload.activity_id) });
 
       if (payload.therapist_id)
         and.push({ "therapist.id": ObjectId(payload.therapist_id) });
@@ -435,7 +427,7 @@ export const addRecurringSessionsService = (
         if (
           await sessionsModel.findOne({
             "therapist.id": parent_session.therapist.id,
-            scheduled_date: isoDate,
+            scheduled_date: date,
             is_deleted: false,
             $expr: {
               $and: [
@@ -446,7 +438,7 @@ export const addRecurringSessionsService = (
           })
         ) {
           throw new Error(
-            `Therapist not available on ${isoDate} (${new Date(
+            `Therapist not available on ${date} (${new Date(
               parent_session.scheduled_start
             )}-${new Date(parent_session.scheduled_end)})`
           );
@@ -466,7 +458,7 @@ export const addRecurringSessionsService = (
 
           scheduled_start: parent_session.scheduled_start,
           scheduled_end: parent_session.scheduled_end,
-          scheduled_date: isoDate,
+          scheduled_date: date,
 
           total_cost: parent_session.total_cost,
           session_type: parent_session.session_type,
@@ -513,6 +505,6 @@ export const addRecurringSessionsService = (
   });
 };
 
-// export const getCalendarService = (
+// export const getCalendarDataService = (
 //   payload: Record<string, any>
 // ): Record<string, any> => {};
